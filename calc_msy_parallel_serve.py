@@ -6,10 +6,10 @@ import sys
 import numpy as np
 import pandas as pd
 from joblib import Parallel, delayed
-from calc_msy_reprod_serve2 import calc_msy
+from calc_msy_rotational_serve import calc_msy
 
 #file containing fish growht parameters
-datadir = '/Users/bwoodson/Documents/UGA/COBIA_LAB/Projects/MSY_Sustainability/msyandpopdynamics/model_output_rev14.nosync/'
+datadir = '/Users/bwoodson/Desktop/MSYfish-main/model_output_new_cons.nosync/'
 
 #create data file if does not exist
 if not os.path.exists(datadir):
@@ -17,7 +17,7 @@ if not os.path.exists(datadir):
     print('Creating data folder: ' + datadir)
 
 #read input data file
-fishdata=pd.read_excel("/Users/bwoodson/Documents/UGA/COBIA_LAB/Projects/MSY_Sustainability/msyandpopdynamics/fish_growth_data2.xlsx",sheet_name='fish_growth_data')
+fishdata=pd.read_excel('/Users/bwoodson/Desktop/MSYfish-main/fish_growth_data2.xlsx',sheet_name='fish_growth_data')
 
 #determine number of species
 numspec = fishdata.shape[0]
