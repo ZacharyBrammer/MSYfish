@@ -60,6 +60,6 @@ if args.connectivity:
 else:
     connectivity = np.array(None)
 
-Parallel(n_jobs=2)(delayed(calc_msy)(outputdir, fishdata, connectivity, kk, 1, 1, 1, 1, True, True)
+Parallel(n_jobs=2)(delayed(calc_msy)(outputdir, fishdata, connectivity, kk, args.stocks, args.niter, args.years, args.initialpop, args.fishing, args.rotation)
                    for kk in range(start, end))
 
