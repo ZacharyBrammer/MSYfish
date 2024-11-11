@@ -6,7 +6,31 @@ import datetime as dt
 import numpy as np
 import netCDF4 as nc
 
-def compute_pop_msy(outdir,f0,nstocks,nfish,species,Linf,K,a,b,maxage,minsize,reprodper,R,msave,niter,btarget,rptest,environ,ft,rvar,connectivity,conn_matrix,rotation):
+def compute_pop_msy(
+        outdir,
+        f0,
+        nstocks,
+        nfish,
+        species,
+        Linf,
+        K,
+        a,
+        b,
+        maxage,
+        minsize,
+        reprodper,
+        R,
+        msave,
+        niter,
+        btarget,
+        rptest,
+        environ,
+        ft,
+        rvar,
+        connectivity,
+        conn_matrix,
+        rotation
+    ) -> bool:
     #print (' ')
     #print ('MSY-IBM model started at ', dt.datetime.strftime(dt.datetime.now(), '%Y-%m-%d %H:%M:%S'))
     #outdir='/Volumes/COBIAT8/msy_sustain_paper/model_output2/'
@@ -30,7 +54,7 @@ def compute_pop_msy(outdir,f0,nstocks,nfish,species,Linf,K,a,b,maxage,minsize,re
     num_close=1
     
     N0 = int(400) #initial population size
-    slap = 0 #restart flag
+    slap = False #restart flag
     #f0 = 0.08 #base fishing rate yr^-1
     delt = 1. #timestep in years
     nyr = 300 #length of simulation in years
@@ -41,7 +65,9 @@ def compute_pop_msy(outdir,f0,nstocks,nfish,species,Linf,K,a,b,maxage,minsize,re
           
     tlength = int(np.ceil(nyr/delt))
     yy=np.zeros([tlength,1])
-    
+    '''
+    do we need these two vars? also, num_close above
+    '''
     #reprodper = .016 #percentage of reproduction that turns into new recruits (.03-.06)
     scf = 2
     szfc = 6
@@ -49,6 +75,9 @@ def compute_pop_msy(outdir,f0,nstocks,nfish,species,Linf,K,a,b,maxage,minsize,re
     #minsize = 4.
     
     #fish species growth parameters
+    '''
+    is this setting up arrays with each index being a fish?
+    '''
     fish=np.zeros([tlength,N0])
     stock=np.random.randint(0,nstocks, size=N0)
     age=np.random.randint(1,maxage, size=N0)
@@ -147,7 +176,6 @@ def compute_pop_msy(outdir,f0,nstocks,nfish,species,Linf,K,a,b,maxage,minsize,re
         fished=np.zeros([numfish])
         
         Wfish[ii]=2*np.mean(fish[ii-1,:])
-        
         order=np.random.permutation(numfish)
         
         #if rptest==0 and ii==230:
@@ -162,7 +190,6 @@ def compute_pop_msy(outdir,f0,nstocks,nfish,species,Linf,K,a,b,maxage,minsize,re
             #if not np.isfinite(fish[ii-1,jj]) or fish[ii-1,jj]<=0:
             #    print(fish[ii-1,jj])
             if dead[jj]==0:
-            
                 bio_order=np.random.permutation(3)
                 
                 for mm in bio_order:
@@ -315,7 +342,7 @@ def compute_pop_msy(outdir,f0,nstocks,nfish,species,Linf,K,a,b,maxage,minsize,re
 
         [nn,numfish]=fish.shape
         if (numfish==0):
-            slap=1
+            slap = True
             #return slap
             break
             
@@ -324,7 +351,7 @@ def compute_pop_msy(outdir,f0,nstocks,nfish,species,Linf,K,a,b,maxage,minsize,re
         #print(rvar,sigrec)
         rep_scale=1
         
-        if connectivity>0:
+        if connectivity:
             reprod_matrix=np.zeros([nstocks,nstocks])
             numrec_stock=np.zeros([nstocks,1])
             
@@ -358,7 +385,7 @@ def compute_pop_msy(outdir,f0,nstocks,nfish,species,Linf,K,a,b,maxage,minsize,re
 
         if numrec>0:
         
-            if connectivity>0:
+            if connectivity:
                 prob_stock=np.cumsum(numrec_stock/numrec)
                 #print(prob_stock)
                 stockn=np.random.random(size=numrec)
