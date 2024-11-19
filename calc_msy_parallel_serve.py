@@ -26,7 +26,7 @@ modelVars.add_argument(dest='endspecies', help='Ending index of species from fil
 modelVars.add_argument(dest='stocks', help='Number of stocks', type=int)
 modelVars.add_argument(dest='niter', help='Number of iterations per simulation', type=int)
 modelVars.add_argument(dest='years', help='Number of years per simulation', type=int)
-modelVars.add_argument(dest='initialpop', help='Initial number of fish', type=int)
+modelVars.add_argument(dest='initialPop', help='Initial number of fish', type=int)
 modelVars.add_argument(dest='fishing', help='Include fishing in simulation', type=bool)
 modelVars.add_argument(dest='rotation', help='Enable rotational closure', type=bool)
 
@@ -60,6 +60,6 @@ if args.connectivity:
 else:
     connectivity = np.array(None)
 
-Parallel(n_jobs=2)(delayed(calc_msy)(outputdir, fishdata, connectivity, kk, args.stocks, args.niter, args.years, args.initialpop, False, args.rotation)
+Parallel(n_jobs=2)(delayed(calc_msy)(outputdir, fishdata, connectivity, kk, args.stocks, args.niter, args.years, args.initialPop, False, args.rotation)
                    for kk in range(start, end))
 

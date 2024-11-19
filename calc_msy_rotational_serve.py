@@ -19,7 +19,7 @@ def calc_msy(
     stocks: int,  # number of stocks
     niter: int,  # number of simulations to run
     years: int,  # number of years per simulation
-    initialpop: int,  # initial fish population
+    initialPop: int,  # initial fish population
     fishing: bool,  # enable fishing
     rotation: bool  # enable rotation
 ):
@@ -36,16 +36,13 @@ def calc_msy(
     species = fishdata['species'][speciesIndex]
     species = species.split()
     species = species[0] + '_' + species[1]
-    print(type(species))
+    #print(type(species))
 
     xtest = True  # flag for simulation run
     iteration = 0  # current iteration number
     print('%d ' % speciesIndex + species + ' started...')
-    runs = 0
 
     while xtest:
-        runs += 1
-        
         # set Winf to -1 to initialize
         Winf = -1
 
@@ -61,28 +58,28 @@ def calc_msy(
         growthCoef[1] = fishdata['Kstd'][speciesIndex]
         print(growthCoef)
 
-        # length-weight power relationship
-        b = fishdata['bmean'][speciesIndex] + 0. * \
+        # power (b) of length-weight relationship
+        lenWtPower = fishdata['bmean'][speciesIndex] + 0. * \
             np.random.randn()*fishdata['bstd'][speciesIndex]/20
-        print(b)
+        print(lenWtPower)
 
-        # calculate coefficient (a) of length-weight power relationship based on value of b
+        # calculate coefficient (a) of length-weight power relationship based on value of lenWtPower
         sl = np.zeros([2])
         sl[0] = fishdata['slope'][speciesIndex]
         sl[1] = fishdata['inter'][speciesIndex]
         print(sl)
-        a = 10**(sl[0]*b+sl[1])
-        print(a)
+        lenWtCoef = 10**(sl[0]*lenWtPower+sl[1])
+        print(lenWtCoef)
 
         # maximum age
         maxage = int(fishdata['max age'][speciesIndex])
-        print(maxage)
+        #print(maxage)
 
         # set reproduction scaling (from earlier sensitivity experiments (see Fig 2)
         reprodmax = -1.*(np.log10(maxage/growthCoef[0]))-0.25
         reprodmin = -1.*(np.log10(maxage/growthCoef[0]))-4.75
-        print(reprodmax)
-        print(reprodmin)
+        #print(reprodmax)
+        #print(reprodmin)
 
         # set number of steps for evaluating recruitment rate and fishing rate
         rstep = 48
@@ -92,12 +89,8 @@ def calc_msy(
         reprodstp = np.logspace(reprodmin, reprodmax, rstep)
         print(reprodstp)
 
-        # set biomass target for each level of fstep for surplus production curves
-        btarget = np.linspace(1, 0, fstep)
-        print(btarget)
-
         # set asymptotic mass and min size for capture
-        Winf = (a*asympLen[0]**b)/1000
+        Winf = (lenWtCoef*asympLen[0]**lenWtPower)/1000
         print(Winf)
         # minimum size caught in kg
         minsize = 0.2*Winf
@@ -108,7 +101,7 @@ def calc_msy(
         print(R)
 
         # set file directories if needed
-        if not (np.isnan(asympLen[0]) or np.isnan(growthCoef[0]) or np.isnan(b) or np.isnan(maxage)):
+        if not (np.isnan(asympLen[0]) or np.isnan(growthCoef[0]) or np.isnan(lenWtPower) or np.isnan(maxage)):
             if not os.path.exists(outdir + species) and iteration == 0:
                 os.makedirs(outdir + species)
                 print('Creating data folder: ' + 'model_output/' + species)
@@ -124,21 +117,21 @@ def calc_msy(
             # set index for recruitment loop
             recruitmentIndex = 0
 
-            # set fishing rate to zero for recruitment loop
-            f0 = np.zeros([stocks])
-            print(f0)
+            # set fishing rate to zero for recruitment loop - per stock
+            fishingRates = np.zeros([stocks])
+            #print(fishingRates)
 
             # estimate minimum viable recruitment rate
             while rslap:
                 if recruitmentIndex < rstep:
                     reprodper = reprodstp[recruitmentIndex]
-                    f0 = np.zeros([stocks])
-                    rslap = compute_pop_msy(outdir, f0, stocks, stocks, species, asympLen, growthCoef, a, b,
-                                            maxage, minsize, reprodper, R, 0, iteration, 1, 1, 0, 0, 0.0, 0, conn_matrix, 0)
+                    fishingRates = np.zeros([stocks])
+                    rslap = compute_pop_msy(outdir, fishingRates, stocks, stocks, species, asympLen, growthCoef, lenWtCoef, lenWtPower,
+                                            maxage, minsize, reprodper, R, False, iteration, 1, True, False, 0.0, conn_matrix, 0)
                     minrec = 1.*reprodper
                     recruitmentIndex = recruitmentIndex + 1
-                    print(minrec)
-                    print(rslap)
+                    #print(minrec)
+                    #print(rslap)
                 else:
                     minrec = 1.*reprodstp[rstep-1]
                     rslap = False
@@ -150,10 +143,10 @@ def calc_msy(
 
             # estimate maximum fishing rate
             while fishing:
-                print(True)
-                f0 = np.zeros([stocks])+maxfish
-                fishing = compute_pop_msy(outdir, f0, stocks, stocks, species, asympLen, growthCoef, a,
-                                        b, maxage, minsize, minrec, R, 0, iteration, 1, 0, 0, 0, .5, 0, conn_matrix, 0)
+                #print(True)
+                fishingRates = np.zeros([stocks])+maxfish
+                fishing = compute_pop_msy(outdir, fishingRates, stocks, stocks, species, asympLen, growthCoef, lenWtCoef,
+                                          lenWtPower, maxage, minsize, minrec, R, False, iteration, 1, False, False, .5, conn_matrix, 0)
                 maxfish = maxfish + .01
 
             # set index for main model run over various fishing rates
@@ -175,24 +168,22 @@ def calc_msy(
 
             # set parameters
             rvar = 0.5
-            msave = 1
+            msave = True
             btarget = 0
-            rptest = 0
-            environ = 1
-            ft = 0
+            rptest = True
+            environ = True
 
             # perform model simulations looping over number of fished stockes and fishing rate
             while stocktest:
 
                 for ii in range(0, fstep+1):  # 41 for complete runs
 
-                    f0[0:nfish] = 0.1
-                    print(f0)
+                    fishingRates[0:nfish] = 0.1
+                    print(fishingRates)
                     print(fstep)
-                    slap = compute_pop_msy(outdir, f0, stocks, nfish, species, asympLen, growthCoef, a, b, maxage, minsize, minrec,
-                                           R, msave, iteration, btarget, rptest, environ, ft, rvar, connectivity, conn_matrix, rotationArray[ii])
+                    slap = compute_pop_msy(outdir, fishingRates, stocks, nfish, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage, minsize, minrec,
+                                           R, msave, iteration, btarget, rptest, environ, rvar, conn_matrix, rotationArray[ii])
                     print(slap)
-                
 
                 stocklist = [g for g in os.listdir(outdir + species) if g.endswith(
                     '%d' % nfish, 19, 20) and g.endswith('_' + '%d' % iteration + '.nc')]
@@ -222,6 +213,5 @@ def calc_msy(
         else:  # flag for data not sufficient and exit
             print('Insufficient Data...not running ' + species)
             xtest = False
-        print(runs)
 
     print('%d ' % speciesIndex + species + ' is done.')
