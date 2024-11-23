@@ -193,7 +193,7 @@ def compute_pop_msy(
                                 cann_prob = 1 - np.exp(-cann_rate * delt)
                                 if cannibal <= cann_prob and availableEnergy < consumption:
                                     availableEnergy = availableEnergy + fish[ii-1, eatid]
-                                    dead[eatid] == 1
+                                    dead[eatid] = 1
                         else:
                             consumption = resource[ii, stock[jj]]
                             availableEnergy = resource[ii, stock[jj]]
@@ -318,7 +318,7 @@ def compute_pop_msy(
             slap = True
             break
 
-        # update mass and age data for new recruits
+        # update mass and age data for new recruits - make user input, default .5
         recruitVar = 0.5
 
         if connectivity:
