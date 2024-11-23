@@ -1,29 +1,65 @@
 #!/usr/bin/python
-#Script to run multiple fisheries model
+# Script to run multiple fisheries model
 
+import argparse
 import os
-import sys
-import numpy as np
+
 import pandas as pd
+import numpy as np
 from joblib import Parallel, delayed
+
 from calc_msy_rotational_serve import calc_msy
 
-#file containing fish growht parameters
-datadir = '/Users/bwoodson/Desktop/MSYfish-main/model_output_new_cons.nosync/'
+# command line arguments - will be removed when GUI added
+parser = argparse.ArgumentParser(
+    prog='MSYParallelServe',
+    description='Runs the MSY Fish Model')
 
-#create data file if does not exist
-if not os.path.exists(datadir):
-    os.makedirs(datadir)
-    print('Creating data folder: ' + datadir)
+files = parser.add_argument_group(title='Paths', description='File paths for inputs/outputs')
+files.add_argument(dest='outputdir', help='Path to output files')
+files.add_argument(dest='fishdata', help='Path to species growth data file')
+files.add_argument('-c', '-connectivity', dest='connectivity', help='Path to optional connectivity file', default=None)
 
-#read input data file
-fishdata=pd.read_excel('/Users/bwoodson/Desktop/MSYfish-main/fish_growth_data2.xlsx',sheet_name='fish_growth_data')
+modelVars = parser.add_argument_group(title='Model Variables', description='Variables for running the model')
+modelVars.add_argument(dest='startspecies', help='Starting index of species from file', type=int)
+modelVars.add_argument(dest='endspecies', help='Ending index of species from file (non-inclusive)', type=int)
+modelVars.add_argument(dest='stocks', help='Number of stocks', type=int)
+modelVars.add_argument(dest='niter', help='Number of iterations per simulation', type=int)
+modelVars.add_argument(dest='years', help='Number of years per simulation', type=int)
+modelVars.add_argument(dest='initialPop', help='Initial number of fish', type=int)
+modelVars.add_argument(dest='fishing', help='Include fishing in simulation', type=bool)
+modelVars.add_argument(dest='rotation', help='Enable rotational closure', type=bool)
 
-#determine number of species
+args = parser.parse_args()
+
+outputdir = args.outputdir
+
+# create data file if does not exist
+if not os.path.exists(outputdir):
+    os.makedirs(outputdir)
+    print('Creating data folder: ' + outputdir)
+
+# read input data file
+fishdata = pd.read_excel(args.fishdata)
+
+# determine number of species
 numspec = fishdata.shape[0]
+start = args.startspecies
+end = args.endspecies
+if (start < 0 or end > numspec or start > end):
+    exit()
+print(args._get_args)
+# run model - start and end = 14/15
 
-#run model
-Parallel(n_jobs=2)(delayed(calc_msy)(datadir,fishdata,kk) for kk in range(14,15))
+if args.connectivity:
+    conn_data = pd.read_excel(args.connectivity)
+    connectivity = conn_data.to_numpy()
+    print(connectivity)
+    connectivity = connectivity[:,1:]
+    print(connectivity)
+else:
+    connectivity = np.array(None)
 
-
+Parallel(n_jobs=2)(delayed(calc_msy)(outputdir, fishdata, connectivity, kk, args.stocks, args.niter, args.years, args.initialPop, False, args.rotation)
+                   for kk in range(start, end))
 
