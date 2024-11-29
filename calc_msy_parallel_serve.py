@@ -63,3 +63,4 @@ else:
 Parallel(n_jobs=2)(delayed(calc_msy)(outputdir, fishdata, connectivity, kk, args.stocks, args.niter, args.years, args.initialPop, False, args.rotation)
                    for kk in range(start, end))
 
+# Command I used for testing - python calc_msy_parallel_serve.py model_output_new_cons.nosync/ fish_growth_data2.xlsx 14 15 6 6 1 1 false false
