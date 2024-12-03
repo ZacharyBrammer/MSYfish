@@ -28,7 +28,8 @@ def compute_pop_msy(
     recruitVar: float,  # variability in recruitment
     # connectivity matrix - to disable connectivity pass np.array(None)
     conn_matrix: np.ndarray,
-    rotation: int  # rotation rate
+    rotation: int,  # rotation rate
+    nyr: int # number of years
 ) -> bool:
     outfile = outdir + species + '/msy_stocks_' + '%d' % fishingRates.size + '_nfish_' + '%d' % nfish + '_mfish_' + \
         '%.4f' % np.max(fishingRates) + '_rot_' + '%03d' % rotation + '_' + \
@@ -53,7 +54,7 @@ def compute_pop_msy(
     slap = False  # restart flag
 
     delt = 1  # timestep in years
-    nyr = 300  # length of simulation in years
+    #nyr = 300  # length of simulation in years
     if rptest:
         nyr = 5 * maxage
         if nyr < 200:

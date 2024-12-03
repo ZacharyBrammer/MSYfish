@@ -1,8 +1,8 @@
 import time
 
+import numpy as np
 import pandas as pd
 import streamlit as st
-import numpy as np
 
 from calc_msy_rotational_serve import calc_msy
 
@@ -36,7 +36,7 @@ for species in selectedSpecies:
     speciesIndexes.append(speciesList[speciesList == species].index.values[0].item())
 
 # Get output directory
-directory = st.text_input(label="Model Output Directory", value="/model", disabled=st.session_state.running)
+directory = st.text_input(label="Model Output Directory", value="path/", disabled=st.session_state.running)
 
 # Integer inputs to the model
 stocks = st.number_input(label="Number of stocks", step=1, min_value=1, disabled=st.session_state.running)
@@ -47,7 +47,8 @@ initialPop = st.number_input(label="Initial population", step=1, min_value=1, di
 
 # Optional enables
 st.write("Optional Flags")
-enableConn = st.toggle(label="Connectivity", disabled=st.session_state.running)
+#enableConn = st.toggle(label="Connectivity", disabled=st.session_state.running)
+enableConn = False # connectivity doesn't actually work, run into an out of bounds error on line 332 in connect file
 fishing = st.toggle(label="Fishing", disabled=st.session_state.running)
 rotation = st.toggle(label="Rotation", disabled=st.session_state.running)
 
@@ -58,7 +59,6 @@ if enableConn:
     connectivity = connectivity[:,1:]
 else:
     connectivity = np.array(None)
-
 
 # Run model
 if st.session_state.running:
