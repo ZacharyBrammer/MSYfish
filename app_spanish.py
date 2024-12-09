@@ -23,34 +23,34 @@ if "running" not in st.session_state:
     st.session_state.running = False
 
 # Run button
-runButton = st.button(label="Run Simluations")
+runButton = st.button(label="Ejecutar Simulacion")
 
 if runButton:
     st.session_state.running = True
 
 # Have user select species, get indexes for running model
-selectedSpecies: list[str] = st.multiselect(label="Species", options=speciesList, disabled=st.session_state.running)
+selectedSpecies: list[str] = st.multiselect(label="Especies", options=speciesList, disabled=st.session_state.running)
 speciesIndexes: list[int] = []
 
 for species in selectedSpecies:
     speciesIndexes.append(speciesList[speciesList == species].index.values[0].item())
 
 # Get output directory
-directory = st.text_input(label="Model Output Directory", value="path/", disabled=st.session_state.running)
+directory = st.text_input(label="Carpeta de salida", value="path/", disabled=st.session_state.running)
 
 # Integer inputs to the model
-stocks = st.number_input(label="Number of stocks", step=1, min_value=1, disabled=st.session_state.running)
-niter = st.number_input(label="Iterations to run", step=1, min_value=1, disabled=st.session_state.running)
-years = st.number_input(label="Years per simulation", step=1, min_value=1, disabled=st.session_state.running)
-initialPop = st.number_input(label="Initial population", step=1, min_value=1, disabled=st.session_state.running)
+stocks = st.number_input(label="Poblaciones", step=1, min_value=1, disabled=st.session_state.running)
+niter = st.number_input(label="Iteraciones", step=1, min_value=1, disabled=st.session_state.running)
+years = st.number_input(label="Anos por simulacion", step=1, min_value=1, disabled=st.session_state.running)
+initialPop = st.number_input(label="Poblacion inicial", step=1, min_value=1, disabled=st.session_state.running)
 
 
 # Optional enables
-st.write("Optional Flags")
+st.write("Opciones")
 #enableConn = st.toggle(label="Connectivity", disabled=st.session_state.running) - take num stocks x num stocks matrix
 enableConn = False # connectivity doesn't actually work, run into an out of bounds error on line 332 in connect file
-fishing = st.toggle(label="Fishing", disabled=st.session_state.running)
-rotation = st.toggle(label="Rotation", disabled=st.session_state.running) # ask about enabling rotation - line 163 in rotational serve - set rotation array to 0
+fishing = st.toggle(label="Pesca", disabled=st.session_state.running)
+#rotation = st.toggle(label="Rotation", disabled=st.session_state.running) # ask about enabling rotation - line 163 in rotational serve - set rotation array to 0
 
 # Load connectivity file
 if enableConn:
