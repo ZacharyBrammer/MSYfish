@@ -139,8 +139,9 @@ def calc_msy(
             mfstp = np.linspace(0, maxfish, fstep)
             mfstp[0] = 0
 
-            rotationArray = np.arange(0, fstep)
-            rotationArray = np.append(rotationArray, 500)
+            if rotation:
+                rotationArray = np.arange(0, fstep)
+                rotationArray = np.append(rotationArray, 500)
 
             # set number of stocks to be fished initially to one
             nfish = initialPop
@@ -154,14 +155,18 @@ def calc_msy(
             rptest = True
             environ = True
 
-            # perform model simulations looping over number of fished stockes and fishing rate
+            # perform model simulations looping over number of fished stocks and fishing rate
             while stocktest:
 
                 for ii in range(0, fstep+1):  # 41 for complete runs
 
                     fishingRates[0:nfish] = 0.1
-                    slap = compute_pop_msy(outdir, fishingRates, stocks, nfish, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage, minsize, minrec,
+                    if rotation:
+                        slap = compute_pop_msy(outdir, fishingRates, stocks, nfish, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage, minsize, minrec,
                                            R, msave, iteration, btarget, rptest, environ, rvar, conn_matrix, rotationArray[ii], years)
+                    else:
+                        slap = compute_pop_msy(outdir, fishingRates, stocks, nfish, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage, minsize, minrec,
+                                           R, msave, iteration, btarget, rptest, environ, rvar, conn_matrix, 0, years)
 
                 stocklist = [g for g in os.listdir(outdir + species) if g.endswith(
                     '%d' % nfish, 19, 20) and g.endswith('_' + '%d' % iteration + '.nc')]

@@ -1,3 +1,4 @@
+import io
 import time
 
 import numpy as np
@@ -46,24 +47,32 @@ initialPop = st.number_input(label="Initial population", step=1, min_value=1, di
 
 
 # Optional enables
-st.write("Optional Flags")
-#enableConn = st.toggle(label="Connectivity", disabled=st.session_state.running) - take num stocks x num stocks matrix
-enableConn = False # connectivity doesn't actually work, run into an out of bounds error on line 332 in connect file
-fishing = st.toggle(label="Fishing", disabled=st.session_state.running)
-rotation = st.toggle(label="Rotation", disabled=st.session_state.running) # ask about enabling rotation - line 163 in rotational serve - set rotation array to 0
+st.write("Optional Parameters")
 
 # Load connectivity file
-if enableConn:
-    conn_data = pd.read_excel("connectivity.xlsx")
+conn_file = st.file_uploader(label="Connectivity Matrix", type=['xls', 'xlsx'], disabled=st.session_state.running)
+if conn_file is not None:
+    file_bytes = io.BytesIO(conn_file.getvalue())
+    conn_data = pd.read_excel(file_bytes)
     connectivity = conn_data.to_numpy()
     connectivity = connectivity[:,1:]
+
+    # Check that connectivity file matches number of stocks
+    if not (connectivity.shape[0] == stocks and connectivity.shape[1] == stocks):
+        # Warn user, set connectivity to none
+        st.warning("Connectivity file does not match number of stocks, connectivity set to none. Update number of stocks or choose new connectivity file.")
+        connectivity = np.array(None)
+        conn_file = None
 else:
     connectivity = np.array(None)
+
+fishing = st.toggle(label="Fishing", disabled=st.session_state.running)
+rotation = st.toggle(label="Rotation", disabled=st.session_state.running)
 
 # Run model
 if st.session_state.running:
     for i in range(len(speciesIndexes)):
-        calc_msy(directory, fishdata, connectivity, i, stocks, niter, years, initialPop, fishing, rotation)
+        #calc_msy(directory, fishdata, connectivity, i, stocks, niter, years, initialPop, fishing, rotation)
 
         # If final run, re-enable inputs
         if i == len(speciesIndexes) - 1:
