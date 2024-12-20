@@ -69,6 +69,11 @@ else:
 fishing = st.toggle(label="Fishing", disabled=st.session_state.running)
 rotation = st.toggle(label="Rotation", disabled=st.session_state.running)
 
+# Check that stocks > 1 to prevent divide by 0 error
+if rotation and stocks == 1:
+    st.warning("Cannot run with connectivity with only one stock, rotation set to false. Update number of stocks or disable rotation.")
+    rotation = False
+
 # Run model
 if st.session_state.running:
     for i in range(len(speciesIndexes)):
