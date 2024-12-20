@@ -399,46 +399,44 @@ def compute_pop_msy(
 
     # create output file
     if msave:
-        biodata = create_popdynnc(
-            outfile, nyr, numfish, nbins, maxage, nstocks)
+        runData = {
+            'ftime': yy,
+            'fishing_rate': fishingRates,
+            'reprod_rate': reprodper,
+            'fish': fish,
+            'popsize': popsize,
+            'biomass': biomass,
+            'consumption': preyconsumed,
+            'newgrowth': newgrowth,
+            'reprod_out': reprodOut,
+            'reproduction': reproduction,
+            'catch': catch,
+            'age': age,
+            'wfish': fishWt,
+            'resource': resource,
+            'mortality': mortality,
+            'stock_size': stockSize,
+            'stock_biomass': stockBiomass,
+            'stock_recruit': stockRec,
+            'sex_ratio': sexRatio,
+            'mort_bins': mortBin,
+            'catch_bins': catchBin,
+            'pop_bins': popBin,
+            'biomass_bins': biomassBin,
+            'reprod_bins': reprodBin,
+            'age_bins': ageBin,
+            'mid_bins': mid_bins,
+            'rotation_rate': rotation
+        }
 
-        # write model output to
-        biodata.variables['ftime'][:] = yy
-        biodata.variables['fishing_rate'][:] = fishingRates
-        biodata.variables['reprod_rate'][:] = reprodper
-        biodata.variables['fish'][:, :] = fish
-        biodata.variables['popsize'][:] = popsize
-        biodata.variables['biomass'][:] = biomass
-        biodata.variables['consumption'][:] = preyconsumed
-        biodata.variables['newgrowth'][:] = newgrowth
-        biodata.variables['reprod_out'][:] = reprodOut
-        biodata.variables['reproduction'][:, :] = reproduction
-        biodata.variables['catch'][:, :, :] = catch
-        biodata.variables['age'][:] = age
-        biodata.variables['wfish'][:] = fishWt
-        biodata.variables['resource'][:, :] = resource
-        biodata.variables['mortality'][:, :] = mortality
-        biodata.variables['stock_size'][:, :] = stockSize
-        biodata.variables['stock_biomass'][:, :] = stockBiomass
-        biodata.variables['stock_recruit'][:, :] = stockRec
-        biodata.variables['sex_ratio'][:] = sexRatio
-
-        biodata.variables['mort_bins'][:, :, :] = mortBin
-        biodata.variables['catch_bins'][:, :, :] = catchBin
-        biodata.variables['pop_bins'][:, :, :] = popBin
-        biodata.variables['biomass_bins'][:, :, :] = biomassBin
-        biodata.variables['reprod_bins'][:, :, :] = reprodBin
-        biodata.variables['age_bins'][:, :, :] = ageBin
-        biodata.variables['mid_bins'][:] = mid_bins
-        biodata.variables['rotation_rate'][:] = rotation
-
-        biodata.close()
-
+        # write model output to file
+        create_popdynnc(outfile, nyr, numfish, nbins, maxage, nstocks, runData)
+        
     return slap
 
 
 # Subroutine to create output netcdf file
-def create_popdynnc(outfile, tlength, numpop, nbins, maxage, nstocks):
+def create_popdynnc(outfile, tlength, numpop, nbins, maxage, nstocks, runData):
     biodata = nc.Dataset(outfile, 'w')
     biodata.createDimension('time', tlength)
     biodata.createDimension('numpop', numpop)
@@ -452,130 +450,157 @@ def create_popdynnc(outfile, tlength, numpop, nbins, maxage, nstocks):
     biodata.createVariable('ftime', 'f8', ('time'))
     biodata.variables['ftime'].long_name = 'time since model start'
     biodata.variables['ftime'].units = 'years'
+    biodata.variables['ftime'][:] = runData['ftime']
 
     # Fish Rate
     biodata.createVariable('fishing_rate', 'f8', ('nstocks'))
     biodata.variables['fishing_rate'].long_name = 'fishing rate in each stock'
     biodata.variables['fishing_rate'].units = '%'
+    biodata.variables['fishing_rate'][:] = runData['fishing_rate']
 
     # Reproduction Rate
     biodata.createVariable('reprod_rate', 'f8', ('nstocks'))
     biodata.variables['reprod_rate'].long_name = 'mean survivial rate of larvae'
     biodata.variables['reprod_rate'].units = '%'
-
+    biodata.variables['reprod_rate'][:] = runData['reprod_rate']
+    
     # Rotation Rate
     biodata.createVariable('rotation_rate', 'f8', ('ones'))
     biodata.variables['rotation_rate'].long_name = 'period of time before reserve rotation'
     biodata.variables['rotation_rate'].units = 'years'
+    biodata.variables['rotation_rate'][:] = runData['rotation_rate']
 
     # Fish Size
     biodata.createVariable('fish', 'f8', ('time', 'numpop'))
     biodata.variables['fish'].long_name = 'individual size through time'
     biodata.variables['fish'].units = 'kg'
+    biodata.variables['fish'][:, :] = runData['fish']
 
     # Population Size
     biodata.createVariable('popsize', 'f8', ('time'))
     biodata.variables['popsize'].long_name = 'population size'
     biodata.variables['popsize'].units = '# of individuals'
+    biodata.variables['popsize'][:] = runData['popsize']
 
     biodata.createVariable('pop_bins', 'f8', ('time', 'numbins', 'nstocks'))
     biodata.variables['pop_bins'].long_name = 'populations size in size bins'
     biodata.variables['pop_bins'].units = '#'
+    biodata.variables['pop_bins'][:, :, :] = runData['pop_bins']
 
     # Sex Ratio
     biodata.createVariable('sex_ratio', 'f8', ('time'))
     biodata.variables['sex_ratio'].long_name = 'proportion female'
     biodata.variables['sex_ratio'].units = 'proportion'
+    biodata.variables['sex_ratio'][:] = runData['sex_ratio']
+
     # Stock Size
     biodata.createVariable('stock_size', 'f8', ('time', 'nstocks'))
     biodata.variables['stock_size'].long_name = 'stock size'
     biodata.variables['stock_size'].units = '# of individuals'
+    biodata.variables['stock_size'][:, :] = runData['stock_size']
 
     biodata.createVariable('stock_biomass', 'f8', ('time', 'nstocks'))
     biodata.variables['stock_biomass'].long_name = 'stock biomass'
     biodata.variables['stock_biomass'].units = '# of individuals'
+    biodata.variables['stock_biomass'][:, :] = runData['stock_biomass']
 
     biodata.createVariable('stock_recruit', 'f8', ('time', 'nstocks'))
     biodata.variables['stock_recruit'].long_name = 'stock recruits'
     biodata.variables['stock_recruit'].units = '# of individuals'
+    biodata.variables['stock_recruit'][:, :] = runData['stock_recruit']
 
     # Biomass
     biodata.createVariable('biomass', 'f8', ('time'))
     biodata.variables['biomass'].long_name = 'biomass'
     biodata.variables['biomass'].units = 'kg'
+    biodata.variables['biomass'][:] = runData['biomass']
 
-    biodata.createVariable('biomass_bins', 'f8',
-                           ('time', 'numbins', 'nstocks'))
+    biodata.createVariable('biomass_bins', 'f8', ('time', 'numbins', 'nstocks'))
     biodata.variables['biomass_bins'].long_name = 'biomass in size bins'
     biodata.variables['biomass_bins'].units = '#'
+    biodata.variables['biomass_bins'][:, :, :] = runData['biomass_bins']
 
     # New growth
     biodata.createVariable('newgrowth', 'f8', ('time'))
     biodata.variables['newgrowth'].long_name = 'new biomass'
     biodata.variables['newgrowth'].units = 'kg'
+    biodata.variables['newgrowth'][:] = runData['newgrowth']
 
     # Reproductive Output
     biodata.createVariable('reprod_out', 'f8', ('time'))
     biodata.variables['reprod_out'].long_name = 'reproductive output'
     biodata.variables['reprod_out'].units = 'number of eggs'
+    biodata.variables['reprod_out'][:] = runData['reprod_out']
 
     # Consumption
     biodata.createVariable('consumption', 'f8', ('time'))
     biodata.variables['consumption'].long_name = 'new biomass'
     biodata.variables['consumption'].units = 'kg'
+    biodata.variables['consumption'][:] = runData['consumption']
 
     # Reproduction
     biodata.createVariable('reproduction', 'f8', ('time', 'twos'))
     biodata.variables['reproduction'].long_name = 'biomass and number'
     biodata.variables['reproduction'].units = 'kg and #'
+    biodata.variables['reproduction'][:, :] = runData['reproduction']
 
     biodata.createVariable('reprod_bins', 'f8', ('time', 'numbins', 'nstocks'))
     biodata.variables['reprod_bins'].long_name = 'reproduction in size bins'
     biodata.variables['reprod_bins'].units = '#'
+    biodata.variables['reprod_bins'][:, :, :] = runData['reprod_bins']
 
     # Catch
     biodata.createVariable('catch', 'f8', ('time', 'nstocks', 'twos'))
     biodata.variables['catch'].long_name = 'catch biomass and numbers'
     biodata.variables['catch'].units = 'kg and #'
+    biodata.variables['catch'][:, :, :] = runData['catch']
 
     biodata.createVariable('catch_bins', 'f8', ('time', 'numbins', 'nstocks'))
     biodata.variables['catch_bins'].long_name = 'catch in size bins'
     biodata.variables['catch_bins'].units = '#'
+    biodata.variables['catch_bins'][:, :, :] = runData['catch_bins']
 
     # Age
     biodata.createVariable('age', 'f8', ('numpop'))
     biodata.variables['age'].long_name = 'fish age'
     biodata.variables['age'].units = 'yr'
+    biodata.variables['age'][:] = runData['age']
 
     biodata.createVariable('age_bins', 'f8', ('time', 'maxage', 'nstocks'))
     biodata.variables['age_bins'].long_name = 'biomass in size bins'
     biodata.variables['age_bins'].units = 'yr'
+    biodata.variables['age_bins'][:, :, :] = runData['age_bins']
 
     # Fish size of target harvest
     biodata.createVariable('wfish', 'f8', ('time'))
     biodata.variables['wfish'].long_name = 'fish size of target harvest'
     biodata.variables['wfish'].units = 'kg'
+    biodata.variables['wfish'][:] = runData['wfish']
 
     # Resource
     biodata.createVariable('resource', 'f8', ('time', 'nstocks'))
     biodata.variables['resource'].long_name = 'resource'
     biodata.variables['resource'].units = 'units'
+    biodata.variables['resource'][:, :] = runData['resource']
 
     # Mortality
     biodata.createVariable('mortality', 'f8', ('time', 'twos'))
     biodata.variables['mortality'].long_name = 'mortality biomass and number'
     biodata.variables['mortality'].units = 'kg and #'
+    biodata.variables['mortality'][:, :] = runData['mortality']
 
     # Mortality by size
     biodata.createVariable('mort_bins', 'f8', ('time', 'numbins', 'nstocks'))
     biodata.variables['mort_bins'].long_name = 'mortality by size bins'
     biodata.variables['mort_bins'].units = '#'
+    biodata.variables['mort_bins'][:, :, :] = runData['mort_bins']
 
     biodata.createVariable('mid_bins', 'f8', ('numbins'))
     biodata.variables['mid_bins'].long_name = 'middle of mortality bins'
     biodata.variables['mid_bins'].units = 'kg'
+    biodata.variables['mid_bins'][:] = runData['mid_bins']
 
-    return biodata
+    biodata.close()
 
 
 def compute_wtMat(asympLen, growthCoef, lenWtCoef, lenWtPower, maxage):

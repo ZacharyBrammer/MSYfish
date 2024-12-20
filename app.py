@@ -72,7 +72,7 @@ rotation = st.toggle(label="Rotation", disabled=st.session_state.running)
 # Run model
 if st.session_state.running:
     for i in range(len(speciesIndexes)):
-        #calc_msy(directory, fishdata, connectivity, i, stocks, niter, years, initialPop, fishing, rotation)
+        calc_msy(directory, fishdata, connectivity, i, stocks, niter, years, initialPop, fishing, rotation)
 
         # If final run, re-enable inputs
         if i == len(speciesIndexes) - 1:
