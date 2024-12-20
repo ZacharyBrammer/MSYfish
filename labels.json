@@ -1,0 +1,58 @@
+{
+    "run": {
+        "en": "Run Simulations",
+        "es": "Ejecutar Simulacion"
+    },
+    "species": {
+        "en": "Species",
+        "es": "Especies"
+    },
+    "output_dir": {
+        "en": "Model Output Directory",
+        "es": "Carpeta de salida"
+    },
+    "stocks": {
+        "en": "Number of stocks",
+        "es": "Poblaciones"
+    },
+    "iterations": {
+        "en": "Iterations to run",
+        "es": "Iteraciones"
+    },
+    "years": {
+        "en": "Years per simulation",
+        "es": "Anos por simulacion"
+    },
+    "initial_pop": {
+        "en": "Initial population",
+        "es": "Poblacion inicial"
+    },
+    "optional_param": {
+        "en": "Optional Parameters",
+        "es": "Opciones"
+    },
+    "conn_file": {
+        "en": "Connectivity Matrix",
+        "es": ""
+    },
+    "conn_warning": {
+        "en": "Connectivity file does not match number of stocks, connectivity set to none. Update number of stocks or choose new connectivity file.",
+        "es": ""
+    },
+    "fishing": {
+        "en": "Fishing",
+        "es": "Pesca"
+    },
+    "rotation": {
+        "en": "Rotation",
+        "es": ""
+    },
+    "rotation_warning": {
+        "en": "Cannot run with connectivity with only one stock, rotation set to false. Update number of stocks or disable rotation.",
+        "es": ""
+    },
+    "sim_complete": {
+        "en": "Simulations complete",
+        "es": ""
+    }
+}
