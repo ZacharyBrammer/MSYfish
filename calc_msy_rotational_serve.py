@@ -5,6 +5,7 @@ import os
 
 import numpy as np
 import pandas as pd
+import streamlit as st
 
 from msy_stocks_rev14_connect import compute_pop_msy
 
@@ -40,6 +41,10 @@ def calc_msy(
     xtest = True  # flag for simulation run
     iteration = 0  # current iteration number
     print('%d ' % speciesIndex + species + ' started...')
+
+    # Setup progress bar
+    iterBar = st.progress(value=0, text="All Iterations")
+    currentBar = st.progress(value=0, text="Current Iteration")
 
     while xtest:
         # set Winf to -1 to initialize
@@ -159,6 +164,7 @@ def calc_msy(
             while stocktest:
 
                 for ii in range(0, fstep+1):  # 41 for complete runs
+                    currentBar.progress(value=(ii / fstep), text="Current Iteration")
 
                     fishingRates[0:nfish] = 0.1
                     if rotation:
@@ -190,6 +196,8 @@ def calc_msy(
                     os.remove(os.path.join(outdir + species, f))
             else:
                 iteration = iteration+1
+                iterBar.progress(value=(iteration / niter), text="All Iterations")
+                currentBar.progress(value=0, text="Current Iteration")
                 if iteration >= (niter):
                     xtest = False
 

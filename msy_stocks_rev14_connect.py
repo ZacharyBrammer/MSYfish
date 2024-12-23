@@ -4,6 +4,7 @@
 
 import netCDF4 as nc
 import numpy as np
+import streamlit as st
 
 
 def compute_pop_msy(
