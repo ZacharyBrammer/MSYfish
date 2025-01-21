@@ -54,5 +54,17 @@
     "sim_complete": {
         "en": "Simulations complete",
         "es": ""
+    },
+    "fishing_rate": {
+        "en": "Percentage of max fishing rate",
+        "es": ""
+    },
+    "rotation_rate": {
+        "en": "Rotation rate (years)",
+        "es": ""
+    },
+    "rotation_rate_warning": {
+        "en": "Rotation rate is the same as simulation length. Permanent closure enabled.",
+        "es": ""
     }
 }

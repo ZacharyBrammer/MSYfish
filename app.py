@@ -85,17 +85,32 @@ else:
     connectivity = np.array(None)
 
 fishing = st.toggle(label=labels["fishing"][st.session_state.language], disabled=st.session_state.running)
+# If fishing is enabled, let user set fishing rate as a percentage of calculated max value
+if fishing:
+    fishingRate = st.number_input(label=labels["fishing_rate"][st.session_state.language], max_value=100.0, value=100.0, disabled=st.session_state.running)
+else:
+    fishingRate = 0
+
 rotation = st.toggle(label=labels["rotation"][st.session_state.language], disabled=st.session_state.running)
+# If rotation is enabled, let user set rotation rate
+if rotation:
+    rotationRate = st.slider(label=labels["rotation_rate"][st.session_state.language], min_value=1, max_value=years + 100, disabled=st.session_state.running)
+else:
+    rotationRate = 0
 
 # Check that stocks > 1 to prevent divide by 0 error
 if rotation and stocks == 1:
     st.warning(labels["rotation_warning"][st.session_state.language])
     rotation = False
+# If rotation rate is the same as number of years, add warning about permanent closure
+if rotationRate == (years + 100):
+    st.warning(labels["rotation_rate_warning"][st.session_state.language])
 
 # Run model
 if st.session_state.running:
     for i in range(len(speciesIndexes)):
-        calc_msy(directory, fishdata, connectivity, i, stocks, niter, years, initialPop, fishing, rotation)
+        # 100 is added to the number of years so the simulation is given time to stabilize
+        calc_msy(directory, fishdata, connectivity, i, stocks, niter, (years + 100), initialPop, fishing, fishingRate, rotation, rotationRate)
 
         # If final run, re-enable inputs
         if i == len(speciesIndexes) - 1:
