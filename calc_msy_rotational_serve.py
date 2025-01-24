@@ -25,7 +25,7 @@ def calc_msy(
     fishingRate: float, # fishing rate as a percentage of maximum calculated
     rotation: bool,  # enable rotation
     rotationRate: int, # rotation rate between stocks
-):
+    ):
 
     minfiles = 1  # minimum files per simulation
 
