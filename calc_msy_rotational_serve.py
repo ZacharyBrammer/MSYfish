@@ -155,7 +155,6 @@ def calc_msy(
             rvar = 0.5
             msave = True
             btarget = 0
-            rptest = True
             environ = True
 
             # perform model simulations looping over number of fished stocks and fishing rate
@@ -167,10 +166,10 @@ def calc_msy(
                     fishingRates[0:nfish] = maxfish * (fishingRate / 100)
                     if rotation:
                         slap = compute_pop_msy(outdir, fishingRates, stocks, nfish, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage, minsize, minrec,
-                                           R, msave, iteration, btarget, rptest, environ, rvar, conn_matrix, rotationRate, years)
+                                           R, msave, iteration, btarget, False, environ, rvar, conn_matrix, rotationRate, years)
                     else:
                         slap = compute_pop_msy(outdir, fishingRates, stocks, nfish, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage, minsize, minrec,
-                                           R, msave, iteration, btarget, rptest, environ, rvar, conn_matrix, 0, years)
+                                           R, msave, iteration, btarget, False, environ, rvar, conn_matrix, 0, years)
 
                 stocklist = [g for g in os.listdir(outdir + species) if g.endswith(
                     '%d' % nfish, 19, 20) and g.endswith('_' + '%d' % iteration + '.nc')]
