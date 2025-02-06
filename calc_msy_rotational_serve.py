@@ -36,7 +36,7 @@ def calc_msy(
         pass
 
     # grab data from fishdata array
-    species = fishdata['species'][speciesIndex]
+    species = fishdata['scientific'][speciesIndex]
     species = species.split()
     species = species[0] + '_' + species[1]
 

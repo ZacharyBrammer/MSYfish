@@ -120,7 +120,7 @@ if rotationRate == (years + 100):
 if st.session_state.running:
     for i in range(len(speciesIndexes)):
         # 100 is added to the number of years so the simulation is given time to stabilize
-        calc_msy(directory, fishdata, connectivity, i, stocks, niter, (years + 100), initialPop, fishing, fishingRate, rotation, rotationRate)
+        calc_msy(directory, fishdata, connectivity, speciesIndexes[i], stocks, niter, (years + 100), initialPop, fishing, fishingRate, rotation, rotationRate)
 
         # If final run, re-enable inputs
         if i == len(speciesIndexes) - 1:
