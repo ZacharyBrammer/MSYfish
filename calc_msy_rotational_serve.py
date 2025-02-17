@@ -199,8 +199,10 @@ def calc_msy(
                     xtest = False
         
         if maxfish > 0:
-            st.write(f"Maximum calculated fishing rate: {maxfish:.2}")
-            st.write(f"Fishing rate used : {maxfish * (fishingRate / 100):.2}")
+            st.session_state.fishingDat = {
+                "Maximum calculated fishing rate": f"{maxfish:.2}",
+                "Fishing rate used": f"{maxfish * (fishingRate / 100):.2}"
+            }
 
         else:  # flag for data not sufficient and exit
             print('Insufficient Data...not running ' + species)

@@ -37,6 +37,9 @@ if "names" not in st.session_state:
 if "plot" not in st.session_state:
     st.session_state.plot = ""
 
+if "fishingDat" not in st.session_state:
+    st.session_state.fishingDat = ""
+
 # Get species data from spreadsheet, can turn into user uploaded file later
 fishdata = pd.read_excel("fish_growth_data2.xlsx")
 speciesList = fishdata[st.session_state.names]
@@ -145,4 +148,5 @@ if st.session_state.running:
 
 # Display images and other data from sim
 if st.session_state.plot != "":
+    st.write(st.session_state.fishingDat)
     st.image(st.session_state.plot)
