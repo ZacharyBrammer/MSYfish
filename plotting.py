@@ -1,5 +1,3 @@
-import os
-
 import matplotlib.pyplot as plt
 import netCDF4 as nc
 import numpy as np
@@ -7,7 +5,7 @@ import numpy as np
 
 def plot_simulation(
         path: str, # path to simulation output
-    ):
+    ) -> list[str]:
     # Read the dataset
     biodata = nc.Dataset(path, "r")
 
@@ -35,14 +33,18 @@ def plot_simulation(
     # Create plot
     stockBFig = plt.figure("Stock Biomass vs Time")
     plt.plot(years, stockBiomass)
-    plt.title("Biomass Per Stock vs Time")
+    if endsEarly:
+        plt.suptitle("Biomass Per Stock vs Time")
+        plt.title("Warning: population crashed during simulation")
+    else:
+        plt.title("Biomass Per Stock vs Time")
+
     plt.xlabel("Time (years)")
     plt.ylabel("Biomass (kg)")
     plt.ylim(bottom=0)
     plt.gca().legend(stocks)
 
-    #plt.savefig("stock_biomass_time")
-    #plt.show()
+    plt.savefig("plots/stock_biomass_time")
 
     # Plot catch over time
     # Get catch data
@@ -53,14 +55,20 @@ def plot_simulation(
 
     catchFig = plt.figure("Catch Over Time")
     plt.plot(years, catch)
-    plt.title("Catch Per Stock vs Time")
+    if endsEarly:
+        plt.suptitle("Catch Per Stock vs Time")
+        plt.title("Warning: population crashed during simulation")
+    else:
+        plt.title("Catch Per Stock vs Time")
+
     plt.xlabel("Time (years)")
     plt.ylabel("Catch (kg)")
     plt.ylim(bottom=0)
     plt.gca().legend(stocks)
     
-    plt.show()
+    plt.savefig("plots/stock_catch_time")
 
-    
     # Close file
     biodata.close()
+
+    return ["plots/stock_biomass_time.png", "plots/stock_catch_time.png"]

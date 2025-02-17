@@ -1,5 +1,6 @@
 import io
 import json
+import os
 import time
 
 import numpy as np
@@ -7,6 +8,7 @@ import pandas as pd
 import streamlit as st
 
 from calc_msy_rotational_serve import calc_msy
+from plotting import plot_simulation
 
 # Page setup
 st.set_page_config(
@@ -30,7 +32,10 @@ if "language" not in st.session_state:
     st.session_state.language = "en"
 
 if "names" not in st.session_state:
-    st.session_state.names = "scientific" # Scientific names
+    st.session_state.names = "scientific"
+
+if "plot" not in st.session_state:
+    st.session_state.plot = ""
 
 # Get species data from spreadsheet, can turn into user uploaded file later
 fishdata = pd.read_excel("fish_growth_data2.xlsx")
@@ -118,13 +123,26 @@ if rotationRate == (years + 100):
 
 # Run model
 if st.session_state.running:
+    if (len(speciesIndexes)) == 0:
+        st.session_state.running = False
+    
     for i in range(len(speciesIndexes)):
         # 100 is added to the number of years so the simulation is given time to stabilize
         calc_msy(directory, fishdata, connectivity, speciesIndexes[i], stocks, niter, (years + 100), initialPop, fishing, fishingRate, rotation, rotationRate)
 
-        # If final run, re-enable inputs
+        # If final run, re-enable inputs and plot first run
         if i == len(speciesIndexes) - 1:
+            # Get path to first simulation to plot
+            firstSimDir = os.getcwd() + "/" + directory + "/" + os.listdir(directory)[0]
+            firstSimPath = firstSimDir + "/" + os.listdir(firstSimDir)[0]
+            st.session_state.plot = plot_simulation(firstSimPath)
+
+            # Set running to false and print success message
             st.session_state.running = False
             st.success(labels["sim_complete"][st.session_state.language])
             time.sleep(5)
             st.rerun()
+
+# Display images and other data from sim
+if st.session_state.plot != "":
+    st.image(st.session_state.plot)
