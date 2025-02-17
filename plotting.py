@@ -29,7 +29,6 @@ def plot_simulation(
         "Stock Biomass Average": f"{np.mean(stockBiomass):.2f}",
         "Stock Biomass Standard Deviation": f"{np.std(stockBiomass):.2f}"
     }
-    print(popDat)
     st.session_state.popDat = popDat
 
     # Create Legend titles
