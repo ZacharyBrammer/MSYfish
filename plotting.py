@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import netCDF4 as nc
 import numpy as np
+import streamlit as st
 
 
 def plot_simulation(
@@ -24,6 +25,12 @@ def plot_simulation(
     # Plot biomass per stock
     # Get per-stock biomass data
     stockBiomass = biodata.variables["stock_biomass"][:].data[100:][:last]
+    popDat = {
+        "Stock Biomass Average": f"{np.mean(stockBiomass):.2f}",
+        "Stock Biomass Standard Deviation": f"{np.std(stockBiomass):.2f}"
+    }
+    print(popDat)
+    st.session_state.popDat = popDat
 
     # Create Legend titles
     stocks = []
