@@ -126,8 +126,10 @@ if rotationRate == (years + 100):
 
 # Run model
 if st.session_state.running:
+    # Make it so not selecting a species and hitting run doesn't break everything
     if (len(speciesIndexes)) == 0:
         st.session_state.running = False
+        st.rerun()
     
     for i in range(len(speciesIndexes)):
         # 100 is added to the number of years so the simulation is given time to stabilize
