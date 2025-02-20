@@ -22,8 +22,10 @@ def calc_msy(
     years: int,  # number of years per simulation
     initialPop: int,  # initial fish population
     fishing: bool,  # enable fishing
-    rotation: bool  # enable rotation
-):
+    fishingRate: float, # fishing rate as a percentage of maximum calculated
+    rotation: bool,  # enable rotation
+    rotationRate: int, # rotation rate between stocks
+    ):
 
     minfiles = 1  # minimum files per simulation
 
@@ -34,7 +36,7 @@ def calc_msy(
         pass
 
     # grab data from fishdata array
-    species = fishdata['species'][speciesIndex]
+    species = fishdata['scientific'][speciesIndex]
     species = species.split()
     species = species[0] + '_' + species[1]
 
@@ -133,7 +135,7 @@ def calc_msy(
             # estimate maximum fishing rate
             while fishing:
                 fishingRates = np.zeros([stocks])+maxfish
-                fishing = compute_pop_msy(outdir, fishingRates, stocks, stocks, species, asympLen, growthCoef, lenWtCoef,
+                fishing = not compute_pop_msy(outdir, fishingRates, stocks, stocks, species, asympLen, growthCoef, lenWtCoef,
                                           lenWtPower, maxage, minsize, minrec, R, False, iteration, 1, False, False, .5, conn_matrix, 0, years)
                 maxfish = maxfish + .01
 
@@ -144,10 +146,6 @@ def calc_msy(
             mfstp = np.linspace(0, maxfish, fstep)
             mfstp[0] = 0
 
-            if rotation:
-                rotationArray = np.arange(0, fstep)
-                rotationArray = np.append(rotationArray, 500)
-
             # set number of stocks to be fished initially to one
             nfish = initialPop
 
@@ -157,7 +155,6 @@ def calc_msy(
             rvar = 0.5
             msave = True
             btarget = 0
-            rptest = True
             environ = True
 
             # perform model simulations looping over number of fished stocks and fishing rate
@@ -166,13 +163,13 @@ def calc_msy(
                 for ii in range(0, fstep+1):  # 41 for complete runs
                     currentBar.progress(value=(ii / fstep), text="Current Iteration")
 
-                    fishingRates[0:nfish] = 0.1
+                    fishingRates[0:nfish] = maxfish * (fishingRate / 100)
                     if rotation:
                         slap = compute_pop_msy(outdir, fishingRates, stocks, nfish, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage, minsize, minrec,
-                                           R, msave, iteration, btarget, rptest, environ, rvar, conn_matrix, rotationArray[ii], years)
+                                           R, msave, iteration, btarget, False, environ, rvar, conn_matrix, rotationRate, years)
                     else:
                         slap = compute_pop_msy(outdir, fishingRates, stocks, nfish, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage, minsize, minrec,
-                                           R, msave, iteration, btarget, rptest, environ, rvar, conn_matrix, 0, years)
+                                           R, msave, iteration, btarget, False, environ, rvar, conn_matrix, 0, years)
 
                 stocklist = [g for g in os.listdir(outdir + species) if g.endswith(
                     '%d' % nfish, 19, 20) and g.endswith('_' + '%d' % iteration + '.nc')]
@@ -200,6 +197,12 @@ def calc_msy(
                 currentBar.progress(value=0, text="Current Iteration")
                 if iteration >= (niter):
                     xtest = False
+        
+        if maxfish > 0:
+            st.session_state.fishingDat = {
+                "Maximum calculated fishing rate": f"{maxfish:.2}",
+                "Fishing rate used": f"{maxfish * (fishingRate / 100):.2}"
+            }
 
         else:  # flag for data not sufficient and exit
             print('Insufficient Data...not running ' + species)

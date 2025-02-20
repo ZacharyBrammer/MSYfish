@@ -31,7 +31,7 @@ def compute_pop_msy(
     conn_matrix: np.ndarray,
     rotation: int,  # rotation rate
     nyr: int # number of years
-) -> bool:
+    ) -> bool:
     outfile = outdir + species + '/msy_stocks_' + '%d' % fishingRates.size + '_nfish_' + '%d' % nfish + '_mfish_' + \
         '%.4f' % np.max(fishingRates) + '_rot_' + '%03d' % rotation + '_' + \
         '%d' % iteration + '.nc'  # '_rec_' + '%.4f' % reprodper
