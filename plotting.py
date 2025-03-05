@@ -1,12 +1,12 @@
-import matplotlib.pyplot as plt
 import netCDF4 as nc
 import numpy as np
+import plotly.graph_objects as go
 import streamlit as st
 
 
 def plot_simulation(
-        path: str, # path to simulation output
-    ) -> list[str]:
+    path: str,  # path to simulation output
+) -> list[go.Figure]:
     # Read the dataset
     biodata = nc.Dataset(path, "r")
 
@@ -31,26 +31,34 @@ def plot_simulation(
     }
     st.session_state.popDat = popDat
 
-    # Create Legend titles
-    stocks = []
-    for i in range(len(stockBiomass[0])):
-        stocks.append(f"Stock {i + 1}")
+    # Setup layout for interactive figure
+    stockBLayout = go.Layout(
+        title={
+            "text": "Stock Biomass vs Time",
+            "x": 0.5,  # Center title on plot
+            "xanchor": "center",
+        },
+        # Set labels along with range
+        xaxis=dict(title="Time (years)", range=[0, None]),
+        yaxis=dict(title="Biomass (kg)", range=[0, None]),
+        template="plotly"  # Default dark theme
+    )
 
-    # Create plot
-    stockBFig = plt.figure("Stock Biomass vs Time")
-    plt.plot(years, stockBiomass)
+    # If ends early, modify title using html to add warning
     if endsEarly:
-        plt.suptitle("Biomass Per Stock vs Time")
-        plt.title("Warning: population crashed during simulation")
-    else:
-        plt.title("Biomass Per Stock vs Time")
+        stockBLayout.title["text"] = "Stock Biomass vs Time <br><sup>Warning: population crashed during simulation</sup>"
 
-    plt.xlabel("Time (years)")
-    plt.ylabel("Biomass (kg)")
-    plt.ylim(bottom=0)
-    plt.gca().legend(stocks)
+    stockBFig = go.Figure(layout=stockBLayout)
 
-    plt.savefig("plots/stock_biomass_time")
+    # Add each stock to figure
+    for i in range(stockBiomass.shape[1]):
+        trace = go.Scatter(
+            x=years,
+            y=stockBiomass[:, i],
+            mode="lines",
+            name=f"Stock {i+1}"
+        )
+        stockBFig.add_trace(trace)
 
     # Plot catch over time
     # Get catch data
@@ -59,22 +67,36 @@ def plot_simulation(
     # Select just the caught weight data
     catch = catch[:, :, 1]
 
-    catchFig = plt.figure("Catch Over Time")
-    plt.plot(years, catch)
-    if endsEarly:
-        plt.suptitle("Catch Per Stock vs Time")
-        plt.title("Warning: population crashed during simulation")
-    else:
-        plt.title("Catch Per Stock vs Time")
+    # Setup layout for interactive figure
+    catchFigLayout = go.Layout(
+        title={
+            "text": "Catch Per Stock vs Time",
+            "x": 0.5,  # Center title on plot
+            "xanchor": "center",
+        },
+        # Set labels along with range
+        xaxis=dict(title="Time (years)", range=[0, None]),
+        yaxis=dict(title="Catch (kg)", range=[0, None]),
+        template="plotly"  # Default dark theme
+    )
 
-    plt.xlabel("Time (years)")
-    plt.ylabel("Catch (kg)")
-    plt.ylim(bottom=0)
-    plt.gca().legend(stocks)
-    
-    plt.savefig("plots/stock_catch_time")
+    # If ends early, modify title using html to add warning
+    if endsEarly:
+        catchFigLayout.title["text"] = "Catch Per Stock vs Time vs Time <br><sup>Warning: population crashed during simulation</sup>"
+
+    catchFig = go.Figure(layout=catchFigLayout)
+
+    # Add each stock to figure
+    for i in range(catch.shape[1]):
+        trace = go.Scatter(
+            x=years,
+            y=catch[:, i],
+            mode="lines",
+            name=f"Stock {i+1}"
+        )
+        catchFig.add_trace(trace)
 
     # Close file
     biodata.close()
 
-    return ["plots/stock_biomass_time.png", "plots/stock_catch_time.png"]
+    return [stockBFig, catchFig]

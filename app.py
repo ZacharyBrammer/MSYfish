@@ -155,4 +155,5 @@ if st.session_state.running:
 if st.session_state.plot != "":
     st.write(st.session_state.fishingDat)
     st.write(st.session_state.popDat)
-    st.image(st.session_state.plot)
+    for plot in st.session_state.plot:
+        st.plotly_chart(plot)
