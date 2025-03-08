@@ -117,7 +117,7 @@ sizes = st.toggle(label=labels["sizes"][st.session_state.language], disabled=st.
 # If size select is enabled, let user set a minimum and maximum catch size
 if sizes:
     minCatchSize = st.number_input(label=labels["min_catch_size"][st.session_state.language], min_value=0.0, value=0.0, disabled=st.session_state.running)
-    maxCatchSize = st.number_input(label=labels["max_catch_size"][st.session_state.language], min_value=minCatchSize, value=minCatchSize, disabled=st.session_state.running)
+    maxCatchSize = st.number_input(label=labels["max_catch_size"][st.session_state.language], min_value=minCatchSize, value=None, disabled=st.session_state.running)
 else:
     minCatchSize = 0
     maxCatchSize = 0
@@ -150,7 +150,7 @@ if st.session_state.running:
     
     for i in range(len(speciesIndexes)):
         # 100 is added to the number of years so the simulation is given time to stabilize
-        calc_msy(directory, fishdata, connectivity, speciesIndexes[i], stocks, niter, (years + 100), initialPop, fishing, fishingRate, rotation, rotationRate)
+        calc_msy(directory, fishdata, connectivity, speciesIndexes[i], stocks, niter, (years + 100), initialPop, fishing, fishingRate, rotation, rotationRate, sizes, minCatchSize, maxCatchSize)
 
         # If final run, re-enable inputs and plot first run
         if i == len(speciesIndexes) - 1:

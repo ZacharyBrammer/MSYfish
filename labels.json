@@ -72,11 +72,11 @@
         "es": ""
     },
     "min_catch_size": {
-        "en": "Minimum size to catch",
+        "en": "Minimum size to catch (meters)",
         "es": ""
     },
     "max_catch_size": {
-        "en": "Maximum size to catch",
+        "en": "Maximum size to catch (meters)",
         "es": ""
     },
     "size_warning": {
