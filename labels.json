@@ -82,5 +82,13 @@
     "size_warning": {
         "en": "Fishing is disabled but catch size selected",
         "es": ""
+    },
+    "temp_enable": {
+        "en": "Set Temperature",
+        "es": ""
+    },
+    "temperature": {
+        "en": "Water temperature (degrees C)",
+        "es": ""
     }
 }

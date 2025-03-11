@@ -31,9 +31,10 @@ def compute_pop_msy(
     conn_matrix: np.ndarray,
     rotation: int,  # rotation rate
     nyr: int, # number of years
-    sizes: bool,
-    minCatch: float,
-    maxCatch: float | None,
+    sizes: bool, # flag to enable catch size restriction
+    minCatch: float, # minimum catch weight - user input
+    maxCatch: float | None, # maximum catch weight - user input
+    temperature: float | None # temperature of water
     ) -> bool:
     outfile = outdir + species + '/msy_stocks_' + '%d' % fishingRates.size + '_nfish_' + '%d' % nfish + '_mfish_' + \
         '%.4f' % np.max(fishingRates) + '_rot_' + '%03d' % rotation + '_' + \
@@ -185,7 +186,12 @@ def compute_pop_msy(
                     if mm == 0:
                         # individual consumption of resource
                         consumption = 6.0 * fish[ii-1, jj] ** 1.00
-                        production = 3.0 * fish[ii-1, jj] ** 0.75
+                        # Production with set temperature
+                        if temperature:
+                            tempConst = float(np.exp(-(0.65 / (8.62e-5 * (temperature + 273.15)))))
+                            production = 2.16e9 * tempConst * fish[ii-1, jj] ** 0.75
+                        else: # Default behavior
+                            production = 3.0 * fish[ii-1, jj] ** 0.75
                         metabolism = consumption-production
 
                         if resource[ii, stock[jj]] >= consumption:
