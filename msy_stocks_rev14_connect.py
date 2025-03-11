@@ -30,7 +30,10 @@ def compute_pop_msy(
     # connectivity matrix - to disable connectivity pass np.array(None)
     conn_matrix: np.ndarray,
     rotation: int,  # rotation rate
-    nyr: int # number of years
+    nyr: int, # number of years
+    sizes: bool,
+    minCatch: float,
+    maxCatch: float | None,
     ) -> bool:
     outfile = outdir + species + '/msy_stocks_' + '%d' % fishingRates.size + '_nfish_' + '%d' % nfish + '_mfish_' + \
         '%.4f' % np.max(fishingRates) + '_rot_' + '%03d' % rotation + '_' + \
@@ -86,6 +89,11 @@ def compute_pop_msy(
     wtMat = compute_wtMat(asympLen[0], growthCoef[0],
                           lenWtCoef, lenWtPower, maxage)
     initialWt = asympWt * (1 - np.exp(-(growthCoef[0] + gvar) * initialAge)) ** lenWtPower
+
+    if sizes:
+        minCatchWt = (lenWtCoef*minCatch**lenWtPower)/1000
+        if maxCatch:
+            maxCatchWt = (lenWtCoef*maxCatch**lenWtPower)/1000
 
     binMin = 0.1 * (lenWtCoef * asympLen[0] ** lenWtPower) / 1000 * (1 - np.exp(-(growthCoef[0]) * initialAge)) ** lenWtPower
     binMax = 10 * (lenWtCoef * asympLen[0] ** lenWtPower) / 1000
@@ -252,12 +260,38 @@ def compute_pop_msy(
                             fishmort = 0
                             fishmprob = 0
 
-                        if caught < fishmprob and fish[ii, jj] > minsize:
-                            fished[jj] = 1
-                            dead[jj] = 1
-                            catch[ii, stock[jj], 0] += 1
-                            catch[ii, stock[jj], 1] += fish[ii, jj]
-                            consumption = 0
+                        # If user specified range of fish to catch
+                        if sizes:
+                            if caught < fishmprob:
+                                # Check if fish is in catch range
+                                if maxCatch:
+                                    inRange = fish[ii, jj] > minCatchWt and fish[ii, jj] < maxCatchWt
+                                else:
+                                    inRange = fish[ii, jj] > minCatchWt
+                                
+                                # Check if fish is caught. Otherwise, random mortality
+                                if inRange:
+                                    fished[jj] = 1
+                                    dead[jj] = 1
+                                    catch[ii, stock[jj], 0] += 1
+                                    catch[ii, stock[jj], 1] += fish[ii, jj]
+                                    consumption = 0
+                                else:
+                                    death = np.random.random()
+                                    
+                                    # Hardcoded catch and release mortality, can make variable in future
+                                    if death < 0.01:
+                                        mortality[ii, 0] += 1
+                                        mortality[ii, 1] += fish[ii-1, jj]
+                                        dead[jj] = 1
+                                        consumption = 0
+                        else: # Default behavior
+                            if caught < fishmprob and fish[ii, jj] > minsize:
+                                fished[jj] = 1
+                                dead[jj] = 1
+                                catch[ii, stock[jj], 0] += 1
+                                catch[ii, stock[jj], 1] += fish[ii, jj]
+                                consumption = 0
 
                 age[jj] = age[jj] + 1
 

@@ -25,6 +25,9 @@ def calc_msy(
     fishingRate: float, # fishing rate as a percentage of maximum calculated
     rotation: bool,  # enable rotation
     rotationRate: int, # rotation rate between stocks
+    sizes: bool, # enable catch size ranges
+    minCatch: float, # minimum length of fish to catch
+    maxCatch: float | None, # maximum length of fish to catch
     ):
 
     minfiles = 1  # minimum files per simulation
@@ -120,7 +123,7 @@ def calc_msy(
                     reprodper = reprodstp[recruitmentIndex]
                     fishingRates = np.zeros([stocks])
                     rslap = compute_pop_msy(outdir, fishingRates, stocks, stocks, species, asympLen, growthCoef, lenWtCoef, lenWtPower,
-                                            maxage, minsize, reprodper, R, False, iteration, 1, True, False, 0.0, conn_matrix, 0, years)
+                                            maxage, minsize, reprodper, R, False, iteration, 1, True, False, 0.0, conn_matrix, 0, years, False, 0, None)
                     minrec = 1.*reprodper
                     recruitmentIndex = recruitmentIndex + 1
                 else:
@@ -136,7 +139,7 @@ def calc_msy(
             while fishing:
                 fishingRates = np.zeros([stocks])+maxfish
                 fishing = not compute_pop_msy(outdir, fishingRates, stocks, stocks, species, asympLen, growthCoef, lenWtCoef,
-                                          lenWtPower, maxage, minsize, minrec, R, False, iteration, 1, False, False, .5, conn_matrix, 0, years)
+                                          lenWtPower, maxage, minsize, minrec, R, False, iteration, 1, False, False, .5, conn_matrix, 0, years, False, 0, None)
                 maxfish = maxfish + .01
 
             # set index for main model run over various fishing rates
@@ -166,10 +169,10 @@ def calc_msy(
                     fishingRates[0:nfish] = maxfish * (fishingRate / 100)
                     if rotation:
                         slap = compute_pop_msy(outdir, fishingRates, stocks, nfish, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage, minsize, minrec,
-                                           R, msave, iteration, btarget, False, environ, rvar, conn_matrix, rotationRate, years)
+                                           R, msave, iteration, btarget, False, environ, rvar, conn_matrix, rotationRate, years, sizes, minCatch, maxCatch)
                     else:
                         slap = compute_pop_msy(outdir, fishingRates, stocks, nfish, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage, minsize, minrec,
-                                           R, msave, iteration, btarget, False, environ, rvar, conn_matrix, 0, years)
+                                           R, msave, iteration, btarget, False, environ, rvar, conn_matrix, 0, years, sizes, minCatch, maxCatch)
 
                 stocklist = [g for g in os.listdir(outdir + species) if g.endswith(
                     '%d' % nfish, 19, 20) and g.endswith('_' + '%d' % iteration + '.nc')]

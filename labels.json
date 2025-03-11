@@ -66,5 +66,21 @@
     "rotation_rate_warning": {
         "en": "Rotation rate is the same as simulation length. Permanent closure enabled.",
         "es": ""
+    },
+    "sizes": {
+        "en": "Restrict catch size",
+        "es": ""
+    },
+    "min_catch_size": {
+        "en": "Minimum size to catch (meters)",
+        "es": ""
+    },
+    "max_catch_size": {
+        "en": "Maximum size to catch (meters)",
+        "es": ""
+    },
+    "size_warning": {
+        "en": "Fishing is disabled but catch size selected",
+        "es": ""
     }
 }
