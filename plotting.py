@@ -59,6 +59,37 @@ def plot_simulation(
             name=f"Stock {i+1}"
         )
         stockBFig.add_trace(trace)
+    
+    # Plot population size over time
+    # Get popsize data
+    popsize = biodata.variables["popsize"][:].data[100:][:last]
+
+    # Setup layout for interactive figure
+    popsizeFigLayout = go.Layout(
+        title={
+            "text": "Population Size vs Time",
+            "x": 0.5,  # Center title on plot
+            "xanchor": "center",
+        },
+        # Set labels along with range
+        xaxis=dict(title="Time (years)", range=[0, None]),
+        yaxis=dict(title="Population Size", range=[0, None]),
+        template="plotly"  # Default dark theme
+    )
+
+    # If ends early, modify title using html to add warning
+    if endsEarly:
+        popsizeFigLayout.title["text"] = "Population Size vs Time <br><sup>Warning: population crashed during simulation</sup>"
+    
+    # Create figure
+    popsizeFig = go.Figure(layout=popsizeFigLayout)
+    popsizeFig.add_trace(
+        go.Scatter(
+            x = years,
+            y = popsize[:],
+            mode="lines"
+        )
+    )
 
     # Plot catch over time
     # Get catch data
@@ -82,7 +113,7 @@ def plot_simulation(
 
     # If ends early, modify title using html to add warning
     if endsEarly:
-        catchFigLayout.title["text"] = "Catch Per Stock vs Time vs Time <br><sup>Warning: population crashed during simulation</sup>"
+        catchFigLayout.title["text"] = "Catch Per Stock vs Time <br><sup>Warning: population crashed during simulation</sup>"
 
     catchFig = go.Figure(layout=catchFigLayout)
 
@@ -99,4 +130,4 @@ def plot_simulation(
     # Close file
     biodata.close()
 
-    return [stockBFig, catchFig]
+    return [stockBFig, popsizeFig, catchFig]
