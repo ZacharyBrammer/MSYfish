@@ -189,7 +189,7 @@ def compute_pop_msy(
                         # Production with set temperature
                         if temperature:
                             tempConst = float(np.exp(-(0.65 / (8.62e-5 * (temperature + 273.15)))))
-                            production = 2.16e9 * tempConst * fish[ii-1, jj] ** 0.75
+                            production = 2.89e11 * tempConst * fish[ii-1, jj] ** 0.75
                         else: # Default behavior
                             production = 3.0 * fish[ii-1, jj] ** 0.75
                         metabolism = consumption-production

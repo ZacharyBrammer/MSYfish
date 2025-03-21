@@ -208,9 +208,9 @@ def calc_msy(
                 "Fishing rate used": f"{maxfish * (fishingRate / 100):.2}"
             }
 
-        else:  # flag for data not sufficient and exit
-            print('Insufficient Data...not running ' + species)
-            xtest = False
+    else:  # flag for data not sufficient and exit
+        print('Insufficient Data...not running ' + species)
+        xtest = False
 
     print('%d ' % speciesIndex + species + ' is done.')
     return True
