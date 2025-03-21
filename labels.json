@@ -72,15 +72,23 @@
         "es": ""
     },
     "min_catch_size": {
-        "en": "Minimum size to catch (meters)",
+        "en": "Minimum size to catch (centimeters)",
         "es": ""
     },
     "max_catch_size": {
-        "en": "Maximum size to catch (meters)",
+        "en": "Maximum size to catch (centimeters)",
         "es": ""
     },
     "size_warning": {
         "en": "Fishing is disabled but catch size selected",
+        "es": ""
+    },
+    "temp_enable": {
+        "en": "Set Temperature",
+        "es": ""
+    },
+    "temperature": {
+        "en": "Water temperature (degrees C)",
         "es": ""
     }
 }

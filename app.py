@@ -129,6 +129,13 @@ if rotation:
 else:
     rotationRate = 0
 
+tempEnable = st.toggle(label=labels["temp_enable"][st.session_state.language], disabled=st.session_state.running)
+# If temperature impact on production is enabled, let user set in degrees C
+if tempEnable:
+    temperature = st.number_input(label=labels["temperature"][st.session_state.language], value=20.0, disabled=st.session_state.running)
+else:
+    temperature = None
+
 # Check that stocks > 1 to prevent divide by 0 error
 if rotation and stocks == 1:
     st.warning(labels["rotation_warning"][st.session_state.language])
@@ -150,7 +157,7 @@ if st.session_state.running:
     
     for i in range(len(speciesIndexes)):
         # 100 is added to the number of years so the simulation is given time to stabilize
-        calc_msy(directory, fishdata, connectivity, speciesIndexes[i], stocks, niter, (years + 100), initialPop, fishing, fishingRate, rotation, rotationRate, sizes, minCatchSize, maxCatchSize)
+        calc_msy(directory, fishdata, connectivity, speciesIndexes[i], stocks, niter, (years + 100), initialPop, fishing, fishingRate, rotation, rotationRate, sizes, minCatchSize, maxCatchSize, temperature)
 
         # If final run, re-enable inputs and plot first run
         if i == len(speciesIndexes) - 1:
