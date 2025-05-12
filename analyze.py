@@ -53,12 +53,13 @@ def analyze(labels):
             variable_desc[variable] = biodata.variables[variable].__dict__["long_name"]
             print(variable, ":",biodata.variables[variable].__dict__["long_name"])
         
+        # TODO: Put this all in a toggle
         st.write("Create custom table/plot:")
         st.write("Dataset Variables")
         st.json(variable_desc, expanded=0)
         st.selectbox(label="Select Variables", options=biodata.variables)
 
-        # Plot the simulation
+        # Plot the simulation (regular plots)
         plots = plot_simulation(path)
         for plot in plots:
             st.plotly_chart(plot)
