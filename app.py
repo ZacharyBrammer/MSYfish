@@ -1,14 +1,8 @@
-import io
 import json
-import os
-import time
 
-import numpy as np
-import pandas as pd
 import streamlit as st
 
-from calc_msy_rotational_serve import calc_msy
-from plotting import plot_simulation
+from analyze import analyze
 from simulate import simulate
 
 # Page setup
@@ -60,7 +54,7 @@ with st.sidebar:
         st.session_state.names = names
         st.rerun()
     
-    mode = st.selectbox(label="Mode", options=["simulate", "plot"], disabled=st.session_state.running)
+    mode = st.selectbox(label="Mode", options=["simulate", "analyze"], disabled=st.session_state.running)
     # If mode changed, rerun page
     if st.session_state.mode != mode:
         st.session_state.mode = mode
@@ -69,3 +63,5 @@ with st.sidebar:
 match st.session_state.mode:
     case "simulate":
         simulate(labels)
+    case "analyze":
+        analyze(labels)
