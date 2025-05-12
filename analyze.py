@@ -37,6 +37,15 @@ def analyze(labels):
         path = f"simulations/{folder}/{species}/{simulation}"
         biodata = nc.Dataset(path, "r")
 
+        # Download button for the simulation file
+        with open(path, "rb") as file:
+            st.download_button(
+                label="Download NetCDF file",
+                data=file,
+                file_name=f"{simulation}",
+                icon=":material/download:",
+            )
+
         # Setup for reading individual variables in file
         # TODO: allow user to make table from whatever variales they want, turn that into plots
         for variable in biodata.variables:
