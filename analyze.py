@@ -48,10 +48,15 @@ def analyze(labels):
 
         # Setup for reading individual variables in file
         # TODO: allow user to make table from whatever variales they want, turn that into plots
+        variable_desc = {}
         for variable in biodata.variables:
+            variable_desc[variable] = biodata.variables[variable].__dict__["long_name"]
             print(variable, ":",biodata.variables[variable].__dict__["long_name"])
-        st.json(biodata.variables, expanded=1)
-        st.selectbox(label="Variables", options=biodata.variables)
+        
+        st.write("Create custom table/plot:")
+        st.write("Dataset Variables")
+        st.json(variable_desc, expanded=0)
+        st.selectbox(label="Select Variables", options=biodata.variables)
 
         # Plot the simulation
         plots = plot_simulation(path)
