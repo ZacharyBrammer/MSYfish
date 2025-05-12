@@ -9,9 +9,8 @@ import streamlit as st
 
 from msy_stocks_rev14_connect import compute_pop_msy
 
+
 # rev10 is most recent and used for data and figures
-
-
 def calc_msy(
     outdir: str,  # output directory
     fishdata: pd.DataFrame,  # dataframe of species data
@@ -207,10 +206,6 @@ def calc_msy(
                 "Maximum calculated fishing rate": f"{maxfish:.2}",
                 "Fishing rate used": f"{maxfish * (fishingRate / 100):.2}"
             }
-
-    else:  # flag for data not sufficient and exit
-        print('Insufficient Data...not running ' + species)
-        xtest = False
 
     print('%d ' % speciesIndex + species + ' is done.')
     return True
