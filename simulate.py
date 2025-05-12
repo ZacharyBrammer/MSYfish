@@ -11,7 +11,11 @@ from plotting import plot_simulation
 
 
 # Method to both display simulation settings and run simulations
-def simulate(speciesList, labels, fishdata):
+def simulate(labels):
+    # Get species data from spreadsheet, can turn into user uploaded file later
+    fishdata = pd.read_excel("fish_growth_data2.xlsx")
+    speciesList = fishdata[st.session_state.names]
+
     # Run button
     runButton = st.button(label=labels["run"][st.session_state.language])
 

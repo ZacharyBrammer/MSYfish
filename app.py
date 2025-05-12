@@ -47,10 +47,6 @@ if "popDat" not in st.session_state:
 if "mode" not in st.session_state:
     st.session_state.mode = "simulate"
 
-# Get species data from spreadsheet, can turn into user uploaded file later
-fishdata = pd.read_excel("fish_growth_data2.xlsx")
-speciesList = fishdata[st.session_state.names]
-
 with st.sidebar:
     language = st.selectbox(label="Language", options=languages, disabled=st.session_state.running)
     # If language changed, rerun page
@@ -72,4 +68,4 @@ with st.sidebar:
 
 match st.session_state.mode:
     case "simulate":
-        simulate(speciesList=speciesList, labels=labels, fishdata=fishdata)
+        simulate(labels)
