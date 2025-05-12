@@ -30,6 +30,9 @@ def calc_msy(
     temperature: float | None # temperature of water
     ):
 
+    print(outdir)
+    outdir = "simulations/" + outdir
+
     minfiles = 1  # minimum files per simulation
 
     if connectivity.any():
