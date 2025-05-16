@@ -99,7 +99,7 @@ def analyze(labels):
                     # Add data to the dataframe
                     selected_data[title] = data
                 case 2:
-                    # Some 2D variables have different units so handle differently
+                    # Some 2D variables have different units/sizes so handle differently
                     match variable:
                         case "stock_size" | "stock_biomass" | "stock_recruit" | "resource":
                             var_name = variable.split("_")[-1]
@@ -110,7 +110,12 @@ def analyze(labels):
                             data = pd.DataFrame(data, columns=[f"{variable} biomass (kg)", f"{variable} number (#)"])
                             selected_data = pd.concat([selected_data, data], axis=1)
                 case 3:
-                    pass
+                    # Some 3D variables have different units/sizes so handle differently
+                    match variable:
+                        case "pop_bins":
+                            # TODO: figure out how to smush so it's (years, bins * stocks) with each column being called "bin x stock y population"
+                            pass
+                            
 
         selected_data = selected_data.set_index("year")
         st.dataframe(selected_data)
