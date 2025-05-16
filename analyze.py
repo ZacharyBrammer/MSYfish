@@ -80,41 +80,36 @@ def analyze(labels):
         selectable_vars.pop("mid_bins")
         selectable_vars.pop("fish") # Too many things for a user to reasonably be able to see on a plot
 
-        variables = st.multiselect(label="Select Variables", options=selectable_vars)
+        variables = st.multiselect(label="Select Variables (Custom Plotting)", options=selectable_vars)
 
         # TODO: for each selected: get title, get data, if more than 1d do a for loop to add all bins/stock with label
         # Collect data user selected, start with time variable
         selected_data = pd.DataFrame()
         selected_data["year"] = years
         for variable in variables:
+            # Get data for the variable
+            data = biodata.variables[variable][:].data[100:][:last]
+
             # If 1D, add data. If 2D, title each bin and add. If 3D, add the bins for each stock then add next stock
             match len(biodata.variables[variable].shape):
                 case 1:
-                    # Get the data for the variable, along with variable name and units
-                    data = biodata.variables[variable][:].data[100:][:last]
+                    # Get variable name and units for column title
                     title = f"{variable} ({biodata.variables[variable].getncattr("units")})"
 
                     # Add data to the dataframe
                     selected_data[title] = data
                 case 2:
-                    # Get the data for the variable
-                    data = biodata.variables[variable][:].data[100:][:last]
-
                     # Some 2D variables have different units so handle differently
                     match variable:
-                        case "stock_size" | "stock_biomass" | "stock_recruit":
-                            data = pd.DataFrame(data, columns=[f"stock {i + 1} {variable.split("_")[1]} (# of individuals)" for i in range(data.shape[1])])
+                        case "stock_size" | "stock_biomass" | "stock_recruit" | "resource":
+                            var_name = variable.split("_")[-1]
+                            units = biodata.variables[variable].getncattr("units")
+                            data = pd.DataFrame(data, columns=[f"stock {i + 1} {var_name} ({units})" for i in range(data.shape[1])])
                             selected_data = pd.concat([selected_data, data], axis=1)
                         case "reproduction" | "mortality":
                             data = pd.DataFrame(data, columns=[f"{variable} biomass (kg)", f"{variable} number (#)"])
                             selected_data = pd.concat([selected_data, data], axis=1)
-                        case "resource":
-                            print(data.shape)
-                            data = pd.DataFrame(data, columns=[f"stock {i + 1} resource (units)" for i in range(data.shape[1])])
-                            selected_data = pd.concat([selected_data, data], axis=1)
                 case 3:
-                    pass
-                case _:
                     pass
 
         selected_data = selected_data.set_index("year")
