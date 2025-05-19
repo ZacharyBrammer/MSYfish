@@ -110,16 +110,47 @@ def analyze(labels):
                             data = pd.DataFrame(data, columns=[f"{variable} biomass (kg)", f"{variable} number (#)"])
                             selected_data = pd.concat([selected_data, data], axis=1)
                 case 3:
+                    # TODO: figure out this, gonna take too long so it's a later problem
                     # Some 3D variables have different units/sizes so handle differently
+                    continue
                     match variable:
                         case "pop_bins":
                             # TODO: figure out how to smush so it's (years, bins * stocks) with each column being called "bin x stock y population"
                             pass
                             
-
         selected_data = selected_data.set_index("year")
         st.dataframe(selected_data)
 
+        # Plot once data is selected
+        if selected_data.shape[1] > 0:
+            figLayout = go.Layout(
+                title={
+                    "text": "Custom Plot",
+                    "x": 0.5,  # Center title on plot
+                    "xanchor": "center",
+                },
+                # Set labels along with range
+                xaxis=dict(title="Time (years)", range=[0, None]),
+                yaxis=dict(title="Selected Vars", range=[0, None]),
+                template="plotly"  # Default dark theme
+            )
+            # If ends early, modify title using html to add warning
+            if endsEarly:
+                figLayout.title["text"] = "Custom Plot <br><sup>Warning: population crashed during simulation</sup>"
+            
+            fig = go.Figure(layout=figLayout)
+
+            # Add all data to figure
+            for i in range(selected_data.shape[1]):
+                trace = go.Scatter(
+                    x=years,
+                    y=selected_data.iloc[:, i],
+                    mode="lines",
+                    name=selected_data.columns[i]
+                )
+                fig.add_trace(trace)
+
+            st.plotly_chart(fig)
 
         # Plot the simulation (regular plots)
         plots = plot_simulation(path)
