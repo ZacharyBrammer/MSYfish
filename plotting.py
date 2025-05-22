@@ -126,8 +126,46 @@ def plot_simulation(
             name=f"Stock {i+1}"
         )
         catchFig.add_trace(trace)
+    
+
+    # Plot per-stock average w/ standard deviations
+    # Setup layout for interactive figure
+    catchBarLayout = go.Layout(
+        title={
+            "text": "Catch Per Stock",
+            "x": 0.5,  # Center title on plot
+            "xanchor": "center",
+        },
+        # Set labels along with range
+        xaxis=dict(title="Stock (#)", range=[0, None]),
+        yaxis=dict(title="Catch (kg)", range=[0, None]),
+        template="plotly"  # Default dark theme
+    )
+
+    catchBar = go.Figure(layout=catchBarLayout)
+    # Get average and std for each stock
+    avgs = []
+    stds = []
+    for i in range(catch.shape[1]):
+        print(np.mean(catch[:, i]))
+        avgs.append(np.mean(catch[:, i]))
+        stds.append(np.std(catch[:, i]))
+        trace = go.Bar(
+            y=catch[:, i],
+            name=f"Stock {i+1}"
+        )
+        #catchBar.add_trace(trace)
+    trace = go.Bar(
+        x=[f"Stock {i+1}" for i in range(catch.shape[1])],
+        y=avgs,
+        error_y=dict(
+            type="data",
+            array=stds,
+        )
+    )
+    catchBar.add_trace(trace)
 
     # Close file
     biodata.close()
 
-    return [stockBFig, popsizeFig, catchFig]
+    return [stockBFig, popsizeFig, catchFig, catchBar]
