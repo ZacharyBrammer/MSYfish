@@ -94,7 +94,7 @@ def analyze(labels):
             match len(biodata.variables[variable].shape):
                 case 1:
                     # Get variable name and units for column title
-                    title = f"{variable} ({biodata.variables[variable].getncattr("units")})"
+                    title = f"{variable} ({biodata.variables[variable].getncattr('units')})"
 
                     # Add data to the dataframe
                     selected_data[title] = data
