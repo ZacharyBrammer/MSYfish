@@ -22,6 +22,9 @@ def plot_simulation(
     years -= 100
     years = years[:last]
 
+    # List for storing all plots
+    plots = []
+
     # Plot biomass per stock
     # Get per-stock biomass data
     stockBiomass = biodata.variables["stock_biomass"][:].data[100:][:last]
@@ -59,7 +62,9 @@ def plot_simulation(
             name=f"Stock {i+1}"
         )
         stockBFig.add_trace(trace)
-    
+
+    plots.append(stockBFig)
+
     # Plot population size over time
     # Get popsize data
     popsize = biodata.variables["popsize"][:].data[100:][:last]
@@ -80,54 +85,100 @@ def plot_simulation(
     # If ends early, modify title using html to add warning
     if endsEarly:
         popsizeFigLayout.title["text"] = "Population Size vs Time <br><sup>Warning: population crashed during simulation</sup>"
-    
+
     # Create figure
     popsizeFig = go.Figure(layout=popsizeFigLayout)
     popsizeFig.add_trace(
         go.Scatter(
-            x = years,
-            y = popsize[:],
+            x=years,
+            y=popsize[:],
             mode="lines"
         )
     )
 
-    # Plot catch over time
+    plots.append(popsizeFig)
+
     # Get catch data
     catch = biodata.variables["catch"][:].data[100:][:last]
 
     # Select just the caught weight data
     catch = catch[:, :, 1]
 
-    # Setup layout for interactive figure
-    catchFigLayout = go.Layout(
-        title={
-            "text": "Catch Per Stock vs Time",
-            "x": 0.5,  # Center title on plot
-            "xanchor": "center",
-        },
-        # Set labels along with range
-        xaxis=dict(title="Time (years)", range=[0, None]),
-        yaxis=dict(title="Catch (kg)", range=[0, None]),
-        template="plotly"  # Default dark theme
-    )
+    # Check if fishing was enabled (there will be non-zeros in array)
+    fishing = np.any(catch)
 
-    # If ends early, modify title using html to add warning
-    if endsEarly:
-        catchFigLayout.title["text"] = "Catch Per Stock vs Time <br><sup>Warning: population crashed during simulation</sup>"
-
-    catchFig = go.Figure(layout=catchFigLayout)
-
-    # Add each stock to figure
-    for i in range(catch.shape[1]):
-        trace = go.Scatter(
-            x=years,
-            y=catch[:, i],
-            mode="lines",
-            name=f"Stock {i+1}"
+    if fishing:
+        # Plot catch over time
+        # Setup layout for interactive figure
+        catchFigLayout = go.Layout(
+            title={
+                "text": "Catch Per Stock vs Time",
+                "x": 0.5,  # Center title on plot
+                "xanchor": "center",
+            },
+            # Set labels along with range
+            xaxis=dict(title="Time (years)", range=[0, None]),
+            yaxis=dict(title="Catch (kg)", range=[0, None]),
+            template="plotly"  # Default dark theme
         )
-        catchFig.add_trace(trace)
+
+        # If ends early, modify title using html to add warning
+        if endsEarly:
+            catchFigLayout.title["text"] = "Catch Per Stock vs Time <br><sup>Warning: population crashed during simulation</sup>"
+
+        catchFig = go.Figure(layout=catchFigLayout)
+
+        # Add each stock to figure
+        for i in range(catch.shape[1]):
+            trace = go.Scatter(
+                x=years,
+                y=catch[:, i],
+                mode="lines",
+                name=f"Stock {i+1}"
+            )
+            catchFig.add_trace(trace)
+
+        plots.append(catchFig)
+
+        # Plot per-stock average w/ standard deviations
+        # Setup layout for interactive figure
+        catchBarLayout = go.Layout(
+            title={
+                "text": "Catch Per Stock",
+                "x": 0.5,  # Center title on plot
+                "xanchor": "center",
+            },
+            # Set labels along with range
+            xaxis=dict(title="Stock (#)", range=[0, None]),
+            yaxis=dict(title="Catch (kg)", range=[0, None]),
+            template="plotly"  # Default dark theme
+        )
+
+        catchBar = go.Figure(layout=catchBarLayout)
+        # Get average and std for each stock
+        avgs = []
+        stds = []
+        for i in range(catch.shape[1]):
+            avgs.append(np.mean(catch[:, i]))
+            stds.append(np.std(catch[:, i]))
+            trace = go.Bar(
+                y=catch[:, i],
+                name=f"Stock {i+1}"
+            )
+            # catchBar.add_trace(trace)
+        trace = go.Bar(
+            x=[f"Stock {i+1}" for i in range(catch.shape[1])],
+            y=avgs,
+            error_y=dict(
+                type="data",
+                array=stds,
+            )
+        )
+        catchBar.add_trace(trace)
+
+        plots.append(catchBar)
 
     # Close file
     biodata.close()
 
-    return [stockBFig, popsizeFig, catchFig]
+    return plots
