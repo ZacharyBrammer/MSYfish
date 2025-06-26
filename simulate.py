@@ -24,33 +24,39 @@ def simulate(labels):
 
     # Have user select species, get indexes for running model
     # TODO: add switching for scientific/common names
-    selectedSpecies: list[str] = st.multiselect(label=labels["species"][st.session_state.language], options=speciesList, disabled=st.session_state.running)
+    selectedSpecies: list[str] = st.multiselect(
+        label=labels["species"][st.session_state.language], options=speciesList, disabled=st.session_state.running)
     speciesIndexes: list[int] = []
 
     for species in selectedSpecies:
-        speciesIndexes.append(speciesList[speciesList == species].index.values[0].item())
+        speciesIndexes.append(
+            speciesList[speciesList == species].index.values[0].item())
 
     # Get output directory
-    # TODO: add "/" to make sure always is a valid path
-    directory = st.text_input(label=labels["output_dir"][st.session_state.language], value="path/", disabled=st.session_state.running)
+    directory = st.text_input(
+        label=labels["output_dir"][st.session_state.language], value="path/", disabled=st.session_state.running)
 
     # Integer inputs to the model
-    stocks = st.number_input(label=labels["stocks"][st.session_state.language], step=1, min_value=1, disabled=st.session_state.running)
-    niter = st.number_input(label=labels["iterations"][st.session_state.language], step=1, min_value=1, disabled=st.session_state.running)
-    years = st.number_input(label=labels["years"][st.session_state.language], step=1, min_value=1, disabled=st.session_state.running)
-    initialPop = st.number_input(label=labels["initial_pop"][st.session_state.language], step=1, min_value=1, disabled=st.session_state.running)
-
+    stocks = st.number_input(label=labels["stocks"][st.session_state.language],
+                             step=1, min_value=1, disabled=st.session_state.running)
+    niter = st.number_input(label=labels["iterations"][st.session_state.language],
+                            step=1, min_value=1, disabled=st.session_state.running)
+    years = st.number_input(label=labels["years"][st.session_state.language],
+                            step=1, min_value=1, disabled=st.session_state.running)
+    initialPop = st.number_input(
+        label=labels["initial_pop"][st.session_state.language], step=1, min_value=1, disabled=st.session_state.running)
 
     # Optional enables
     st.write(labels["optional_param"][st.session_state.language])
 
     # Load connectivity file
-    conn_file = st.file_uploader(label=labels["conn_file"][st.session_state.language], type=["xls", "xlsx"], disabled=st.session_state.running)
+    conn_file = st.file_uploader(label=labels["conn_file"][st.session_state.language], type=[
+                                 "xls", "xlsx"], disabled=st.session_state.running)
     if conn_file is not None:
         file_bytes = io.BytesIO(conn_file.getvalue())
         conn_data = pd.read_excel(file_bytes)
         connectivity = conn_data.to_numpy()
-        connectivity = connectivity[:,1:]
+        connectivity = connectivity[:, 1:]
 
         # Check that connectivity file matches number of stocks
         if not (connectivity.shape[0] == stocks and connectivity.shape[1] == stocks):
@@ -61,34 +67,43 @@ def simulate(labels):
     else:
         connectivity = np.array(None)
 
-    fishing = st.toggle(label=labels["fishing"][st.session_state.language], disabled=st.session_state.running)
+    fishing = st.toggle(
+        label=labels["fishing"][st.session_state.language], disabled=st.session_state.running)
     # If fishing is enabled, let user set fishing rate as a percentage of calculated max value
     if fishing:
-        fishingRate = st.number_input(label=labels["fishing_rate"][st.session_state.language], min_value=0.0, max_value=100.0, value=100.0, disabled=st.session_state.running)
-        
+        fishingRate = st.number_input(label=labels["fishing_rate"][st.session_state.language],
+                                      min_value=0.0, max_value=100.0, value=100.0, disabled=st.session_state.running)
+
     else:
         fishingRate = 0
 
-    sizes = st.toggle(label=labels["sizes"][st.session_state.language], disabled=st.session_state.running)
+    sizes = st.toggle(
+        label=labels["sizes"][st.session_state.language], disabled=st.session_state.running)
     # If size select is enabled, let user set a minimum and maximum catch size
     if sizes:
-        minCatchSize = st.number_input(label=labels["min_catch_size"][st.session_state.language], min_value=0.0, value=0.0, disabled=st.session_state.running)
-        maxCatchSize = st.number_input(label=labels["max_catch_size"][st.session_state.language], min_value=minCatchSize, value=None, disabled=st.session_state.running)
+        minCatchSize = st.number_input(
+            label=labels["min_catch_size"][st.session_state.language], min_value=0.0, value=0.0, disabled=st.session_state.running)
+        maxCatchSize = st.number_input(label=labels["max_catch_size"][st.session_state.language],
+                                       min_value=minCatchSize, value=None, disabled=st.session_state.running)
     else:
         minCatchSize = 0
         maxCatchSize = 0
 
-    rotation = st.toggle(label=labels["rotation"][st.session_state.language], disabled=st.session_state.running)
+    rotation = st.toggle(
+        label=labels["rotation"][st.session_state.language], disabled=st.session_state.running)
     # If rotation is enabled, let user set rotation rate
     if rotation:
-        rotationRate = st.number_input(label=labels["rotation_rate"][st.session_state.language], min_value=1, max_value=years + 100, disabled=st.session_state.running)
+        rotationRate = st.number_input(label=labels["rotation_rate"][st.session_state.language],
+                                       min_value=1, max_value=years + 100, disabled=st.session_state.running)
     else:
         rotationRate = 0
 
-    tempEnable = st.toggle(label=labels["temp_enable"][st.session_state.language], disabled=st.session_state.running)
+    tempEnable = st.toggle(
+        label=labels["temp_enable"][st.session_state.language], disabled=st.session_state.running)
     # If temperature impact on production is enabled, let user set in degrees C
     if tempEnable:
-        temperature = st.number_input(label=labels["temperature"][st.session_state.language], value=20.0, disabled=st.session_state.running)
+        temperature = st.number_input(
+            label=labels["temperature"][st.session_state.language], value=20.0, disabled=st.session_state.running)
     else:
         temperature = None
 
@@ -110,15 +125,18 @@ def simulate(labels):
         if (len(speciesIndexes)) == 0:
             st.session_state.running = False
             st.rerun()
-        
+
         for i in range(len(speciesIndexes)):
             # 100 is added to the number of years so the simulation is given time to stabilize
-            calc_msy(directory, fishdata, connectivity, speciesIndexes[i], stocks, niter, (years + 100), initialPop, fishing, fishingRate, rotation, rotationRate, sizes, minCatchSize, maxCatchSize, temperature)
+            calc_msy(directory, fishdata, connectivity, speciesIndexes[i], stocks, niter, (
+                years + 100), initialPop, fishing, fishingRate, rotation, rotationRate, sizes, minCatchSize, maxCatchSize, temperature)
 
+            # TODO: add "/" to make sure always is a valid path
             # If final run, re-enable inputs and plot first run
             if i == len(speciesIndexes) - 1:
                 # Get path to first simulation to plot
-                firstSimDir = os.getcwd() + "/simulations/" + directory + "/" + os.listdir("simulations/" + directory)[0]
+                firstSimDir = os.getcwd() + "/simulations/" + directory + "/" + \
+                    os.listdir("simulations/" + directory)[0]
                 print(directory, firstSimDir)
                 firstSimPath = firstSimDir + "/" + os.listdir(firstSimDir)[0]
                 st.session_state.plot = plot_simulation(firstSimPath)
