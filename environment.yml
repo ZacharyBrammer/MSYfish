@@ -1,0 +1,10 @@
+name: msyfish
+channels:
+  - conda-forge
+dependencies:
+  - streamlit
+  - netcdf4
+  - pandas
+  - plotly
+  - openpyxl
+  - pandas-stubs
