@@ -31,6 +31,7 @@ def simulate(labels):
         speciesIndexes.append(speciesList[speciesList == species].index.values[0].item())
 
     # Get output directory
+    # TODO: add "/" to make sure always is a valid path
     directory = st.text_input(label=labels["output_dir"][st.session_state.language], value="path/", disabled=st.session_state.running)
 
     # Integer inputs to the model
