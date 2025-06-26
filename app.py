@@ -42,19 +42,22 @@ if "mode" not in st.session_state:
     st.session_state.mode = "simulate"
 
 with st.sidebar:
-    language = st.selectbox(label="Language", options=languages, disabled=st.session_state.running)
+    language = st.selectbox(
+        label="Language", options=languages, disabled=st.session_state.running)
     # If language changed, rerun page
     if st.session_state.language != language:
         st.session_state.language = language
         st.rerun()
-    
-    names = st.selectbox(label="Species Names", options=["scientific", "common"], disabled=st.session_state.running)
+
+    names = st.selectbox(label="Species Names", options=[
+                         "scientific", "common"], disabled=st.session_state.running)
     # If name type changed, rerun page
     if st.session_state.names != names:
         st.session_state.names = names
         st.rerun()
-    
-    mode = st.selectbox(label="Mode", options=["simulate", "analyze"], disabled=st.session_state.running)
+
+    mode = st.selectbox(label="Mode", options=[
+                        "simulate", "analyze"], disabled=st.session_state.running)
     # If mode changed, rerun page
     if st.session_state.mode != mode:
         st.session_state.mode = mode

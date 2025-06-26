@@ -1,12 +1,11 @@
-import io
 import os
-import time
 
 import netCDF4 as nc
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 import streamlit as st
+
 from plotting import plot_simulation
 
 
@@ -15,16 +14,17 @@ def analyze(labels):
     # Select which simulation to plot
     folders = [""] + sorted(os.listdir("simulations/"))
     folder = st.selectbox(label="Folder", options=folders)
-    
+
     # Select folder
     if folder != "":
         # Get all species in the folder. If there's multiple species, allow choice
         speciess = [""] + os.listdir(f"simulations/{folder}")
         if len(speciess) > 2:
-            species = st.selectbox(label="Species", options=sorted(os.listdir(f"simulations/{folder}")))
+            species = st.selectbox(label="Species", options=sorted(
+                os.listdir(f"simulations/{folder}")))
         else:
             species = speciess[-1]
-        
+
         # Get all simulations in the folder and let user select
         simulations = [""] + os.listdir(f"simulations/{folder}/{species}")
         simulation = st.selectbox(label="Simulation", options=simulations)
@@ -62,9 +62,9 @@ def analyze(labels):
         # TODO: allow user to make table from whatever variales they want, turn that into plots
         variable_desc = {}
         for variable in biodata.variables:
-            variable_desc[variable] = biodata.variables[variable].__dict__["long_name"]
-        
-        
+            variable_desc[variable] = biodata.variables[variable].__dict__[
+                "long_name"]
+
         # TODO: Put this all in a toggle
         st.write("Create custom table/plot:")
         st.write("Dataset Variables")
@@ -78,9 +78,11 @@ def analyze(labels):
         selectable_vars.pop("rotation_rate")
         selectable_vars.pop("age")
         selectable_vars.pop("mid_bins")
-        selectable_vars.pop("fish") # Too many things for a user to reasonably be able to see on a plot
+        # Too many things for a user to reasonably be able to see on a plot
+        selectable_vars.pop("fish")
 
-        variables = st.multiselect(label="Select Variables (Custom Plotting)", options=selectable_vars)
+        variables = st.multiselect(
+            label="Select Variables (Custom Plotting)", options=selectable_vars)
 
         # TODO: for each selected: get title, get data, if more than 1d do a for loop to add all bins/stock with label
         # Collect data user selected, start with time variable
@@ -103,12 +105,17 @@ def analyze(labels):
                     match variable:
                         case "stock_size" | "stock_biomass" | "stock_recruit" | "resource":
                             var_name = variable.split("_")[-1]
-                            units = biodata.variables[variable].getncattr("units")
-                            data = pd.DataFrame(data, columns=[f"stock {i + 1} {var_name} ({units})" for i in range(data.shape[1])])
-                            selected_data = pd.concat([selected_data, data], axis=1)
+                            units = biodata.variables[variable].getncattr(
+                                "units")
+                            data = pd.DataFrame(data, columns=[
+                                                f"stock {i + 1} {var_name} ({units})" for i in range(data.shape[1])])
+                            selected_data = pd.concat(
+                                [selected_data, data], axis=1)
                         case "reproduction" | "mortality":
-                            data = pd.DataFrame(data, columns=[f"{variable} biomass (kg)", f"{variable} number (#)"])
-                            selected_data = pd.concat([selected_data, data], axis=1)
+                            data = pd.DataFrame(
+                                data, columns=[f"{variable} biomass (kg)", f"{variable} number (#)"])
+                            selected_data = pd.concat(
+                                [selected_data, data], axis=1)
                 case 3:
                     # TODO: figure out this, gonna take too long so it's a later problem
                     # Some 3D variables have different units/sizes so handle differently
@@ -117,7 +124,7 @@ def analyze(labels):
                         case "pop_bins":
                             # TODO: figure out how to smush so it's (years, bins * stocks) with each column being called "bin x stock y population"
                             pass
-                            
+
         selected_data = selected_data.set_index("year")
         st.dataframe(selected_data)
 
@@ -137,7 +144,7 @@ def analyze(labels):
             # If ends early, modify title using html to add warning
             if endsEarly:
                 figLayout.title["text"] = "Custom Plot <br><sup>Warning: population crashed during simulation</sup>"
-            
+
             fig = go.Figure(layout=figLayout)
 
             # Add all data to figure
@@ -156,5 +163,3 @@ def analyze(labels):
         plots = plot_simulation(path)
         for plot in plots:
             st.plotly_chart(plot)
-        
-        
