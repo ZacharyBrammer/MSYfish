@@ -25,8 +25,8 @@ def calc_msy(
     maxCatch: float | None,  # maximum length of fish to catch
     temperature: float | None  # temperature of water
 ):
+    outdir = f"simulations/{st.session_state.id}/{outdir}"
     print(outdir)
-    outdir = "simulations/" + outdir
 
     minfiles = 1  # minimum files per simulation
 

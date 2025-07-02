@@ -12,21 +12,22 @@ from plotting import plot_simulation
 # Method to allow plotting/viewing of previous simulations
 def analyze(labels):
     # Select which simulation to plot
-    folders = [""] + sorted(os.listdir("simulations/"))
+    base = f"simulations/{st.session_state.id}/"
+    folders = [""] + sorted(os.listdir(base))
     folder = st.selectbox(label="Folder", options=folders)
 
     # Select folder
     if folder != "":
         # Get all species in the folder. If there's multiple species, allow choice
-        speciess = [""] + os.listdir(f"simulations/{folder}")
+        speciess = [""] + os.listdir(f"{base}/{folder}")
         if len(speciess) > 2:
             species = st.selectbox(label="Species", options=sorted(
-                os.listdir(f"simulations/{folder}")))
+                os.listdir(f"{base}/{folder}")))
         else:
             species = speciess[-1]
 
         # Get all simulations in the folder and let user select
-        simulations = [""] + os.listdir(f"simulations/{folder}/{species}")
+        simulations = [""] + os.listdir(f"{base}/{folder}/{species}")
         simulation = st.selectbox(label="Simulation", options=simulations)
     else:
         # If blank folder is selected set species and simulation to blank
@@ -34,7 +35,7 @@ def analyze(labels):
 
     if simulation != "":
         # Read the dataset
-        path = f"simulations/{folder}/{species}/{simulation}"
+        path = f"{base}/{folder}/{species}/{simulation}"
         biodata = nc.Dataset(path, "r")
 
         # Get years. If simulation ended early, get index of last year

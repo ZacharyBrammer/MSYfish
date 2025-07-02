@@ -1,4 +1,6 @@
 import json
+import os
+import uuid
 
 import streamlit as st
 
@@ -12,7 +14,7 @@ st.set_page_config(
 )
 
 # Language setup
-languages = ["en", "es"]
+languages = ["en"]
 with open("labels.json", "r") as f:
     labels = json.load(f)
     f.close()
@@ -20,6 +22,16 @@ with open("labels.json", "r") as f:
 st.title("MSYFish Model")
 
 # Set up session state
+if "id" not in st.session_state:
+    if "id" in st.query_params:
+        st.session_state.id = st.query_params["id"]
+    else:
+        st.session_state.id = str(uuid.uuid4())
+try:
+    os.mkdir(f"simulations/{st.session_state.id}")
+except FileExistsError:
+    pass
+
 if "running" not in st.session_state:
     st.session_state.running = False
 
@@ -62,6 +74,9 @@ with st.sidebar:
     if st.session_state.mode != mode:
         st.session_state.mode = mode
         st.rerun()
+
+    st.write("Session ID (Bookmark Link to View Simulations Later):")
+    st.write(f"[Link to Session]({st.context.url}?id={st.session_state.id})")
 
 match st.session_state.mode:
     case "simulate":

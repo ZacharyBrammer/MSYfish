@@ -135,8 +135,8 @@ def simulate(labels):
             # If final run, re-enable inputs and plot first run
             if i == len(speciesIndexes) - 1:
                 # Get path to first simulation to plot
-                firstSimDir = os.getcwd() + "/simulations/" + directory + "/" + \
-                    os.listdir("simulations/" + directory)[0]
+                path = f"simulations/{st.session_state.id}"
+                firstSimDir = f"{os.getcwd()}/{path}/{directory}/{os.listdir(f"{path}/" + directory)[0]}"
                 print(directory, firstSimDir)
                 firstSimPath = firstSimDir + "/" + os.listdir(firstSimDir)[0]
                 st.session_state.plot = plot_simulation(firstSimPath)

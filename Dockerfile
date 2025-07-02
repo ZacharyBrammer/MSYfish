@@ -10,6 +10,10 @@ SHELL ["/bin/bash", "-c"]
 
 COPY . .
 
+RUN mkdir -p /app/simulations
+
+RUN chmod +x start.sh
+
 EXPOSE 8501
 
 CMD ["./start.sh"]
