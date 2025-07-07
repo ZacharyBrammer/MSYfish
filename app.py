@@ -54,6 +54,7 @@ if "mode" not in st.session_state:
     st.session_state.mode = "simulate"
 
 with st.sidebar:
+    # TODO: Spanish
     language = st.selectbox(
         label="Language", options=languages, disabled=st.session_state.running)
     # If language changed, rerun page
@@ -61,6 +62,7 @@ with st.sidebar:
         st.session_state.language = language
         st.rerun()
 
+    # TODO: Spanish
     names = st.selectbox(label="Species Names", options=[
                          "scientific", "common"], disabled=st.session_state.running)
     # If name type changed, rerun page
@@ -68,6 +70,7 @@ with st.sidebar:
         st.session_state.names = names
         st.rerun()
 
+    # TODO: Spanish
     mode = st.selectbox(label="Mode", options=[
                         "simulate", "analyze"], disabled=st.session_state.running)
     # If mode changed, rerun page
@@ -75,6 +78,7 @@ with st.sidebar:
         st.session_state.mode = mode
         st.rerun()
 
+    # TODO: Spanish
     st.write(f"Bookmark Link to View Simulations Later:  \n[Link to Session]({st.context.url}?id={st.session_state.id})")
 
 match st.session_state.mode:

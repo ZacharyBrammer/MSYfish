@@ -14,6 +14,7 @@ def analyze(labels):
     # Select which simulation to plot
     base = f"simulations/{st.session_state.id}/"
     folders = [""] + sorted(os.listdir(base))
+    # TODO: Spanish
     folder = st.selectbox(label="Folder", options=folders)
 
     # Select folder
@@ -21,6 +22,7 @@ def analyze(labels):
         # Get all species in the folder. If there's multiple species, allow choice
         speciess = [""] + os.listdir(f"{base}/{folder}")
         if len(speciess) > 2:
+            # TODO: Spanish
             species = st.selectbox(label="Species", options=sorted(
                 os.listdir(f"{base}/{folder}")))
         else:
@@ -28,6 +30,7 @@ def analyze(labels):
 
         # Get all simulations in the folder and let user select
         simulations = [""] + os.listdir(f"{base}/{folder}/{species}")
+        # TODO: Spanish
         simulation = st.selectbox(label="Simulation", options=simulations)
     else:
         # If blank folder is selected set species and simulation to blank
@@ -52,6 +55,7 @@ def analyze(labels):
 
         # Download button for the simulation file
         with open(path, "rb") as file:
+            # TODO: Spanish
             st.download_button(
                 label="Download NetCDF file",
                 data=file,
@@ -66,7 +70,7 @@ def analyze(labels):
             variable_desc[variable] = biodata.variables[variable].__dict__[
                 "long_name"]
 
-        # TODO: Put this all in a toggle
+        # TODO: Spanish
         st.write("Create custom table/plot:")
         st.write("Dataset Variables")
         st.json(variable_desc, expanded=0)
@@ -82,6 +86,7 @@ def analyze(labels):
         # Too many things for a user to reasonably be able to see on a plot
         selectable_vars.pop("fish")
 
+        # TODO: Spanish
         variables = st.multiselect(
             label="Select Variables (Custom Plotting)", options=selectable_vars)
 
@@ -133,18 +138,18 @@ def analyze(labels):
         if selected_data.shape[1] > 0:
             figLayout = go.Layout(
                 title={
-                    "text": "Custom Plot",
+                    "text": "Custom Plot", # TODO: Spanish
                     "x": 0.5,  # Center title on plot
                     "xanchor": "center",
                 },
                 # Set labels along with range
-                xaxis=dict(title="Time (years)", range=[0, None]),
-                yaxis=dict(title="Selected Vars", range=[0, None]),
+                xaxis=dict(title="Time (years)", range=[0, None]), # TODO: Spanish
+                yaxis=dict(title="Selected Vars", range=[0, None]), # TODO: Spanish
                 template="plotly"  # Default dark theme
             )
             # If ends early, modify title using html to add warning
             if endsEarly:
-                figLayout.title["text"] = "Custom Plot <br><sup>Warning: population crashed during simulation</sup>"
+                figLayout.title["text"] = "Custom Plot <br><sup>Warning: population crashed during simulation</sup>" # TODO: Spanish
 
             fig = go.Figure(layout=figLayout)
 

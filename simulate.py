@@ -24,9 +24,8 @@ def simulate(labels):
 
     # Have user select species, get indexes for running model
     # TODO: add switching for scientific/common names
-    selectedSpecies: list[str] = st.multiselect(
-        label=labels["species"][st.session_state.language], options=speciesList, disabled=st.session_state.running)
-    speciesIndexes: list[int] = []
+    selectedSpecies: list[str] = st.multiselect(label=labels["species"][st.session_state.language], options=speciesList, disabled=st.session_state.running) # type: ignore
+    speciesIndexes: list[int] = [] # type: ignore
 
     for species in selectedSpecies:
         speciesIndexes.append(
@@ -128,10 +127,10 @@ def simulate(labels):
 
         for i in range(len(speciesIndexes)):
             # 100 is added to the number of years so the simulation is given time to stabilize
+            # TODO: add language flag to make the nc things all be in spanish. Only do long names, short ones have to stay the same for logic
             calc_msy(directory, fishdata, connectivity, speciesIndexes[i], stocks, niter, (
                 years + 100), initialPop, fishing, fishingRate, rotation, rotationRate, sizes, minCatchSize, maxCatchSize, temperature)
 
-            # TODO: add "/" to make sure always is a valid path
             # If final run, re-enable inputs and plot first run
             if i == len(speciesIndexes) - 1:
                 # Get path to first simulation to plot

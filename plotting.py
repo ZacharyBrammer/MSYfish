@@ -29,27 +29,27 @@ def plot_simulation(
     # Get per-stock biomass data
     stockBiomass = biodata.variables["stock_biomass"][:].data[100:][:last]
     popDat = {
-        "Stock Biomass Average": f"{np.mean(stockBiomass):.2f}",
-        "Stock Biomass Standard Deviation": f"{np.std(stockBiomass):.2f}"
+        "Stock Biomass Average": f"{np.mean(stockBiomass):.2f}", # TODO: Spanish
+        "Stock Biomass Standard Deviation": f"{np.std(stockBiomass):.2f}" # TODO: Spanish
     }
     st.session_state.popDat = popDat
 
     # Setup layout for interactive figure
     stockBLayout = go.Layout(
         title={
-            "text": "Stock Biomass vs Time",
+            "text": "Stock Biomass vs Time", # TODO: Spanish
             "x": 0.5,  # Center title on plot
             "xanchor": "center",
         },
         # Set labels along with range
-        xaxis=dict(title="Time (years)", range=[0, None]),
-        yaxis=dict(title="Biomass (kg)", range=[0, None]),
+        xaxis=dict(title="Time (years)", range=[0, None]), # TODO: Spanish
+        yaxis=dict(title="Biomass (kg)", range=[0, None]), # TODO: Spanish
         template="plotly"  # Default dark theme
     )
 
     # If ends early, modify title using html to add warning
     if endsEarly:
-        stockBLayout.title["text"] = "Stock Biomass vs Time <br><sup>Warning: population crashed during simulation</sup>"
+        stockBLayout.title["text"] = "Stock Biomass vs Time <br><sup>Warning: population crashed during simulation</sup>" # TODO: Spanish
 
     stockBFig = go.Figure(layout=stockBLayout)
 
@@ -72,19 +72,19 @@ def plot_simulation(
     # Setup layout for interactive figure
     popsizeFigLayout = go.Layout(
         title={
-            "text": "Population Size vs Time",
+            "text": "Population Size vs Time", # TODO: Spanish
             "x": 0.5,  # Center title on plot
             "xanchor": "center",
         },
         # Set labels along with range
-        xaxis=dict(title="Time (years)", range=[0, None]),
-        yaxis=dict(title="Population Size", range=[0, None]),
+        xaxis=dict(title="Time (years)", range=[0, None]), # TODO: Spanish
+        yaxis=dict(title="Population Size", range=[0, None]), # TODO: Spanish
         template="plotly"  # Default dark theme
     )
 
     # If ends early, modify title using html to add warning
     if endsEarly:
-        popsizeFigLayout.title["text"] = "Population Size vs Time <br><sup>Warning: population crashed during simulation</sup>"
+        popsizeFigLayout.title["text"] = "Population Size vs Time <br><sup>Warning: population crashed during simulation</sup>" # TODO: Spanish
 
     # Create figure
     popsizeFig = go.Figure(layout=popsizeFigLayout)
@@ -112,19 +112,19 @@ def plot_simulation(
         # Setup layout for interactive figure
         catchFigLayout = go.Layout(
             title={
-                "text": "Catch Per Stock vs Time",
+                "text": "Catch Per Stock vs Time", # TODO: Spanish
                 "x": 0.5,  # Center title on plot
                 "xanchor": "center",
             },
             # Set labels along with range
-            xaxis=dict(title="Time (years)", range=[0, None]),
-            yaxis=dict(title="Catch (kg)", range=[0, None]),
+            xaxis=dict(title="Time (years)", range=[0, None]), # TODO: Spanish
+            yaxis=dict(title="Catch (kg)", range=[0, None]), # TODO: Spanish
             template="plotly"  # Default dark theme
         )
 
         # If ends early, modify title using html to add warning
         if endsEarly:
-            catchFigLayout.title["text"] = "Catch Per Stock vs Time <br><sup>Warning: population crashed during simulation</sup>"
+            catchFigLayout.title["text"] = "Catch Per Stock vs Time <br><sup>Warning: population crashed during simulation</sup>" # TODO: Spanish
 
         catchFig = go.Figure(layout=catchFigLayout)
 
@@ -134,7 +134,7 @@ def plot_simulation(
                 x=years,
                 y=catch[:, i],
                 mode="lines",
-                name=f"Stock {i+1}"
+                name=f"Stock {i+1}" # TODO: Spanish
             )
             catchFig.add_trace(trace)
 
@@ -144,13 +144,13 @@ def plot_simulation(
         # Setup layout for interactive figure
         catchBarLayout = go.Layout(
             title={
-                "text": "Catch Per Stock",
+                "text": "Catch Per Stock", # TODO: Spanish
                 "x": 0.5,  # Center title on plot
                 "xanchor": "center",
             },
             # Set labels along with range
-            xaxis=dict(title="Stock (#)", range=[0, None]),
-            yaxis=dict(title="Catch (kg)", range=[0, None]),
+            xaxis=dict(title="Stock (#)", range=[0, None]), # TODO: Spanish
+            yaxis=dict(title="Catch (kg)", range=[0, None]), # TODO: Spanish
             template="plotly"  # Default dark theme
         )
 
@@ -163,11 +163,11 @@ def plot_simulation(
             stds.append(np.std(catch[:, i]))
             trace = go.Bar(
                 y=catch[:, i],
-                name=f"Stock {i+1}"
+                name=f"Stock {i+1}" # TODO: Spanish
             )
             # catchBar.add_trace(trace)
         trace = go.Bar(
-            x=[f"Stock {i+1}" for i in range(catch.shape[1])],
+            x=[f"Stock {i+1}" for i in range(catch.shape[1])], # TODO: Spanish
             y=avgs,
             error_y=dict(
                 type="data",
