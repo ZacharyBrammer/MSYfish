@@ -75,8 +75,7 @@ with st.sidebar:
         st.session_state.mode = mode
         st.rerun()
 
-    st.write("Session ID (Bookmark Link to View Simulations Later):")
-    st.write(f"[Link to Session]({st.context.url}?id={st.session_state.id})")
+    st.write(f"Bookmark Link to View Simulations Later:  \n[Link to Session]({st.context.url}?id={st.session_state.id})")
 
 match st.session_state.mode:
     case "simulate":
