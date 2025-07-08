@@ -9,35 +9,35 @@
     },
     "output_dir": {
         "en": "Model Output Directory",
-        "es": "Carpeta de salida"
+        "es": "Directorio de salida del modelo"
     },
     "stocks": {
         "en": "Number of stocks",
-        "es": "Poblaciones"
+        "es": "Número de poblaciones"
     },
     "iterations": {
         "en": "Iterations to run",
-        "es": "Iteraciones"
+        "es": "Número de iteraciones"
     },
     "years": {
         "en": "Years per simulation",
-        "es": "Anos por simulacion"
+        "es": "Años por simulación"
     },
     "initial_pop": {
         "en": "Initial population",
-        "es": "Poblacion inicial"
+        "es": "Población inicial"
     },
     "optional_param": {
         "en": "Optional Parameters",
-        "es": "Opciones"
+        "es": "Parámetros opcionales"
     },
     "conn_file": {
         "en": "Connectivity Matrix",
-        "es": ""
+        "es": "Matriz de conectividad"
     },
     "conn_warning": {
         "en": "Connectivity file does not match number of stocks, connectivity set to none. Update number of stocks or choose new connectivity file.",
-        "es": ""
+        "es": "El archivo de conectividad no coincide con el número de poblaciones. Conectividad desactivada. Actualice el número de poblaciones o seleccione un nuevo archivo de conectividad."
     },
     "fishing": {
         "en": "Fishing",
@@ -45,50 +45,104 @@
     },
     "rotation": {
         "en": "Rotation",
-        "es": ""
+        "es": "Rotación"
     },
     "rotation_warning": {
         "en": "Cannot run with connectivity with only one stock, rotation set to false. Update number of stocks or disable rotation.",
-        "es": ""
+        "es": "No se puede ejecutar con conectividad con solo una población. Rotación desactivada. Actualice el número de poblaciones o desactive la rotación."
     },
     "sim_complete": {
         "en": "Simulations complete",
-        "es": ""
+        "es": "Simulaciones completadas"
     },
     "fishing_rate": {
         "en": "Percentage of max fishing rate",
-        "es": ""
+        "es": "Porcentaje de la tasa máxima de pesca"
     },
     "rotation_rate": {
         "en": "Rotation rate (years)",
-        "es": ""
+        "es": "Frecuencia de rotación (años)"
     },
     "rotation_rate_warning": {
         "en": "Rotation rate is the same as simulation length. Permanent closure enabled.",
-        "es": ""
+        "es": "La frecuencia de rotación es igual a la duración de la simulación. Cierre permanente activado."
     },
     "sizes": {
         "en": "Restrict catch size",
-        "es": ""
+        "es": "Restringir tamaño de captura"
     },
     "min_catch_size": {
         "en": "Minimum size to catch (centimeters)",
-        "es": ""
+        "es": "Tamaño mínimo de captura (centímetros)"
     },
     "max_catch_size": {
         "en": "Maximum size to catch (centimeters)",
-        "es": ""
+        "es": "Tamaño máximo de captura (centímetros)"
     },
     "size_warning": {
         "en": "Fishing is disabled but catch size selected",
-        "es": ""
+        "es": "La pesca está desactivada, pero se seleccionó un tamaño de captura"
     },
     "temp_enable": {
         "en": "Set Temperature",
-        "es": ""
+        "es": "Establecer temperatura"
     },
     "temperature": {
         "en": "Water temperature (degrees C)",
-        "es": ""
+        "es": "Temperatura del agua (grados C)"
+    },
+    "language": {
+        "en": "Language",
+        "es": "Idioma"
+    },
+    "species_names": {
+        "en": "Species Names",
+        "es": "Nombres de especies"
+    },
+    "sim_mode": {
+        "en": "Mode",
+        "es": "Modo"
+    },
+    "simulate": {
+        "en": "simulate",
+        "es": "simular"
+    },
+    "analyze": {
+        "en": "analyze",
+        "es": "analizar"
+    },
+    "session_link": {
+        "en": "Bookmark Link to View Simulations Later:  \n[Link to Session]({link})",
+        "es": "Guardar enlace para ver simulaciones más tarde:  \n[Enlace a la sesión]({link})"
+    },
+    "folder": {
+        "en": "Folder",
+        "es": "Carpeta"
+    },
+    "download": {
+        "en": "Download NetCDF file",
+        "es": "Descargar archivo NetCDF"
+    },
+    "var_select": {
+        "en": "Select Variables (Custom Plotting)",
+        "es": "Seleccionar variables (gráficos personalizados)"
+    },
+    "options": {
+        "simulate": {
+      "en": "simulate",
+      "es": "simular"
+    },
+    "analyze": {
+      "en": "analyze",
+      "es": "analizar"
+    },
+    "scientific": {
+      "en": "scientific",
+      "es": "científico"
+    },
+    "common": {
+      "en": "common",
+      "es": "común"
     }
+  }
 }
