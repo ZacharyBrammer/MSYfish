@@ -127,22 +127,87 @@
         "en": "Select Variables (Custom Plotting)",
         "es": "Seleccionar variables (gráficos personalizados)"
     },
+    "simulation": {
+        "en": "Simulation",
+        "es": "Simulación"
+    },
+    "create_custom": {
+        "en": "Create custom table/plot:",
+        "es": "Crear tabla/gráfico personalizado:"
+    },
+    "dataset_vars": {
+        "en": "Dataset Variables",
+        "es": "Variables del conjunto de datos"
+    },
+    "custom_plot": {
+        "en": "Custom Plot",
+        "es": "Gráfico personalizado"
+    },
+    "years_x": {
+        "en": "Time (years)",
+        "es": "Tiempo (años)"
+    },
+    "cust_y": {
+        "en": "Selected Vars",
+        "es": "Variables seleccionadas"
+    },
+    "crash_warning": {
+        "en": "Warning: population crashed during simulation",
+        "es": "Advertencia: la población colapsó durante la simulación"
+    },
+    "stock": {
+        "en": "stock",
+        "es": "población"
+    },
+    "biomass": {
+        "en": "biomass",
+        "es": "biomasa"
+    },
+    "number": {
+        "en": "number",
+        "es": "número"
+    },
+    "bin": {
+        "en": "bin",
+        "es": "intervalo"
+    },
+    "reproduction": {
+        "en": "reproduction",
+        "es": "reproducción"
+    },
+    "mortality": {
+        "en": "mortality",
+        "es": "mortalidad"
+    },
+    "size": {
+        "en": "size",
+        "es": "tamaño"
+    },
+    "recruit": {
+        "en": "recruit",
+        "es": "reclutas"
+    },
+    "resource": {
+        "en": "resource",
+        "es": "recurso"
+    },
+    "": {},
     "options": {
         "simulate": {
-      "en": "simulate",
-      "es": "simular"
-    },
-    "analyze": {
-      "en": "analyze",
-      "es": "analizar"
-    },
-    "scientific": {
-      "en": "scientific",
-      "es": "científico"
-    },
-    "common": {
-      "en": "common",
-      "es": "común"
+            "en": "simulate",
+            "es": "simular"
+        },
+        "analyze": {
+            "en": "analyze",
+            "es": "analizar"
+        },
+        "scientific": {
+            "en": "scientific",
+            "es": "científico"
+        },
+        "common": {
+            "en": "common",
+            "es": "común"
+        }
     }
-  }
 }
