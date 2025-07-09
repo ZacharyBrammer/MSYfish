@@ -5,6 +5,7 @@ import pandas as pd
 import streamlit as st
 
 from msy_stocks_rev14_connect import compute_pop_msy
+from translate import Translator
 
 
 def calc_msy(
@@ -25,6 +26,9 @@ def calc_msy(
     maxCatch: float | None,  # maximum length of fish to catch
     temperature: float | None  # temperature of water
 ):
+    translator = Translator(st.session_state.language)
+    t = translator.translate
+    
     outdir = f"simulations/{st.session_state.id}/{outdir}"
     print(outdir)
 
@@ -202,8 +206,8 @@ def calc_msy(
 
         if maxfish > 0:
             st.session_state.fishingDat = {
-                "Maximum calculated fishing rate": f"{maxfish:.2}",
-                "Fishing rate used": f"{maxfish * (fishingRate / 100):.2}"
+                t("max_fish"): f"{maxfish:.2}",
+                t("fish_used"): f"{maxfish * (fishingRate / 100):.2}"
             }
 
     print('%d ' % speciesIndex + species + ' is done.')

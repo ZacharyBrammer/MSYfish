@@ -191,6 +191,62 @@
         "en": "resource",
         "es": "recurso"
     },
+    "biomass_avg": {
+        "en": "Stock Biomass Average",
+        "es": "Promedio de biomasa por población"
+    },
+    "biomass_sd": {
+        "en": "Stock Biomass Standard Deviation",
+        "es": "Desviación estándar de biomasa por población"
+    },
+    "biomass_time": {
+        "en": "Stock Biomass vs Time",
+        "es": "Biomasa por población vs tiempo"
+    },
+    "popsize_time": {
+        "en": "Population Size vs Time",
+        "es": "Tamaño poblacional vs tiempo"
+    },
+    "catch_time": {
+        "en": "Catch Per Stock vs Time",
+        "es": "Captura por población vs tiempo"
+    },
+    "catch_stock": {
+        "en": "Catch Per Stock",
+        "es": "Captura por población"
+    },
+    "max_fish": {
+        "en": "Maximum calculated fishing rate",
+        "es": "Tasa máxima de pesca calculada"
+    },
+    "fish_used": {
+        "en": "Fishing rate used",
+        "es": "Tasa de pesca utilizada"
+    },
+    "biomass_y": {
+        "en": "Biomass (kg)",
+        "es": "Biomasa (kg)"
+    },
+    "popsize_y": {
+        "en": "Population Size",
+        "es": "Tamaño Poblacional"
+    },
+    "catch_kg_y": {
+        "en": "Catch (kg)",
+        "es": "Captura (kg)"
+    },
+    "stock_num": {
+        "en": "Stock (#)",
+        "es": "Población (#)"
+    },
+    "": {
+        "en": "",
+        "es": ""
+    },
+    "": {
+        "en": "",
+        "es": ""
+    },
     "options": {
         "simulate": {
             "en": "simulate",
