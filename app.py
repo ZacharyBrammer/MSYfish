@@ -1,4 +1,3 @@
-import json
 import os
 import uuid
 
@@ -6,18 +5,13 @@ import streamlit as st
 
 from analyze import analyze
 from simulate import simulate
+from translate import Translator
 
 # Page setup
 st.set_page_config(
     page_title="MSYFish",
     page_icon="🎣"
 )
-
-# Language setup
-languages = ["en"]
-with open("labels.json", "r") as f:
-    labels = json.load(f)
-    f.close()
 
 st.title("MSYFish Model")
 
@@ -53,32 +47,64 @@ if "popDat" not in st.session_state:
 if "mode" not in st.session_state:
     st.session_state.mode = "simulate"
 
+# Translator
+translator = Translator(st.session_state.language)
+t = translator.translate
+opt = translator.option
+
 with st.sidebar:
+    # Language select
+    languages = ["en", "es"]
     language = st.selectbox(
-        label="Language", options=languages, disabled=st.session_state.running)
+        label=t("language"),
+        options=languages,
+        index=languages.index(st.session_state.language),
+        disabled=st.session_state.running
+    )
     # If language changed, rerun page
     if st.session_state.language != language:
         st.session_state.language = language
         st.rerun()
 
-    names = st.selectbox(label="Species Names", options=[
-                         "scientific", "common"], disabled=st.session_state.running)
+    translator.set_lang(st.session_state.language)
+    t = translator.translate
+    opt = translator.option
+
+    # Species name select
+    name_options = ["scientific", "common"]
+    names = st.selectbox(
+        label=t("spesies_names"),
+        options=name_options,
+        index=name_options.index(st.session_state.names),
+        format_func=lambda x: opt(x),
+        disabled=st.session_state.running
+    )
     # If name type changed, rerun page
     if st.session_state.names != names:
         st.session_state.names = names
         st.rerun()
 
-    mode = st.selectbox(label="Mode", options=[
-                        "simulate", "analyze"], disabled=st.session_state.running)
+    # Mode select
+    mode_options = ["simulate", "analyze"]
+    mode = st.selectbox(
+        label=t("sim_mode"),
+        options=mode_options,
+        index=mode_options.index(st.session_state.mode),
+        format_func=lambda x: opt(x),
+        disabled=st.session_state.running
+    )
     # If mode changed, rerun page
     if st.session_state.mode != mode:
         st.session_state.mode = mode
         st.rerun()
 
-    st.write(f"Bookmark Link to View Simulations Later:  \n[Link to Session]({st.context.url}?id={st.session_state.id})")
+    # Link to session
+    st.write(
+        t("session_link", link=f"{st.context.url}?id={st.session_state.id}")
+    )
 
 match st.session_state.mode:
     case "simulate":
-        simulate(labels)
+        simulate()
     case "analyze":
-        analyze(labels)
+        analyze()

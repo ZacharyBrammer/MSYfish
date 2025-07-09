@@ -9,35 +9,35 @@
     },
     "output_dir": {
         "en": "Model Output Directory",
-        "es": "Carpeta de salida"
+        "es": "Directorio de salida del modelo"
     },
     "stocks": {
         "en": "Number of stocks",
-        "es": "Poblaciones"
+        "es": "Número de poblaciones"
     },
     "iterations": {
         "en": "Iterations to run",
-        "es": "Iteraciones"
+        "es": "Número de iteraciones"
     },
     "years": {
         "en": "Years per simulation",
-        "es": "Anos por simulacion"
+        "es": "Años por simulación"
     },
     "initial_pop": {
         "en": "Initial population",
-        "es": "Poblacion inicial"
+        "es": "Población inicial"
     },
     "optional_param": {
         "en": "Optional Parameters",
-        "es": "Opciones"
+        "es": "Parámetros opcionales"
     },
     "conn_file": {
         "en": "Connectivity Matrix",
-        "es": ""
+        "es": "Matriz de conectividad"
     },
     "conn_warning": {
         "en": "Connectivity file does not match number of stocks, connectivity set to none. Update number of stocks or choose new connectivity file.",
-        "es": ""
+        "es": "El archivo de conectividad no coincide con el número de poblaciones. Conectividad desactivada. Actualice el número de poblaciones o seleccione un nuevo archivo de conectividad."
     },
     "fishing": {
         "en": "Fishing",
@@ -45,50 +45,604 @@
     },
     "rotation": {
         "en": "Rotation",
-        "es": ""
+        "es": "Rotación"
     },
     "rotation_warning": {
         "en": "Cannot run with connectivity with only one stock, rotation set to false. Update number of stocks or disable rotation.",
-        "es": ""
+        "es": "No se puede ejecutar con conectividad con solo una población. Rotación desactivada. Actualice el número de poblaciones o desactive la rotación."
     },
     "sim_complete": {
         "en": "Simulations complete",
-        "es": ""
+        "es": "Simulaciones completadas"
     },
     "fishing_rate": {
         "en": "Percentage of max fishing rate",
-        "es": ""
+        "es": "Porcentaje de la tasa máxima de pesca"
     },
     "rotation_rate": {
         "en": "Rotation rate (years)",
-        "es": ""
+        "es": "Frecuencia de rotación (años)"
     },
     "rotation_rate_warning": {
         "en": "Rotation rate is the same as simulation length. Permanent closure enabled.",
-        "es": ""
+        "es": "La frecuencia de rotación es igual a la duración de la simulación. Cierre permanente activado."
     },
     "sizes": {
         "en": "Restrict catch size",
-        "es": ""
+        "es": "Restringir tamaño de captura"
     },
     "min_catch_size": {
         "en": "Minimum size to catch (centimeters)",
-        "es": ""
+        "es": "Tamaño mínimo de captura (centímetros)"
     },
     "max_catch_size": {
         "en": "Maximum size to catch (centimeters)",
-        "es": ""
+        "es": "Tamaño máximo de captura (centímetros)"
     },
     "size_warning": {
         "en": "Fishing is disabled but catch size selected",
-        "es": ""
+        "es": "La pesca está desactivada, pero se seleccionó un tamaño de captura"
     },
     "temp_enable": {
         "en": "Set Temperature",
-        "es": ""
+        "es": "Establecer temperatura"
     },
     "temperature": {
         "en": "Water temperature (degrees C)",
-        "es": ""
+        "es": "Temperatura del agua (grados C)"
+    },
+    "language": {
+        "en": "Language",
+        "es": "Idioma"
+    },
+    "species_names": {
+        "en": "Species Names",
+        "es": "Nombres de especies"
+    },
+    "sim_mode": {
+        "en": "Mode",
+        "es": "Modo"
+    },
+    "simulate": {
+        "en": "simulate",
+        "es": "simular"
+    },
+    "analyze": {
+        "en": "analyze",
+        "es": "analizar"
+    },
+    "session_link": {
+        "en": "Bookmark Link to View Simulations Later:  \n[Link to Session]({link})",
+        "es": "Guardar enlace para ver simulaciones más tarde:  \n[Enlace a la sesión]({link})"
+    },
+    "folder": {
+        "en": "Folder",
+        "es": "Carpeta"
+    },
+    "download": {
+        "en": "Download NetCDF file",
+        "es": "Descargar archivo NetCDF"
+    },
+    "var_select": {
+        "en": "Select Variables (Custom Plotting)",
+        "es": "Seleccionar variables (gráficos personalizados)"
+    },
+    "simulation": {
+        "en": "Simulation",
+        "es": "Simulación"
+    },
+    "create_custom": {
+        "en": "Create custom table/plot:",
+        "es": "Crear tabla/gráfico personalizado:"
+    },
+    "dataset_vars": {
+        "en": "Dataset Variables",
+        "es": "Variables del conjunto de datos"
+    },
+    "custom_plot": {
+        "en": "Custom Plot",
+        "es": "Gráfico personalizado"
+    },
+    "years_x": {
+        "en": "Time (years)",
+        "es": "Tiempo (años)"
+    },
+    "cust_y": {
+        "en": "Selected Vars",
+        "es": "Variables seleccionadas"
+    },
+    "crash_warning": {
+        "en": "Warning: population crashed during simulation",
+        "es": "Advertencia: la población colapsó durante la simulación"
+    },
+    "stock": {
+        "en": "stock",
+        "es": "población"
+    },
+    "biomass": {
+        "en": "biomass",
+        "es": "biomasa"
+    },
+    "number": {
+        "en": "number",
+        "es": "número"
+    },
+    "bin": {
+        "en": "bin",
+        "es": "intervalo"
+    },
+    "reproduction": {
+        "en": "reproduction",
+        "es": "reproducción"
+    },
+    "mortality": {
+        "en": "mortality",
+        "es": "mortalidad"
+    },
+    "size": {
+        "en": "size",
+        "es": "tamaño"
+    },
+    "recruit": {
+        "en": "recruit",
+        "es": "reclutas"
+    },
+    "resource": {
+        "en": "resource",
+        "es": "recurso"
+    },
+    "biomass_avg": {
+        "en": "Stock Biomass Average",
+        "es": "Promedio de biomasa por población"
+    },
+    "biomass_sd": {
+        "en": "Stock Biomass Standard Deviation",
+        "es": "Desviación estándar de biomasa por población"
+    },
+    "biomass_time": {
+        "en": "Stock Biomass vs Time",
+        "es": "Biomasa por población vs tiempo"
+    },
+    "popsize_time": {
+        "en": "Population Size vs Time",
+        "es": "Tamaño poblacional vs tiempo"
+    },
+    "catch_time": {
+        "en": "Catch Per Stock vs Time",
+        "es": "Captura por población vs tiempo"
+    },
+    "catch_stock": {
+        "en": "Catch Per Stock",
+        "es": "Captura por población"
+    },
+    "max_fish": {
+        "en": "Maximum calculated fishing rate",
+        "es": "Tasa máxima de pesca calculada"
+    },
+    "fish_used": {
+        "en": "Fishing rate used",
+        "es": "Tasa de pesca utilizada"
+    },
+    "biomass_y": {
+        "en": "Biomass (kg)",
+        "es": "Biomasa (kg)"
+    },
+    "popsize_y": {
+        "en": "Population Size",
+        "es": "Tamaño Poblacional"
+    },
+    "catch_kg_y": {
+        "en": "Catch (kg)",
+        "es": "Captura (kg)"
+    },
+    "stock_num": {
+        "en": "Stock (#)",
+        "es": "Población (#)"
+    },
+    "iter_bar": {
+        "en": "All Iterations",
+        "es": "Todas las iteraciones"
+    },
+    "curr_bar": {
+        "en": "Current Iteration",
+        "es": "Iteración actual"
+    },
+    "options": {
+        "simulate": {
+            "en": "simulate",
+            "es": "simular"
+        },
+        "analyze": {
+            "en": "analyze",
+            "es": "analizar"
+        },
+        "scientific": {
+            "en": "scientific",
+            "es": "científico"
+        },
+        "common": {
+            "en": "common",
+            "es": "común"
+        }
+    },
+    "variables": {
+        "ftime": {
+            "short": {
+                "en": "ftime",
+                "es": "tiempo"
+            },
+            "long": {
+                "en": "time since model start",
+                "es": "tiempo desde el inicio del modelo"
+            },
+            "units": {
+                "en": "years",
+                "es": "años"
+            }
+        },
+        "fishing_rate": {
+            "short": {
+                "en": "fishing_rate",
+                "es": "tasa_de_pesca"
+            },
+            "long": {
+                "en": "fishing rate in each stock",
+                "es": "tasa de pesca en cada stock"
+            },
+            "units": {
+                "en": "%",
+                "es": "%"
+            }
+        },
+        "reprod_rate": {
+            "short": {
+                "en": "reprod_rate",
+                "es": "tasa_de_reproduccion"
+            },
+            "long": {
+                "en": "mean survivial rate of larvae",
+                "es": "tasa media de supervivencia de larvas"
+            },
+            "units": {
+                "en": "%",
+                "es": "%"
+            }
+        },
+        "rotation_rate": {
+            "short": {
+                "en": "rotation_rate",
+                "es": "tasa_de_rotacion"
+            },
+            "long": {
+                "en": "period of time before reserve rotation",
+                "es": "período antes de la rotación de la reserva"
+            },
+            "units": {
+                "en": "years",
+                "es": "años"
+            }
+        },
+        "fish": {
+            "short": {
+                "en": "fish",
+                "es": "pez"
+            },
+            "long": {
+                "en": "individual size through time",
+                "es": "tamaño individual a lo largo del tiempo"
+            },
+            "units": {
+                "en": "kg",
+                "es": "kg"
+            }
+        },
+        "popsize": {
+            "short": {
+                "en": "popsize",
+                "es": "tamano_poblacional"
+            },
+            "long": {
+                "en": "population size",
+                "es": "tamaño poblacional"
+            },
+            "units": {
+                "en": "# of individuals",
+                "es": "número de individuos"
+            }
+        },
+        "pop_bins": {
+            "short": {
+                "en": "pop_bins",
+                "es": "poblacion_por_tamano"
+            },
+            "long": {
+                "en": "populations size in size bins",
+                "es": "población por categorías de tamaño"
+            },
+            "units": {
+                "en": "#",
+                "es": "#"
+            }
+        },
+        "sex_ratio": {
+            "short": {
+                "en": "sex_ratio",
+                "es": "proporcion_sexual"
+            },
+            "long": {
+                "en": "proportion female",
+                "es": "proporción de hembras"
+            },
+            "units": {
+                "en": "proportion",
+                "es": "proporción"
+            }
+        },
+        "stock_size": {
+            "short": {
+                "en": "stock_size",
+                "es": "tamano_del_stock"
+            },
+            "long": {
+                "en": "stock size",
+                "es": "tamaño del stock"
+            },
+            "units": {
+                "en": "# of individuals",
+                "es": "número de individuos"
+            }
+        },
+        "stock_biomass": {
+            "short": {
+                "en": "stock_biomass",
+                "es": "biomasa_del_stock"
+            },
+            "long": {
+                "en": "stock biomass",
+                "es": "biomasa del stock"
+            },
+            "units": {
+                "en": "# of individuals",
+                "es": "número de individuos"
+            }
+        },
+        "stock_recruit": {
+            "short": {
+                "en": "stock_recruit",
+                "es": "reclutas_del_stock"
+            },
+            "long": {
+                "en": "stock recruits",
+                "es": "reclutas del stock"
+            },
+            "units": {
+                "en": "# of individuals",
+                "es": "número de individuos"
+            }
+        },
+        "biomass": {
+            "short": {
+                "en": "biomass",
+                "es": "biomasa"
+            },
+            "long": {
+                "en": "biomass",
+                "es": "biomasa"
+            },
+            "units": {
+                "en": "kg",
+                "es": "kg"
+            }
+        },
+        "biomass_bins": {
+            "short": {
+                "en": "biomass_bins",
+                "es": "biomasa_por_tamano"
+            },
+            "long": {
+                "en": "biomass in size bins",
+                "es": "biomasa por categorías de tamaño"
+            },
+            "units": {
+                "en": "#",
+                "es": "#"
+            }
+        },
+        "newgrowth": {
+            "short": {
+                "en": "newgrowth",
+                "es": "nuevo_crecimiento"
+            },
+            "long": {
+                "en": "new biomass",
+                "es": "nueva biomasa"
+            },
+            "units": {
+                "en": "kg",
+                "es": "kg"
+            }
+        },
+        "reprod_out": {
+            "short": {
+                "en": "reprod_out",
+                "es": "produccion_reproductiva"
+            },
+            "long": {
+                "en": "reproductive output",
+                "es": "producción reproductiva"
+            },
+            "units": {
+                "en": "number of eggs",
+                "es": "número de huevos"
+            }
+        },
+        "consumption": {
+            "short": {
+                "en": "consumption",
+                "es": "consumo"
+            },
+            "long": {
+                "en": "consumption",
+                "es": "consumo"
+            },
+            "units": {
+                "en": "kg",
+                "es": "kg"
+            }
+        },
+        "reproduction": {
+            "short": {
+                "en": "reproduction",
+                "es": "reproduccion"
+            },
+            "long": {
+                "en": "biomass and number",
+                "es": "biomasa y número"
+            },
+            "units": {
+                "en": "kg and #",
+                "es": "kg y número"
+            }
+        },
+        "reprod_bins": {
+            "short": {
+                "en": "reprod_bins",
+                "es": "reproduccion_por_tamano"
+            },
+            "long": {
+                "en": "reproduction in size bins",
+                "es": "reproducción por categorías de tamaño"
+            },
+            "units": {
+                "en": "#",
+                "es": "#"
+            }
+        },
+        "catch": {
+            "short": {
+                "en": "catch",
+                "es": "captura"
+            },
+            "long": {
+                "en": "catch biomass and numbers",
+                "es": "captura (biomasa y número)"
+            },
+            "units": {
+                "en": "kg and #",
+                "es": "kg y número"
+            }
+        },
+        "catch_bins": {
+            "short": {
+                "en": "catch_bins",
+                "es": "captura_por_tamano"
+            },
+            "long": {
+                "en": "catch in size bins",
+                "es": "captura por categorías de tamaño"
+            },
+            "units": {
+                "en": "#",
+                "es": "#"
+            }
+        },
+        "age": {
+            "short": {
+                "en": "age",
+                "es": "edad"
+            },
+            "long": {
+                "en": "fish age",
+                "es": "edad de los peces"
+            },
+            "units": {
+                "en": "yr",
+                "es": "años"
+            }
+        },
+        "age_bins": {
+            "short": {
+                "en": "age_bins",
+                "es": "edad_por_tamano"
+            },
+            "long": {
+                "en": "biomass in size bins",
+                "es": "biomasa por categorías de tamaño"
+            },
+            "units": {
+                "en": "yr",
+                "es": "años"
+            }
+        },
+        "wfish": {
+            "short": {
+                "en": "wfish",
+                "es": "pez_objetivo"
+            },
+            "long": {
+                "en": "fish size of target harvest",
+                "es": "tamaño del pez objetivo de la pesca"
+            },
+            "units": {
+                "en": "kg",
+                "es": "kg"
+            }
+        },
+        "resource": {
+            "short": {
+                "en": "resource",
+                "es": "recurso"
+            },
+            "long": {
+                "en": "resource",
+                "es": "recurso"
+            },
+            "units": {
+                "en": "units",
+                "es": "unidades"
+            }
+        },
+        "mortality": {
+            "short": {
+                "en": "mortality",
+                "es": "mortalidad"
+            },
+            "long": {
+                "en": "mortality biomass and number",
+                "es": "mortalidad (biomasa y número)"
+            },
+            "units": {
+                "en": "kg and #",
+                "es": "kg y número"
+            }
+        },
+        "mort_bins": {
+            "short": {
+                "en": "mort_bins",
+                "es": "mortalidad_por_tamano"
+            },
+            "long": {
+                "en": "mortality by size bins",
+                "es": "mortalidad por categorías de tamaño"
+            },
+            "units": {
+                "en": "#",
+                "es": "#"
+            }
+        },
+        "mid_bins": {
+            "short": {
+                "en": "mid_bins",
+                "es": "centro_de_categorias"
+            },
+            "long": {
+                "en": "middle of mortality bins",
+                "es": "centro de las categorías de mortalidad"
+            },
+            "units": {
+                "en": "kg",
+                "es": "kg"
+            }
+        }
     }
 }
