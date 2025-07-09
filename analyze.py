@@ -14,6 +14,7 @@ from translate import Translator
 def analyze(labels):
     translator = Translator(st.session_state.language)
     t = translator.translate
+    v = translator.var
 
     # Select which simulation to plot
     base = f"simulations/{st.session_state.id}/"
@@ -24,17 +25,14 @@ def analyze(labels):
     if folder != "":
         # Get all species in the folder. If there's multiple species, allow choice
         speciess = [""] + os.listdir(f"{base}/{folder}")
-        if len(speciess) > 2:
-            species = st.selectbox(
-                label=t("species"),
-                options=sorted(os.listdir(f"{base}/{folder}"))
-            )
-        else:
-            species = speciess[-1]
+        species = st.selectbox(label=t("species"), options=speciess)
 
-        # Get all simulations in the folder and let user select
-        simulations = [""] + os.listdir(f"{base}/{folder}/{species}")
-        simulation = st.selectbox(label=t("simulation"), options=simulations)
+        if species != "":
+            # Get all simulations in the folder and let user select
+            simulations = [""] + os.listdir(f"{base}/{folder}/{species}")
+            simulation = st.selectbox(label=t("simulation"), options=simulations)
+        else:
+            simulation = ""
     else:
         # If blank folder is selected set species and simulation to blank
         species = simulation = ""
@@ -69,7 +67,7 @@ def analyze(labels):
         # TODO: allow user to make table from whatever variales they want, turn that into plots
         variable_desc = {}
         for variable in biodata.variables:
-            variable_desc[variable] = biodata.variables[variable].__dict__["long_name"]
+            variable_desc[v(variable, "short")] = v(variable, "long")
 
         st.write(t("create_custom"))
         st.write(t("dataset_vars"))
@@ -88,7 +86,8 @@ def analyze(labels):
 
         variables = st.multiselect(
             label=t("var_select"),
-            options=selectable_vars
+            options=selectable_vars,
+            format_func=lambda x: v(x, "short")
         )
 
         # TODO: for each selected: get title, get data, if more than 1d do a for loop to add all bins/stock with label
@@ -103,7 +102,7 @@ def analyze(labels):
             match len(biodata.variables[variable].shape):
                 case 1:
                     # Get variable name and units for column title
-                    title = f"{variable} ({biodata.variables[variable].getncattr('units')})"
+                    title = f"{v(variable, "short")} ({v(variable, "units")})"
 
                     # Add data to the dataframe
                     selected_data[title] = data
@@ -112,7 +111,7 @@ def analyze(labels):
                     match variable:
                         case "stock_size" | "stock_biomass" | "stock_recruit" | "resource":
                             var_name = variable.split("_")[-1]
-                            units = biodata.variables[variable].getncattr("units")
+                            units = v(variable, "units")
                             data = pd.DataFrame(
                                 data,
                                 columns=[f"{t("stock")} {i + 1} {t(var_name)} ({(units)})" for i in range(data.shape[1])]

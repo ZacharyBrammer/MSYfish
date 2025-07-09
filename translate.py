@@ -15,3 +15,6 @@ class Translator:
 
     def option(self, key):
         return self.labels.get("options", {}).get(key, {}).get(self.lang, key)
+
+    def var(self, key, dat) -> str:
+        return self.labels.get("variables", {}).get(key, {}).get(dat, {}).get(self.lang, key)
