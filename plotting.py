@@ -11,7 +11,7 @@ def plot_simulation(
 ) -> list[go.Figure]:
     translator = Translator(st.session_state.language)
     t = translator.translate
-    
+
     # Read the dataset
     biodata = nc.Dataset(path, "r")
 

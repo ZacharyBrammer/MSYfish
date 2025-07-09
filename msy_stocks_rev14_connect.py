@@ -158,7 +158,7 @@ def compute_pop_msy(
                 ff[RM] = 0
         else:
             ff = fishingRates
-            mnpop = np.mean(popsize[ii-5:ii]) / np.mean(popsize[40:50])
+            mnpop = np.mean(popsize[ii-5:ii]) / np.mean(popsize[40:50]) # type: ignore
 
         if mnpop < btarget:
             ff = btarget * ff
@@ -384,7 +384,7 @@ def compute_pop_msy(
 
             for kk in range(0, nstocks):
                 reprodTot[ii, kk] = np.sum(reprod[stock == kk])
-                for mm in range(0, nstocks):
+                for mm in range(0, nstocks): # type: ignore
                     reproductionMatrix[kk, mm] = conn_matrix[kk,
                                                              mm] * reprodTot[ii, kk]
                 sigrec = np.random.lognormal(0., recruitVar)

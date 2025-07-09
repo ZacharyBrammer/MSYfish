@@ -239,13 +239,13 @@
         "en": "Stock (#)",
         "es": "Población (#)"
     },
-    "": {
-        "en": "",
-        "es": ""
+    "iter_bar": {
+        "en": "All Iterations",
+        "es": "Todas las iteraciones"
     },
-    "": {
-        "en": "",
-        "es": ""
+    "curr_bar": {
+        "en": "Current Iteration",
+        "es": "Iteración actual"
     },
     "options": {
         "simulate": {

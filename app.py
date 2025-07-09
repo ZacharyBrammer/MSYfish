@@ -1,4 +1,3 @@
-import json
 import os
 import uuid
 
@@ -100,10 +99,12 @@ with st.sidebar:
         st.rerun()
 
     # Link to session
-    st.write(t("session_link", link=f"{st.context.url}?id={st.session_state.id}"))
+    st.write(
+        t("session_link", link=f"{st.context.url}?id={st.session_state.id}")
+    )
 
 match st.session_state.mode:
-    case "simulate" | "simular":
-        simulate(translator.labels)
-    case "analyze" | "analizar":
-        analyze(translator.labels)
+    case "simulate":
+        simulate()
+    case "analyze":
+        analyze()

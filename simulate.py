@@ -12,7 +12,7 @@ from translate import Translator
 
 
 # Method to both display simulation settings and run simulations
-def simulate(labels):
+def simulate():
     translator = Translator(st.session_state.language)
     t = translator.translate
 
@@ -144,7 +144,7 @@ def simulate(labels):
             label=t("rotation_rate"),
             min_value=1,
             max_value=years + 100,
-            disabled=st.session_state.running\
+            disabled=st.session_state.running
         )
     else:
         rotationRate = 0

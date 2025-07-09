@@ -28,7 +28,7 @@ def calc_msy(
 ):
     translator = Translator(st.session_state.language)
     t = translator.translate
-    
+
     outdir = f"simulations/{st.session_state.id}/{outdir}"
     print(outdir)
 
@@ -50,8 +50,8 @@ def calc_msy(
     print('%d ' % speciesIndex + species + ' started...')
 
     # Setup progress bar
-    iterBar = st.progress(value=0, text="All Iterations")
-    currentBar = st.progress(value=0, text="Current Iteration")
+    iterBar = st.progress(value=0, text=t("iter_bar"))
+    currentBar = st.progress(value=0, text=t("curr_bar"))
 
     while xtest:
         # set Winf to -1 to initialize
@@ -166,15 +166,15 @@ def calc_msy(
             while stocktest:
                 for ii in range(0, fstep+1):  # 41 for complete runs
                     currentBar.progress(value=(ii / fstep),
-                                        text="Current Iteration")
+                                        text=t("curr_bar"))
 
                     fishingRates[0:nfish] = maxfish * (fishingRate / 100)
                     if rotation:
                         _ = compute_pop_msy(outdir, fishingRates, stocks, nfish, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage, minsize, minrec,
-                                               R, msave, iteration, btarget, False, environ, rvar, conn_matrix, rotationRate, years, sizes, minCatch, maxCatch, temperature)
+                                            R, msave, iteration, btarget, False, environ, rvar, conn_matrix, rotationRate, years, sizes, minCatch, maxCatch, temperature)
                     else:
                         _ = compute_pop_msy(outdir, fishingRates, stocks, nfish, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage, minsize, minrec,
-                                               R, msave, iteration, btarget, False, environ, rvar, conn_matrix, 0, years, sizes, minCatch, maxCatch, temperature)
+                                            R, msave, iteration, btarget, False, environ, rvar, conn_matrix, 0, years, sizes, minCatch, maxCatch, temperature)
 
                 stocklist = [g for g in os.listdir(outdir + species) if g.endswith(
                     '%d' % nfish, 19, 20) and g.endswith('_' + '%d' % iteration + '.nc')]
@@ -199,8 +199,8 @@ def calc_msy(
             else:
                 iteration = iteration+1
                 iterBar.progress(value=(iteration / niter),
-                                 text="All Iterations")
-                currentBar.progress(value=0, text="Current Iteration")
+                                 text=t("iter_bar"))
+                currentBar.progress(value=0, text=t("curr_bar"))
                 if iteration >= (niter):
                     xtest = False
 

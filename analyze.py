@@ -3,7 +3,7 @@ import os
 import netCDF4 as nc
 import numpy as np
 import pandas as pd
-import plotly.graph_objects as go # type: ignore
+import plotly.graph_objects as go  # type: ignore
 import streamlit as st
 
 from plotting import plot_simulation
@@ -11,7 +11,7 @@ from translate import Translator
 
 
 # Method to allow plotting/viewing of previous simulations
-def analyze(labels):
+def analyze():
     translator = Translator(st.session_state.language)
     t = translator.translate
     v = translator.var
