@@ -127,6 +127,22 @@ def analyze():
                             )
                             selected_data = pd.concat([selected_data, data], axis=1)
                 case 3:
+                    match variable:
+                        case "pop_bins" | "biomass_bins" | "reprod_bins" | "catch_bins" | "mort_bins":
+                            var_name = v(variable, "short")
+                            units = v(variable, "units")
+                            print(var_name, units)
+                            time, bins, stocks = data.shape
+                            data = data.reshape(time, bins * stocks)
+                            data = pd.DataFrame(
+                                data,
+                                columns= [
+                                    f"{t("bin")} {b + 1} {t("stock")} {s + 1} {var_name} ({(units)})"
+                                    for b in range(bins)
+                                    for s in range(stocks)
+                                ]
+                            )
+                            selected_data = pd.concat([selected_data, data], axis=1)
                     # TODO: figure out this, gonna take too long so it's a later problem
                     # Some 3D variables have different units/sizes so handle differently
                     continue

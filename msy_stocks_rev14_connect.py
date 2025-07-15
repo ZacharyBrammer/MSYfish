@@ -578,7 +578,7 @@ def create_popdynnc(outfile, tlength, numpop, nbins, maxage, nstocks, runData):
     biodata.createVariable('biomass_bins', 'f8',
                            ('time', 'numbins', 'nstocks'))
     biodata.variables['biomass_bins'].long_name = 'biomass in size bins'
-    biodata.variables['biomass_bins'].units = '#'
+    biodata.variables['biomass_bins'].units = 'kg'
     biodata.variables['biomass_bins'][:, :, :] = runData['biomass_bins']
 
     # New growth

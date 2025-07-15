@@ -1,6 +1,6 @@
 import netCDF4 as nc
 import numpy as np
-import plotly.graph_objects as go
+import plotly.graph_objects as go # type: ignore
 import streamlit as st
 
 from translate import Translator

@@ -444,8 +444,8 @@
                 "es": "biomasa por categorías de tamaño"
             },
             "units": {
-                "en": "#",
-                "es": "#"
+                "en": "kg",
+                "es": "kg"
             }
         },
         "newgrowth": {
