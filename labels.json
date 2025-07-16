@@ -247,6 +247,10 @@
         "en": "Current Iteration",
         "es": "Iteración actual"
     },
+    "path_warning": {
+        "en": "Invalid folder name. Only letters, numbers, underscores, and hyphens are allowed.",
+        "es": "Nombre de carpeta no válido. Solo se permiten letras, números, guiones bajos y guiones."
+    },
     "options": {
         "simulate": {
             "en": "simulate",
