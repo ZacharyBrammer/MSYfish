@@ -184,7 +184,6 @@ def simulate():
 
         for i in range(len(speciesIndexes)):
             # 100 is added to the number of years so the simulation is given time to stabilize
-            # TODO: add language flag to make the nc things all be in spanish. Only do long names, short ones have to stay the same for logic
             calc_msy(directory, fishdata, connectivity, speciesIndexes[i], stocks, niter, (
                 years + 100), initialPop, fishing, fishingRate, rotation, rotationRate, sizes, minCatchSize, maxCatchSize, temperature)
 
