@@ -64,7 +64,6 @@ def analyze():
             )
 
         # Setup for reading individual variables in file
-        # TODO: allow user to make table from whatever variales they want, turn that into plots
         variable_desc = {}
         for variable in biodata.variables:
             variable_desc[v(variable, "short")] = v(variable, "long")
@@ -90,7 +89,6 @@ def analyze():
             format_func=lambda x: v(x, "short")
         )
 
-        # TODO: for each selected: get title, get data, if more than 1d do a for loop to add all bins/stock with label
         # Collect data user selected, start with time variable
         selected_data = pd.DataFrame()
         selected_data["year"] = years
@@ -131,25 +129,46 @@ def analyze():
                         case "pop_bins" | "biomass_bins" | "reprod_bins" | "catch_bins" | "mort_bins":
                             var_name = v(variable, "short")
                             units = v(variable, "units")
-                            print(var_name, units)
                             time, bins, stocks = data.shape
                             data = data.reshape(time, bins * stocks)
                             data = pd.DataFrame(
                                 data,
-                                columns= [
+                                columns=[
                                     f"{t("bin")} {b + 1} {t("stock")} {s + 1} {var_name} ({(units)})"
                                     for b in range(bins)
                                     for s in range(stocks)
                                 ]
                             )
                             selected_data = pd.concat([selected_data, data], axis=1)
-                    # TODO: figure out this, gonna take too long so it's a later problem
-                    # Some 3D variables have different units/sizes so handle differently
-                    continue
-                    match variable:
-                        case "pop_bins":
-                            # TODO: figure out how to smush so it's (years, bins * stocks) with each column being called "bin x stock y population"
-                            pass
+                        case "age_bins":
+                            # TODO: Figure out units / if this is right
+                            var_name = v(variable, "short")
+                            units = v(variable, "units")
+                            time, ages, stocks = data.shape
+                            data = data.reshape(time, ages * stocks)
+                            data = pd.DataFrame(
+                                data,
+                                columns=[
+                                    f"{v("age", "short")} {a + 1} {t("stock")} {s + 1} {var_name} ({(units)})"
+                                    for a in range(ages)
+                                    for s in range(stocks)
+                                ]
+                            )
+                            selected_data = pd.concat([selected_data, data], axis=1)
+                        case "catch":
+                            var_name = v(variable, "short")
+                            units = v(variable, "units")
+                            time, stocks, vars = data.shape
+                            columns = []
+                            for i in range(stocks):
+                                columns.append(f"{t("stock")} {i + 1} {var_name} (#)")
+                                columns.append(f"{t("stock")} {i + 1} {var_name} (kg)")
+                            data = data.reshape(time, stocks * vars)
+                            data = pd.DataFrame(
+                                data,
+                                columns=columns
+                            )
+                            selected_data = pd.concat([selected_data, data], axis=1)
 
         selected_data = selected_data.set_index("year")
         st.dataframe(selected_data)
