@@ -29,7 +29,7 @@ def calc_msy(
     translator = Translator(st.session_state.language)
     t = translator.translate
 
-    outdir = f"simulations/{st.session_state.id}/{outdir}"
+    outdir = f"simulations/{st.session_state.id}/{outdir}/"
     print(outdir)
 
     minfiles = 1  # minimum files per simulation

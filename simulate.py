@@ -1,5 +1,6 @@
 import io
 import os
+import re
 import time
 
 import numpy as np
@@ -38,12 +39,20 @@ def simulate():
         speciesIndexes.append(
             speciesList[speciesList == species].index.values[0].item())
 
+    dir_regex = r"^[A-Za-z0-9_-]+$"
+
     # Get output directory
     directory = st.text_input(
         label=t("output_dir"),
-        value="path/",
+        value="path",
         disabled=st.session_state.running
     )
+
+    if not re.fullmatch(dir_regex, directory):
+        st.session_state.valid_path = False
+        st.error("Invalid folder name. Only letters, numbers, underscores, and hyphens are allowed.")
+    else:
+        st.session_state.valid_path = True
 
     # Integer inputs to the model
     stocks = st.number_input(
@@ -181,6 +190,10 @@ def simulate():
         if (len(speciesIndexes)) == 0:
             st.session_state.running = False
             st.rerun()
+        
+        if st.session_state.valid_path == False:
+            st.session_state.running = False
+            st.rerun()
 
         for i in range(len(speciesIndexes)):
             # 100 is added to the number of years so the simulation is given time to stabilize
@@ -190,10 +203,9 @@ def simulate():
             # If final run, re-enable inputs and plot first run
             if i == len(speciesIndexes) - 1:
                 # Get path to first simulation to plot
-                path = f"simulations/{st.session_state.id}"
-                firstSimDir = f"{os.getcwd()}/{path}/{directory}/{os.listdir(f"{path}/" + directory)[0]}"
-                print(directory, firstSimDir)
-                firstSimPath = firstSimDir + "/" + os.listdir(firstSimDir)[0]
+                path = f"simulations/{st.session_state.id}/{directory}"
+                firstSimDir = os.path.join(path, os.listdir(path)[0])
+                firstSimPath = os.path.join(firstSimDir, os.listdir(firstSimDir)[0])
                 st.session_state.plot = plot_simulation(firstSimPath)
 
                 # Set running to false and print success message

@@ -47,6 +47,9 @@ if "popDat" not in st.session_state:
 if "mode" not in st.session_state:
     st.session_state.mode = "simulate"
 
+if "valid_path" not in st.session_state:
+    st.session_state.valid_path = True
+
 # Translator
 translator = Translator(st.session_state.language)
 t = translator.translate
