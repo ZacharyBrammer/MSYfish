@@ -97,7 +97,7 @@ def calc_msy(
         minsize = 0.2*Winf
 
         # set background resource value to scale as Winf to constrain run time
-        R = np.floor(400*Winf**1.2)
+        R = np.floor(800*Winf**1.2)
 
         # set file directories if needed
         if not (np.isnan(asympLen[0]) or np.isnan(growthCoef[0]) or np.isnan(lenWtPower) or np.isnan(maxage)):
