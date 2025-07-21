@@ -50,6 +50,9 @@ if "mode" not in st.session_state:
 if "valid_path" not in st.session_state:
     st.session_state.valid_path = True
 
+if "firstSimPath" not in st.session_state:
+    st.session_state.firstSimPath = ""
+
 # Translator
 translator = Translator(st.session_state.language)
 t = translator.translate
