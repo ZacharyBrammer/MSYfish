@@ -31,8 +31,11 @@ def compute_pop_msy(
     maxCatch: float | None,  # maximum catch weight - user input
     temperature: float | None  # temperature of water
 ) -> bool:
-
-    outfile = outdir + species + '/msy_stocks_' + '%d' % fishingRates.size + '_nfish_' + '%d' % nfish + '_mfish_' + \
+    if any(fishingRates):
+        fishedStocks = fishingRates.size
+    else:
+        fishedStocks = 0
+    outfile = outdir + species + '/msy_stocks_' + '%d' % fishingRates.size + '_nfish_' + '%d' % fishedStocks + '_mfish_' + \
         '%.4f' % np.max(fishingRates) + '_rot_' + '%03d' % rotation + '_' + \
         '%d' % iteration + '.nc'  # '_rec_' + '%.4f' % reprodper
 

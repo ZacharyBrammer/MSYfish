@@ -37,7 +37,6 @@ def plot_simulation(
         t("biomass_avg"): f"{np.mean(stockBiomass):.2f}",
         t("biomass_sd"): f"{np.std(stockBiomass):.2f}"
     }
-    st.session_state.popDat = popDat
 
     # Setup layout for interactive figure
     stockBLayout = go.Layout(
@@ -113,6 +112,12 @@ def plot_simulation(
     fishing = np.any(catch)
 
     if fishing:
+        # Get average count and weight of catch
+        popDat[t("catch_avg_kg")] = f"{np.mean(catch):.2f}"
+        catchCt = biodata.variables["catch"][:].data[100:][:last]
+        catchCt = catchCt[:, :, 0]
+        popDat[t("catch_avg_ct")] = f"{np.mean(catchCt):.2f}"
+
         # Plot catch over time
         # Setup layout for interactive figure
         catchFigLayout = go.Layout(
@@ -183,6 +188,7 @@ def plot_simulation(
 
         plots.append(catchBar)
 
+    st.session_state.popDat = popDat
     # Close file
     biodata.close()
 

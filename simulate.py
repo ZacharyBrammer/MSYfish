@@ -202,11 +202,15 @@ def simulate():
 
             # If final run, re-enable inputs and plot first run
             if i == len(speciesIndexes) - 1:
-                # Get path to first simulation to plot
+                # Get path to most recent simulation to plot
                 path = f"simulations/{st.session_state.id}/{directory}"
-                firstSimDir = os.path.join(path, os.listdir(path)[0])
-                firstSimPath = os.path.join(firstSimDir, os.listdir(firstSimDir)[0])
-                st.session_state.plot = plot_simulation(firstSimPath)
+                allSims = [
+                    os.path.join(path, species, file)
+                    for species in os.listdir(path)
+                    for file in os.listdir(os.path.join(path, species))
+                ]
+                st.session_state.firstSimPath = max(allSims, key=os.path.getmtime)
+                st.session_state.plot = plot_simulation(st.session_state.firstSimPath)
 
                 # Set running to false and print success message
                 st.session_state.running = False
@@ -216,6 +220,8 @@ def simulate():
 
     # Display images and other data from sim
     if st.session_state.plot != "":
+        simPathStr = "/".join(st.session_state.firstSimPath.split("/")[2:])
+        st.write(f"{t("simulation")}: {simPathStr}")
         st.write(st.session_state.fishingDat)
         st.write(st.session_state.popDat)
         for plot in st.session_state.plot:

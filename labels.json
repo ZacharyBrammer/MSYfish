@@ -251,6 +251,14 @@
         "en": "Invalid folder name. Only letters, numbers, underscores, and hyphens are allowed.",
         "es": "Nombre de carpeta no válido. Solo se permiten letras, números, guiones bajos y guiones."
     },
+    "catch_avg_kg": {
+        "en": "Average Catch (kg)",
+        "es": "Captura promedio (kg)"
+    },
+    "catch_avg_ct": {
+        "en": "Average Catch (#)",
+        "es": "Captura promedio (#)"
+    },
     "options": {
         "simulate": {
             "en": "simulate",
