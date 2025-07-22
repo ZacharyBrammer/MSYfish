@@ -29,7 +29,9 @@ def compute_pop_msy(
     sizes: bool,  # flag to enable catch size restriction
     minCatch: float,  # minimum catch weight - user input
     maxCatch: float | None,  # maximum catch weight - user input
-    temperature: float | None  # temperature of water
+    temperature: float | None,  # temperature of water
+    massChance: float | None, # yearly chance of a mass mortality event
+    massMort: float | None, # proportion of population to die in mass mortality event
 ) -> bool:
     if any(fishingRates):
         fishedStocks = fishingRates.size

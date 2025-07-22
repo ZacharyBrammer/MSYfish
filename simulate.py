@@ -171,6 +171,30 @@ def simulate():
         )
     else:
         temperature = None
+    
+    climaticEnable = st.toggle(
+        label="Climatic Event Enable",
+        disabled=st.session_state.running
+    )
+
+    if climaticEnable:
+        eventChance = st.number_input(
+            label="Chance of Climatic Event",
+            min_value=0.0,
+            max_value=100.0,
+            value=0.0,
+            disabled=st.session_state.running
+        )
+        eventMort = st.number_input(
+            label="Population Lost In Event",
+            min_value=0.0,
+            max_value=100.0,
+            value=0.0,
+            disabled=st.session_state.running
+        )
+    else:
+        eventChance = None
+        eventMort = None
 
     # Check that stocks > 1 to prevent divide by 0 error
     if rotation and stocks == 1:
