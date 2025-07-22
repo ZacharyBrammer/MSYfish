@@ -181,6 +181,17 @@ def compute_pop_msy(
         fishWt[ii] = 2 * np.mean(fish[ii-1, :])
         order = np.random.permutation(numfish)
 
+        # If climatic (mass mortality) events are enabled
+        if ii > 100 and massChance and massMort:
+            climatic = np.random.random()
+
+            # If event occurs
+            if climatic < massChance / 100:
+                numDead = int(numfish * (massMort / 100))
+                for i in range(numDead):
+                    fishI = order[i]
+                    dead[fishI] = 1
+
         for kk in range(0, numfish):
 
             jj = order[kk]

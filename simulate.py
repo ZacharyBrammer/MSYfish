@@ -179,14 +179,14 @@ def simulate():
 
     if climaticEnable:
         eventChance = st.number_input(
-            label="Chance of Climatic Event",
+            label="% Chance of Climatic Event",
             min_value=0.0,
             max_value=100.0,
             value=0.0,
             disabled=st.session_state.running
         )
         eventMort = st.number_input(
-            label="Population Lost In Event",
+            label="% Population Lost In Event",
             min_value=0.0,
             max_value=100.0,
             value=0.0,
@@ -222,7 +222,7 @@ def simulate():
         for i in range(len(speciesIndexes)):
             # 100 is added to the number of years so the simulation is given time to stabilize
             calc_msy(directory, fishdata, connectivity, speciesIndexes[i], stocks, niter, (
-                years + 100), initialPop, fishing, fishingRate, rotation, rotationRate, sizes, minCatchSize, maxCatchSize, temperature)
+                years + 100), initialPop, fishing, fishingRate, rotation, rotationRate, sizes, minCatchSize, maxCatchSize, temperature, eventChance, eventMort)
 
             # If final run, re-enable inputs and plot first run
             if i == len(speciesIndexes) - 1:
