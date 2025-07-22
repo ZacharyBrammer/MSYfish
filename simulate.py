@@ -77,6 +77,7 @@ def simulate():
         label=t("initial_pop"),
         step=1,
         min_value=1,
+        value=400,
         disabled=st.session_state.running
     )
 

@@ -6,7 +6,7 @@ def compute_pop_msy(
     outdir: str,  # output directory
     fishingRates: np.ndarray,  # array with fishing rate per stock
     nstocks: int,  # number of stocks
-    nfish: int,  # number of fish
+    initialPop: int,  # number of fish
     species: str,  # name of species
     asympLen: np.ndarray,  # asymptotic length array
     growthCoef: np.ndarray,  # growth coefficient array
@@ -54,7 +54,6 @@ def compute_pop_msy(
     # rotational closure parameters
     RM = 0
 
-    initialPop = int(400)  # initial population size
     slap = False  # restart flag
 
     delt = 1  # timestep in years
