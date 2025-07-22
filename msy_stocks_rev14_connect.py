@@ -191,6 +191,8 @@ def compute_pop_msy(
                 for i in range(numDead):
                     fishI = order[i]
                     dead[fishI] = 1
+                    mortality[ii, 0] += 1
+                    mortality[ii, 1] += fish[ii-1, fishI]
 
         for kk in range(0, numfish):
 
