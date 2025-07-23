@@ -24,7 +24,10 @@ def calc_msy(
     sizes: bool,  # enable catch size ranges
     minCatch: float,  # minimum length of fish to catch
     maxCatch: float | None,  # maximum length of fish to catch
-    temperature: float | None  # temperature of water
+    temperature: float | None,  # temperature of water
+    massChance: float | None,  # yearly chance of a mass mortality event
+    massMort: float | None,  # proportion of population to die in mass mortality event
+    biomassFishing: bool,  # false for fishing from max fishing rate, true for % of biomass
 ):
     translator = Translator(st.session_state.language)
     t = translator.translate
@@ -124,8 +127,8 @@ def calc_msy(
                 if recruitmentIndex < rstep:
                     reprodper = reprodstp[recruitmentIndex]
                     fishingRates = np.zeros([stocks])
-                    rslap = compute_pop_msy(outdir, fishingRates, stocks, stocks, species, asympLen, growthCoef, lenWtCoef, lenWtPower,
-                                            maxage, minsize, reprodper, R, False, iteration, 1, True, False, 0.0, conn_matrix, 0, years, False, 0, None, None)
+                    rslap = compute_pop_msy(outdir, fishingRates, stocks, stocks, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage,
+                                            minsize, reprodper, R, False, iteration, 1, True, False, 0.0, conn_matrix, 0, years, False, 0, None, None, None, None)
                     minrec = 1.*reprodper
                     recruitmentIndex = recruitmentIndex + 1
                 else:
@@ -140,8 +143,8 @@ def calc_msy(
             # estimate maximum fishing rate
             while fishing:
                 fishingRates = np.zeros([stocks]) + maxfish
-                fishing = not compute_pop_msy(outdir, fishingRates, stocks, stocks, species, asympLen, growthCoef, lenWtCoef,
-                                              lenWtPower, maxage, minsize, minrec, R, False, iteration, 1, False, False, .5, conn_matrix, 0, years, False, 0, None, None)
+                fishing = not compute_pop_msy(outdir, fishingRates, stocks, stocks, species, asympLen, growthCoef, lenWtCoef, lenWtPower,
+                                              maxage, minsize, minrec, R, False, iteration, 1, False, False, .5, conn_matrix, 0, years, False, 0, None, None, None, None)
                 maxfish = maxfish + .01
 
             # set index for main model run over various fishing rates
@@ -169,13 +172,17 @@ def calc_msy(
                     currentBar.progress(value=(ii / fstep),
                                         text=t("curr_bar"))
 
-                    fishingRates[0:nfish] = maxfish * (fishingRate / 100)
+                    # Regular fishing
+                    if not biomassFishing:
+                        fishingRates[0:nfish] = maxfish * (fishingRate / 100)
+                    else:
+                        fishingRates[0:nfish] = fishingRate
                     if rotation:
                         _ = compute_pop_msy(outdir, fishingRates, stocks, nfish, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage, minsize, minrec,
-                                            R, msave, iteration, btarget, False, environ, rvar, conn_matrix, rotationRate, years, sizes, minCatch, maxCatch, temperature)
+                                            R, msave, iteration, btarget, False, environ, rvar, conn_matrix, rotationRate, years, sizes, minCatch, maxCatch, temperature, massChance, massMort)
                     else:
                         _ = compute_pop_msy(outdir, fishingRates, stocks, nfish, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage, minsize, minrec,
-                                            R, msave, iteration, btarget, False, environ, rvar, conn_matrix, 0, years, sizes, minCatch, maxCatch, temperature)
+                                            R, msave, iteration, btarget, False, environ, rvar, conn_matrix, 0, years, sizes, minCatch, maxCatch, temperature, massChance, massMort)
 
                 stocklist = [g for g in os.listdir(outdir + species) if g.endswith(
                     '%d' % nfish, 19, 20) and g.endswith('_' + '%d' % iteration + '.nc')]
@@ -208,8 +215,13 @@ def calc_msy(
         if maxfish > 0:
             st.session_state.fishingDat = {
                 t("max_fish"): f"{maxfish:.2}",
-                t("fish_used"): f"{maxfish * (fishingRate / 100):.2}"
             }
+            if not biomassFishing:
+                st.session_state.fishingDat[t(
+                    "fish_used")] = f"{maxfish * (fishingRate / 100):.2}"
+            else:
+                st.session_state.fishingDat[t(
+                    "fish_used")] = f"{fishingRate:.2}"
 
     print('%d ' % speciesIndex + species + ' is done.')
     return True

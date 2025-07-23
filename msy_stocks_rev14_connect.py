@@ -29,7 +29,9 @@ def compute_pop_msy(
     sizes: bool,  # flag to enable catch size restriction
     minCatch: float,  # minimum catch weight - user input
     maxCatch: float | None,  # maximum catch weight - user input
-    temperature: float | None  # temperature of water
+    temperature: float | None,  # temperature of water
+    massChance: float | None, # yearly chance of a mass mortality event
+    massMort: float | None, # proportion of population to die in mass mortality event
 ) -> bool:
     if any(fishingRates):
         fishedStocks = fishingRates.size
@@ -177,6 +179,19 @@ def compute_pop_msy(
 
         fishWt[ii] = 2 * np.mean(fish[ii-1, :])
         order = np.random.permutation(numfish)
+
+        # If climatic (mass mortality) events are enabled
+        if ii > 100 and massChance and massMort:
+            climatic = np.random.random()
+
+            # If event occurs
+            if climatic < massChance / 100:
+                numDead = int(numfish * (massMort / 100))
+                for i in range(numDead):
+                    fishI = order[i]
+                    dead[fishI] = 1
+                    mortality[ii, 0] += 1
+                    mortality[ii, 1] += fish[ii-1, fishI]
 
         for kk in range(0, numfish):
 
