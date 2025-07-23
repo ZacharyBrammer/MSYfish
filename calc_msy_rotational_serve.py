@@ -152,6 +152,7 @@ def calc_msy(
             mfstp[0] = 0
 
             # set number of stocks to be fished initially to one
+            # TODO: Fix this
             nfish = initialPop
 
             # print('max fishing rate finished...rate = ',maxfish)
