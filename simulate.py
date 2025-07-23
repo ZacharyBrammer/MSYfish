@@ -130,9 +130,9 @@ def simulate():
                 value=100.0,
                 disabled=st.session_state.running
             )
-
     else:
         fishingRate = 0
+        biomassFishing = False
 
     sizes = st.toggle(
         label=t("sizes"),
