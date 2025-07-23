@@ -27,6 +27,7 @@ def calc_msy(
     temperature: float | None,  # temperature of water
     massChance: float | None,  # yearly chance of a mass mortality event
     massMort: float | None,  # proportion of population to die in mass mortality event
+    biomassFishing: bool,  # false for fishing from max fishing rate, true for % of biomass
 ):
     translator = Translator(st.session_state.language)
     t = translator.translate
@@ -170,7 +171,11 @@ def calc_msy(
                     currentBar.progress(value=(ii / fstep),
                                         text=t("curr_bar"))
 
-                    fishingRates[0:nfish] = maxfish * (fishingRate / 100)
+                    # Regular fishing
+                    if not biomassFishing:
+                        fishingRates[0:nfish] = maxfish * (fishingRate / 100)
+                    else:
+                        fishingRates[0:nfish] = fishingRate
                     if rotation:
                         _ = compute_pop_msy(outdir, fishingRates, stocks, nfish, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage, minsize, minrec,
                                             R, msave, iteration, btarget, False, environ, rvar, conn_matrix, rotationRate, years, sizes, minCatch, maxCatch, temperature, massChance, massMort)
@@ -209,8 +214,13 @@ def calc_msy(
         if maxfish > 0:
             st.session_state.fishingDat = {
                 t("max_fish"): f"{maxfish:.2}",
-                t("fish_used"): f"{maxfish * (fishingRate / 100):.2}"
             }
+            if not biomassFishing:
+                st.session_state.fishingDat[t(
+                    "fish_used")] = f"{maxfish * (fishingRate / 100):.2}"
+            else:
+                st.session_state.fishingDat[t(
+                    "fish_used")] = f"{fishingRate:.2}"
 
     print('%d ' % speciesIndex + species + ' is done.')
     return True
