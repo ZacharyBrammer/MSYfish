@@ -32,9 +32,10 @@ def compute_pop_msy(
     temperature: float | None,  # temperature of water
     massChance: float | None, # yearly chance of a mass mortality event
     massMort: float | None, # proportion of population to die in mass mortality event
+    nfished: int, # number of stocks fished
 ) -> bool:
     if any(fishingRates):
-        fishedStocks = fishingRates.size
+        fishedStocks = nfished
     else:
         fishedStocks = 0
     outfile = outdir + species + '/msy_stocks_' + '%d' % fishingRates.size + '_nfish_' + '%d' % fishedStocks + '_mfish_' + \
