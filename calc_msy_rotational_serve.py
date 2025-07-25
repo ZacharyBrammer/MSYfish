@@ -146,7 +146,6 @@ def calc_msy(
                 fishing = not compute_pop_msy(outdir, fishingRates, stocks, initialPop, species, asympLen, growthCoef, lenWtCoef, lenWtPower,
                                               maxage, minsize, minrec, R, False, iteration, 1, False, False, .5, conn_matrix, 0, years, False, 0, None, None, None, None, stocks)
                 maxfish = maxfish + .01
-            print("pre-loop")
             if not biomassFishing:
                 fishingRates[:] = maxfish * (fishingRate / 100)
             else:
@@ -159,8 +158,8 @@ def calc_msy(
             mfstp = np.linspace(0, maxfish, fstep)
             mfstp[0] = 0
 
-            # set number of stocks to be fished initially to one
-            nfished = 1
+            # set number of stocks to be fished initially to number of stocks. Leaving here for if we want to add fishing a different number of stocks in future
+            nfished = stocks
 
             # print('max fishing rate finished...rate = ',maxfish)
 
@@ -169,28 +168,12 @@ def calc_msy(
             msave = True
             btarget = 0
             environ = True
-            count = 0
 
             # perform model simulations looping over number of fished stocks and fishing rate
             while stocktest:
-                print(f"run {count}")
-                print(fishingRates)
-                print(maxfish)
-                count += 1
                 for ii in range(0, fstep+1):  # 41 for complete runs
                     currentBar.progress(value=(ii / fstep),
                                         text=t("curr_bar"))
-                    #print(count)
-                    #count += 1
-                    # Regular fishing
-                    if not biomassFishing:
-                        #print(fishingRates)
-                        #fishingRates[0:nfished] = maxfish * (fishingRate / 100)
-                        #print(fishingRates)
-                        pass
-                    else:
-                        #fishingRates[0:nfished] = fishingRate
-                        pass
                     if rotation:
                         _ = compute_pop_msy(outdir, fishingRates, stocks, initialPop, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage, minsize, minrec,
                                             R, msave, iteration, btarget, False, environ, rvar, conn_matrix, rotationRate, years, sizes, minCatch, maxCatch, temperature, massChance, massMort, nfished)
