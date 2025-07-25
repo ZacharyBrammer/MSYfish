@@ -6,7 +6,7 @@ def compute_pop_msy(
     outdir: str,  # output directory
     fishingRates: np.ndarray,  # array with fishing rate per stock
     nstocks: int,  # number of stocks
-    nfish: int,  # number of fish
+    initialPop: int,  # number of fish
     species: str,  # name of species
     asympLen: np.ndarray,  # asymptotic length array
     growthCoef: np.ndarray,  # growth coefficient array
@@ -29,10 +29,13 @@ def compute_pop_msy(
     sizes: bool,  # flag to enable catch size restriction
     minCatch: float,  # minimum catch weight - user input
     maxCatch: float | None,  # maximum catch weight - user input
-    temperature: float | None  # temperature of water
+    temperature: float | None,  # temperature of water
+    massChance: float | None, # yearly chance of a mass mortality event
+    massMort: float | None, # proportion of population to die in mass mortality event
+    nfished: int, # number of stocks fished
 ) -> bool:
     if any(fishingRates):
-        fishedStocks = fishingRates.size
+        fishedStocks = nfished
     else:
         fishedStocks = 0
     outfile = outdir + species + '/msy_stocks_' + '%d' % fishingRates.size + '_nfish_' + '%d' % fishedStocks + '_mfish_' + \
@@ -54,7 +57,6 @@ def compute_pop_msy(
     # rotational closure parameters
     RM = 0
 
-    initialPop = int(400)  # initial population size
     slap = False  # restart flag
 
     delt = 1  # timestep in years
@@ -178,6 +180,19 @@ def compute_pop_msy(
 
         fishWt[ii] = 2 * np.mean(fish[ii-1, :])
         order = np.random.permutation(numfish)
+
+        # If climatic (mass mortality) events are enabled
+        if ii > 100 and massChance and massMort:
+            climatic = np.random.random()
+
+            # If event occurs
+            if climatic < massChance / 100:
+                numDead = int(numfish * (massMort / 100))
+                for i in range(numDead):
+                    fishI = order[i]
+                    dead[fishI] = 1
+                    mortality[ii, 0] += 1
+                    mortality[ii, 1] += fish[ii-1, fishI]
 
         for kk in range(0, numfish):
 

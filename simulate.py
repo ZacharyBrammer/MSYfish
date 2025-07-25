@@ -77,6 +77,7 @@ def simulate():
         label=t("initial_pop"),
         step=1,
         min_value=1,
+        value=400,
         disabled=st.session_state.running
     )
 
@@ -110,16 +111,29 @@ def simulate():
     )
     # If fishing is enabled, let user set fishing rate as a percentage of calculated max value
     if fishing:
-        fishingRate = st.number_input(
-            label=t("fishing_rate"),
-            min_value=0.0,
-            max_value=100.0,
-            value=100.0,
+        biomassFishing = st.toggle(
+            label="Fish by percentage of biomass",
             disabled=st.session_state.running
         )
-
+        if biomassFishing:
+            fishingRate = st.number_input(
+                label="Percentage of biomass to fish",
+                min_value=0.0,
+                max_value=100.0,
+                value=0.0,
+                disabled=st.session_state.running
+            )
+        else:
+            fishingRate = st.number_input(
+                label=t("fishing_rate"),
+                min_value=0.0,
+                max_value=100.0,
+                value=100.0,
+                disabled=st.session_state.running
+            )
     else:
         fishingRate = 0
+        biomassFishing = False
 
     sizes = st.toggle(
         label=t("sizes"),
@@ -171,6 +185,30 @@ def simulate():
         )
     else:
         temperature = None
+    
+    climaticEnable = st.toggle(
+        label="Climatic Event Enable",
+        disabled=st.session_state.running
+    )
+
+    if climaticEnable:
+        eventChance = st.number_input(
+            label="% Chance of Climatic Event",
+            min_value=0.0,
+            max_value=100.0,
+            value=0.0,
+            disabled=st.session_state.running
+        )
+        eventMort = st.number_input(
+            label="% Population Lost In Event",
+            min_value=0.0,
+            max_value=100.0,
+            value=0.0,
+            disabled=st.session_state.running
+        )
+    else:
+        eventChance = None
+        eventMort = None
 
     # Check that stocks > 1 to prevent divide by 0 error
     if rotation and stocks == 1:
@@ -198,7 +236,7 @@ def simulate():
         for i in range(len(speciesIndexes)):
             # 100 is added to the number of years so the simulation is given time to stabilize
             calc_msy(directory, fishdata, connectivity, speciesIndexes[i], stocks, niter, (
-                years + 100), initialPop, fishing, fishingRate, rotation, rotationRate, sizes, minCatchSize, maxCatchSize, temperature)
+                years + 100), initialPop, fishing, fishingRate, rotation, rotationRate, sizes, minCatchSize, maxCatchSize, temperature, eventChance, eventMort, biomassFishing)
 
             # If final run, re-enable inputs and plot first run
             if i == len(speciesIndexes) - 1:
