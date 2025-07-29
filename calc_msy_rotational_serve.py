@@ -126,9 +126,8 @@ def calc_msy(
             while rslap:
                 if recruitmentIndex < rstep:
                     reprodper = reprodstp[recruitmentIndex]
-                    fishingRates = np.zeros([stocks])
-                    rslap = compute_pop_msy(outdir, fishingRates, stocks, initialPop, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage,
-                                            minsize, reprodper, R, False, iteration, 1, True, False, 0.0, conn_matrix, 0, years, False, 0, None, None, None, None, stocks)
+                    rslap = compute_pop_msy(outdir, fishingRates, 1, initialPop, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage,
+                                            minsize, reprodper, R, False, iteration, 1, True, False, 0.0, conn_matrix, 0, years, False, 0, None, None, None, None, 0)
                     minrec = 1.*reprodper
                     recruitmentIndex = recruitmentIndex + 1
                 else:
@@ -143,8 +142,8 @@ def calc_msy(
             # estimate maximum fishing rate
             while fishing:
                 fishingRates = np.zeros([stocks]) + maxfish
-                fishing = not compute_pop_msy(outdir, fishingRates, stocks, initialPop, species, asympLen, growthCoef, lenWtCoef, lenWtPower,
-                                              maxage, minsize, minrec, R, False, iteration, 1, False, False, .5, conn_matrix, 0, years, False, 0, None, None, None, None, stocks)
+                fishing = not compute_pop_msy(outdir, fishingRates, 1, initialPop, species, asympLen, growthCoef, lenWtCoef, lenWtPower,
+                                              maxage, minsize, minrec, R, False, iteration, 1, False, False, .5, conn_matrix, 0, years, False, 0, None, None, None, None, 1)
                 maxfish = maxfish + .01
             if not biomassFishing:
                 fishingRates[:] = maxfish * (fishingRate / 100)
