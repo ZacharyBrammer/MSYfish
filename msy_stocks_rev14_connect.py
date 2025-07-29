@@ -29,7 +29,7 @@ def compute_pop_msy(
     sizes: bool,  # flag to enable catch size restriction
     minCatch: float,  # minimum catch weight - user input
     maxCatch: float | None,  # maximum catch weight - user input
-    temperature: float | None,  # temperature of water
+    temperature: np.ndarray,  # # temperature of water per year, will be None if disabled
     massChance: float | None, # yearly chance of a mass mortality event
     massMort: float | None, # proportion of population to die in mass mortality event
     nfished: int, # number of stocks fished
@@ -205,9 +205,11 @@ def compute_pop_msy(
                         # individual consumption of resource
                         consumption = 6.0 * fish[ii-1, jj] ** 1.00
                         # Production with set temperature
-                        if temperature:
+                        if temperature.any() and ii >= 100:
+                            print(ii - 100, temperature[ii - 100])
+                            temp = temperature[ii - 100]
                             tempConst = float(
-                                np.exp(-(0.65 / (8.62e-5 * (temperature + 273.15)))))
+                                np.exp(-(0.65 / (8.62e-5 * (temp + 273.15)))))
                             production = 2.89e11 * tempConst * \
                                 fish[ii-1, jj] ** 0.75
                         else:  # Default behavior
