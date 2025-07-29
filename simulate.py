@@ -50,7 +50,8 @@ def simulate():
 
     if not re.fullmatch(dir_regex, directory):
         st.session_state.valid_path = False
-        st.error("Invalid folder name. Only letters, numbers, underscores, and hyphens are allowed.")
+        st.error(
+            "Invalid folder name. Only letters, numbers, underscores, and hyphens are allowed.")
     else:
         st.session_state.valid_path = True
 
@@ -178,14 +179,31 @@ def simulate():
     )
     # If temperature impact on production is enabled, let user set in degrees C
     if tempEnable:
-        temperature = st.number_input(
-            label=t("temperature"),
-            value=20.0,
+        # Set up temperature data to be number of years with default value of 20C
+        temps = np.hstack(
+            [np.arange(1, years + 1).reshape(-1, 1), np.full((years, 1), 20.0)]
+        )
+
+        # Data editor to allow users to input their temperature data
+        temps = st.data_editor(
+            temps,
+            column_config={
+                "0": st.column_config.NumberColumn(
+                    "Year",
+                    disabled=True
+                ),
+                "1": st.column_config.NumberColumn(
+                    "Temperature (C)",
+                    format="%.2f"
+                )
+            },
             disabled=st.session_state.running
         )
+
+        temperature = temps[:, 1]
     else:
-        temperature = None
-    
+        temperature = np.array(None)
+
     climaticEnable = st.toggle(
         label="Climatic Event Enable",
         disabled=st.session_state.running
@@ -228,7 +246,7 @@ def simulate():
         if (len(speciesIndexes)) == 0:
             st.session_state.running = False
             st.rerun()
-        
+
         if st.session_state.valid_path == False:
             st.session_state.running = False
             st.rerun()
@@ -247,8 +265,10 @@ def simulate():
                     for species in os.listdir(path)
                     for file in os.listdir(os.path.join(path, species))
                 ]
-                st.session_state.firstSimPath = max(allSims, key=os.path.getmtime)
-                st.session_state.plot = plot_simulation(st.session_state.firstSimPath)
+                st.session_state.firstSimPath = max(
+                    allSims, key=os.path.getmtime)
+                st.session_state.plot = plot_simulation(
+                    st.session_state.firstSimPath)
 
                 # Set running to false and print success message
                 st.session_state.running = False
