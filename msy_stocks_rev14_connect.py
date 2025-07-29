@@ -206,7 +206,6 @@ def compute_pop_msy(
                         consumption = 6.0 * fish[ii-1, jj] ** 1.00
                         # Production with set temperature
                         if temperature.any() and ii >= 100:
-                            print(ii - 100, temperature[ii - 100])
                             temp = temperature[ii - 100]
                             tempConst = float(
                                 np.exp(-(0.65 / (8.62e-5 * (temp + 273.15)))))
