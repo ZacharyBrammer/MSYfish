@@ -299,13 +299,13 @@ def average_sims(path: str, simulations: List[str]):
                 last = np.where(years == 0)[0][0]
             else:
                 last = None
-            
+
             # Copy all the data
             for name, var in ds.variables.items():
                 data = var[:]
 
                 if "time" in var.dimensions and last is not None:
-                    cutoff = 100 + last # keeps stabilization years in file
+                    cutoff = 100 + last  # keeps stabilization years in file
                     data[cutoff:] = np.nan
 
                 stacks[name].append(data)
@@ -321,5 +321,3 @@ def average_sims(path: str, simulations: List[str]):
                 np.stack(stack, axis=0),
                 axis=0
             )
-        
-        print(ref.variables["ftime"])
