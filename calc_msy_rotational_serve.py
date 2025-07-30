@@ -152,8 +152,6 @@ def calc_msy(
                     fishingRates[:] = maxfish * (fishingRate / 100)
                 else:
                     fishingRates[:] = fishingRate
-            
-            print(fishingRates)
 
             # set index for main model run over various fishing rates
             stocktest = True

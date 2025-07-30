@@ -267,12 +267,10 @@ def average_sims(path: str, simulations: List[str]):
     for i in range(len(sims)):
         sims[i] = f"{path}/{sims[i]}"
 
-    # In case of sims ending early, longest simulation is used to set up output file
-    longestSim = max(sims, key=lambda f: len(nc.Dataset(f).dimensions['time']))
-    maxTime = len(nc.Dataset(longestSim).dimensions['time'])
+    refSim = sims[0]
 
     # Open reference file and set up average file
-    with nc.Dataset(longestSim) as ref:
+    with nc.Dataset(refSim) as ref:
         with nc.Dataset(f"{path}/average.nc", "w") as out:
             # Copy dimensions
             for name, dim in ref.dimensions.items():
@@ -287,21 +285,28 @@ def average_sims(path: str, simulations: List[str]):
                 )
 
     # Initialize data stacks
-    stacks: Dict[str, List[Any]] = {name: []
-                                    for name in nc.Dataset(longestSim).variables.keys()}
+    stacks: Dict[str, List[Any]] = {
+        name: [] for name in nc.Dataset(refSim).variables.keys()
+    }
 
     # Get all data. If a simulation ended early pad with NaN
     for sim in sims:
         with nc.Dataset(sim) as ds:
+            # Determine if simulation ended early
+            years = ds.variables["ftime"][:].data[100:]
+            endsEarly = np.where(years == 0)[0].size != 0
+            if endsEarly:
+                last = np.where(years == 0)[0][0]
+            else:
+                last = None
+            
+            # Copy all the data
             for name, var in ds.variables.items():
-                # Copy all the data
                 data = var[:]
 
-                if "time" in var.dimensions and data.shape[0] < maxTime:
-                    missing = maxTime - data.shape[0]
-                    padWidth = [(0, missing)] + [(0, 0)] * (data.ndim - 1)
-                    data = np.pad(data, pad_width=padWidth,
-                                  constant_values=np.nan)
+                if "time" in var.dimensions and last is not None:
+                    cutoff = 100 + last # keeps stabilization years in file
+                    data[cutoff:] = np.nan
 
                 stacks[name].append(data)
 
@@ -310,7 +315,11 @@ def average_sims(path: str, simulations: List[str]):
     stacks.pop("age")
 
     # Write averages to file
-    with nc.Dataset(f"{path}/average.nc", "a") as out:
+    with nc.Dataset(f"{path}/average.nc", "a") as out, nc.Dataset(refSim) as ref:
         for name, stack in stacks.items():
             out.variables[name][:] = np.nanmean(
-                np.stack(stack, axis=0), axis=0)
+                np.stack(stack, axis=0),
+                axis=0
+            )
+        
+        print(ref.variables["ftime"])
