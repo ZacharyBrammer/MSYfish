@@ -1,11 +1,11 @@
 import os
+from typing import Any, Dict, List
 
 import netCDF4 as nc
 import numpy as np
 import pandas as pd
 import plotly.graph_objects as go  # type: ignore
 import streamlit as st
-from typing import List
 
 from plotting import plot_simulation
 from translate import Translator
@@ -33,7 +33,10 @@ def analyze():
             # Get all simulations in the folder and let user select
             simulations = [""] + os.listdir(f"{base}/{folder}/{species}")
             if not compareAll:
-                simulation = st.selectbox(label=t("simulation"), options=simulations)
+                simulation = st.selectbox(
+                    label=t("simulation"),
+                    options=simulations
+                )
             else:
                 simulation = ""
         else:
@@ -57,7 +60,7 @@ def analyze():
             path = f"{base}/{folder}/{species}/{simulation}"
 
         biodata = nc.Dataset(path, "r")
-        
+
         # Get years. If simulation ended early, get index of last year
         years = biodata.variables["ftime"][:].data[100:]
         endsEarly = np.where(years == 0)[0].size != 0
@@ -128,9 +131,14 @@ def analyze():
                             units = v(variable, "units")
                             data = pd.DataFrame(
                                 data,
-                                columns=[f"{t("stock")} {i + 1} {t(var_name)} ({(units)})" for i in range(data.shape[1])]
+                                columns=[
+                                    f"{t("stock")} {i + 1} {t(var_name)} ({(units)})" for i in range(data.shape[1])
+                                ]
                             )
-                            selected_data = pd.concat([selected_data, data], axis=1)
+                            selected_data = pd.concat(
+                                [selected_data, data],
+                                axis=1
+                            )
                         case "reproduction" | "mortality":
                             data = pd.DataFrame(
                                 data,
@@ -139,7 +147,10 @@ def analyze():
                                     f"{t(variable)} {t("number")} (#)"
                                 ]
                             )
-                            selected_data = pd.concat([selected_data, data], axis=1)
+                            selected_data = pd.concat(
+                                [selected_data, data],
+                                axis=1
+                            )
                 case 3:
                     match variable:
                         case "pop_bins" | "biomass_bins" | "reprod_bins" | "catch_bins" | "mort_bins":
@@ -155,7 +166,10 @@ def analyze():
                                     for s in range(stocks)
                                 ]
                             )
-                            selected_data = pd.concat([selected_data, data], axis=1)
+                            selected_data = pd.concat(
+                                [selected_data, data],
+                                axis=1
+                            )
                         case "age_bins":
                             # TODO: Figure out units / if this is right
                             var_name = v(variable, "short")
@@ -170,21 +184,31 @@ def analyze():
                                     for s in range(stocks)
                                 ]
                             )
-                            selected_data = pd.concat([selected_data, data], axis=1)
+                            selected_data = pd.concat(
+                                [selected_data, data],
+                                axis=1
+                            )
                         case "catch":
                             var_name = v(variable, "short")
                             units = v(variable, "units")
                             time, stocks, vars = data.shape
                             columns = []
                             for i in range(stocks):
-                                columns.append(f"{t("stock")} {i + 1} {var_name} (#)")
-                                columns.append(f"{t("stock")} {i + 1} {var_name} (kg)")
+                                columns.append(
+                                    f"{t("stock")} {i + 1} {var_name} (#)"
+                                )
+                                columns.append(
+                                    f"{t("stock")} {i + 1} {var_name} (kg)"
+                                )
                             data = data.reshape(time, stocks * vars)
                             data = pd.DataFrame(
                                 data,
                                 columns=columns
                             )
-                            selected_data = pd.concat([selected_data, data], axis=1)
+                            selected_data = pd.concat(
+                                [selected_data, data],
+                                axis=1
+                            )
 
         selected_data = selected_data.set_index("year")
         st.dataframe(selected_data)
@@ -205,7 +229,7 @@ def analyze():
                 yaxis=dict(
                     title=t("cust_y"),
                     range=[0, None]
-                ), 
+                ),
                 template="plotly"  # Default dark theme
             )
             # If ends early, modify title using html to add warning
@@ -231,6 +255,7 @@ def analyze():
         for plot in plots:
             st.plotly_chart(plot)
 
+
 def average_sims(path: str, simulations: List[str]):
     # Remove the empty string placeholder and previous average file (if applicable)
     sims = simulations.copy()
@@ -241,7 +266,7 @@ def average_sims(path: str, simulations: List[str]):
     # Restore path to sim names
     for i in range(len(sims)):
         sims[i] = f"{path}/{sims[i]}"
-    
+
     # In case of sims ending early, longest simulation is used to set up output file
     longestSim = max(sims, key=lambda f: len(nc.Dataset(f).dimensions['time']))
     maxTime = len(nc.Dataset(longestSim).dimensions['time'])
@@ -252,7 +277,7 @@ def average_sims(path: str, simulations: List[str]):
             # Copy dimensions
             for name, dim in ref.dimensions.items():
                 out.createDimension(name, len(dim))
-            
+
             # Copy variables
             for name, var in ref.variables.items():
                 out.createVariable(name, var.datatype, var.dimensions)
@@ -262,8 +287,9 @@ def average_sims(path: str, simulations: List[str]):
                 )
 
     # Initialize data stacks
-    stacks = {name: [] for name in nc.Dataset(longestSim).variables.keys()}
-    
+    stacks: Dict[str, List[Any]] = {name: []
+                                    for name in nc.Dataset(longestSim).variables.keys()}
+
     # Get all data. If a simulation ended early pad with NaN
     for sim in sims:
         with nc.Dataset(sim) as ds:
@@ -274,10 +300,11 @@ def average_sims(path: str, simulations: List[str]):
                 if "time" in var.dimensions and data.shape[0] < maxTime:
                     missing = maxTime - data.shape[0]
                     padWidth = [(0, missing)] + [(0, 0)] * (data.ndim - 1)
-                    data = np.pad(data, pad_width=padWidth, constant_values=np.nan)
-                
+                    data = np.pad(data, pad_width=padWidth,
+                                  constant_values=np.nan)
+
                 stacks[name].append(data)
-    
+
     # Remove fish, age since they have a different shape for every array and users can't see it anyways
     stacks.pop("fish")
     stacks.pop("age")
@@ -285,4 +312,5 @@ def average_sims(path: str, simulations: List[str]):
     # Write averages to file
     with nc.Dataset(f"{path}/average.nc", "a") as out:
         for name, stack in stacks.items():
-            out.variables[name][:] = np.nanmean(np.stack(stack, axis=0), axis=0)
+            out.variables[name][:] = np.nanmean(
+                np.stack(stack, axis=0), axis=0)
