@@ -24,7 +24,7 @@ def calc_msy(
     sizes: bool,  # enable catch size ranges
     minCatch: float,  # minimum length of fish to catch
     maxCatch: float | None,  # maximum length of fish to catch
-    temperature: float | None,  # temperature of water
+    temperature: np.ndarray,  # temperature of water per year, will be None if disabled
     massChance: float | None,  # yearly chance of a mass mortality event
     massMort: float | None,  # proportion of population to die in mass mortality event
     biomassFishing: bool,  # false for fishing from max fishing rate, true for % of biomass
@@ -126,8 +126,9 @@ def calc_msy(
             while rslap:
                 if recruitmentIndex < rstep:
                     reprodper = reprodstp[recruitmentIndex]
+                    fishingRates = np.zeros([stocks])
                     rslap = compute_pop_msy(outdir, fishingRates, 1, initialPop, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage,
-                                            minsize, reprodper, R, False, iteration, 1, True, False, 0.0, conn_matrix, 0, years, False, 0, None, None, None, None, 0)
+                                            minsize, reprodper, R, False, iteration, 1, True, False, 0.0, conn_matrix, 0, years, False, 0, None, np.array(None), None, None, 0)
                     minrec = 1.*reprodper
                     recruitmentIndex = recruitmentIndex + 1
                 else:
@@ -140,15 +141,17 @@ def calc_msy(
             maxfish = 0.0
 
             # estimate maximum fishing rate
-            while fishing:
-                fishingRates = np.zeros([stocks]) + maxfish
-                fishing = not compute_pop_msy(outdir, fishingRates, 1, initialPop, species, asympLen, growthCoef, lenWtCoef, lenWtPower,
-                                              maxage, minsize, minrec, R, False, iteration, 1, False, False, .5, conn_matrix, 0, years, False, 0, None, None, None, None, 1)
-                maxfish = maxfish + .01
-            if not biomassFishing:
-                fishingRates[:] = maxfish * (fishingRate / 100)
-            else:
-                fishingRates[:] = fishingRate
+            if fishing:
+                fslap = True
+                while fslap:
+                    fishingRates = np.zeros([stocks]) + maxfish
+                    fslap = not compute_pop_msy(outdir, fishingRates, 1, initialPop, species, asympLen, growthCoef, lenWtCoef, lenWtPower,
+                                                maxage, minsize, minrec, R, False, iteration, 1, False, False, .5, conn_matrix, 0, years, False, 0, None, np.array(None), None, None, 1)
+                    maxfish = maxfish + .01
+                if not biomassFishing:
+                    fishingRates[:] = maxfish * (fishingRate / 100)
+                else:
+                    fishingRates[:] = fishingRate
 
             # set index for main model run over various fishing rates
             stocktest = True
