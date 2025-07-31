@@ -141,15 +141,17 @@ def calc_msy(
             maxfish = 0.0
 
             # estimate maximum fishing rate
+            # TODO: when splitting simulate page into multiple parts, add progress bar here
             if fishing:
                 fslap = True
                 while fslap:
-                    fishingRates = np.zeros([stocks]) + maxfish
+                    fishingRates = np.zeros([1]) + maxfish
                     fslap = not compute_pop_msy(outdir, fishingRates, 1, initialPop, species, asympLen, growthCoef, lenWtCoef, lenWtPower,
-                                                maxage, minsize, minrec, R, False, iteration, 1, False, False, .5, conn_matrix, 0, years, False, 0, None, np.array(None), None, None, 1)
+                                                maxage, minsize, minrec, R, False, iteration, 1, True, False, .5, conn_matrix, 0, years, False, 0, None, np.array(None), None, None, 1)
                     maxfish = maxfish + .01
+                fishingRates = np.zeros([stocks])
                 if not biomassFishing:
-                    fishingRates[:] = maxfish * (fishingRate / 100)
+                    fishingRates[:] = (maxfish - 0.01) * (fishingRate / 100)
                 else:
                     fishingRates[:] = fishingRate
 
