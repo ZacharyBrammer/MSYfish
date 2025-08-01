@@ -110,7 +110,7 @@ def simulate():
         label=t("fishing"),
         disabled=st.session_state.running
     )
-    # If fishing is enabled, let user set fishing rate as a percentage of calculated max value
+    # If fishing is enabled, let user set fishing rate as a percentage of calculated max value. Other fishing settings are also hidden under this enable
     if fishing:
         biomassFishing = st.toggle(
             label="Fish by percentage of biomass",
@@ -132,45 +132,52 @@ def simulate():
                 value=100.0,
                 disabled=st.session_state.running
             )
+
+        sizes = st.toggle(
+            label=t("sizes"),
+            disabled=st.session_state.running
+        )
+
+        # If size select is enabled, let user set a minimum and maximum catch size
+        if sizes:
+            minCatchSize = st.number_input(
+                label=t("min_catch_size"),
+                min_value=0.0,
+                value=0.0,
+                disabled=st.session_state.running
+            )
+            maxCatchSize = st.number_input(
+                label=t("max_catch_size"),
+                min_value=minCatchSize,
+                value=None,
+                disabled=st.session_state.running
+            )
+        else:
+            minCatchSize = 0
+            maxCatchSize = 0
+
+        rotation = st.toggle(
+            label=t("rotation"),
+            disabled=st.session_state.running
+        )
+
+        # If rotation is enabled, let user set rotation rate
+        if rotation:
+            rotationRate = st.number_input(
+                label=t("rotation_rate"),
+                min_value=1,
+                max_value=years + 100,
+                disabled=st.session_state.running
+            )
+        else:
+            rotationRate = 0
     else:
         fishingRate = 0
         biomassFishing = False
-
-    sizes = st.toggle(
-        label=t("sizes"),
-        disabled=st.session_state.running
-    )
-    # If size select is enabled, let user set a minimum and maximum catch size
-    if sizes:
-        minCatchSize = st.number_input(
-            label=t("min_catch_size"),
-            min_value=0.0,
-            value=0.0,
-            disabled=st.session_state.running
-        )
-        maxCatchSize = st.number_input(
-            label=t("max_catch_size"),
-            min_value=minCatchSize,
-            value=None,
-            disabled=st.session_state.running
-        )
-    else:
+        sizes = False
         minCatchSize = 0
         maxCatchSize = 0
-
-    rotation = st.toggle(
-        label=t("rotation"),
-        disabled=st.session_state.running
-    )
-    # If rotation is enabled, let user set rotation rate
-    if rotation:
-        rotationRate = st.number_input(
-            label=t("rotation_rate"),
-            min_value=1,
-            max_value=years + 100,
-            disabled=st.session_state.running
-        )
-    else:
+        rotation = False
         rotationRate = 0
 
     tempEnable = st.toggle(
