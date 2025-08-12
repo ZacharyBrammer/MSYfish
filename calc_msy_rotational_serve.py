@@ -41,7 +41,7 @@ def calc_msy(
         conn_matrix = connectivity
     else:
         conn_matrix = np.array(None)
-        pass
+        pass # TODO: remove
 
     # grab data from fishdata array
     species = fishdata['scientific'][speciesIndex]
@@ -156,6 +156,7 @@ def calc_msy(
             # set index for main model run over various fishing rates
             stocktest = True
 
+            # TODO: Remove, does nothing
             # set fishing rate vector based on maximum fishing rate and steps
             mfstp = np.linspace(0, maxfish, fstep)
             mfstp[0] = 0
@@ -171,6 +172,7 @@ def calc_msy(
             btarget = 0
             environ = True
 
+            # TODO: get rid of this loop, doesn't actually do anything
             # perform model simulations looping over number of fished stocks and fishing rate
             while stocktest:
                 for ii in range(0, fstep+1):  # 41 for complete runs
