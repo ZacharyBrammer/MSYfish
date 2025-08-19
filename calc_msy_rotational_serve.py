@@ -16,7 +16,6 @@ def calc_msy(
     stocks: int,  # number of stocks
     niter: int,  # number of simulations to run
     years: int,  # number of years per simulation
-    initialPop: int,  # initial fish population
     fishing: bool,  # enable fishing
     fishingRate: float,  # fishing rate as a percentage of maximum calculated
     rotation: bool,  # enable rotation
@@ -127,7 +126,7 @@ def calc_msy(
                 if recruitmentIndex < rstep:
                     reprodper = reprodstp[recruitmentIndex]
                     fishingRates = np.zeros([stocks])
-                    rslap = compute_pop_msy(outdir, fishingRates, 1, initialPop, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage,
+                    rslap = compute_pop_msy(outdir, fishingRates, 1, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage,
                                             minsize, reprodper, R, False, iteration, 1, True, False, 0.0, conn_matrix, 0, years, False, 0, None, np.array(None), None, None, 0)
                     minrec = 1.*reprodper
                     recruitmentIndex = recruitmentIndex + 1
@@ -146,7 +145,7 @@ def calc_msy(
                 fslap = True
                 while fslap:
                     fishingRates = np.zeros([1]) + maxfish
-                    fslap = not compute_pop_msy(outdir, fishingRates, 1, initialPop, species, asympLen, growthCoef, lenWtCoef, lenWtPower,
+                    fslap = not compute_pop_msy(outdir, fishingRates, 1, species, asympLen, growthCoef, lenWtCoef, lenWtPower,
                                                 maxage, minsize, minrec, R, False, iteration, 1, True, False, .5, conn_matrix, 0, years, False, 0, None, np.array(None), None, None, 1)
                     maxfish = maxfish + .01
 
@@ -181,10 +180,10 @@ def calc_msy(
                     currentBar.progress(value=(ii / fstep),
                                         text=t("curr_bar"))
                     if rotation:
-                        _ = compute_pop_msy(outdir, fishingRates, stocks, initialPop, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage, minsize, minrec,
+                        _ = compute_pop_msy(outdir, fishingRates, stocks, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage, minsize, minrec,
                                             R, msave, iteration, btarget, False, environ, rvar, conn_matrix, rotationRate, years, sizes, minCatch, maxCatch, temperature, massChance, massMort, nfished)
                     else:
-                        _ = compute_pop_msy(outdir, fishingRates, stocks, initialPop, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage, minsize, minrec,
+                        _ = compute_pop_msy(outdir, fishingRates, stocks, species, asympLen, growthCoef, lenWtCoef, lenWtPower, maxage, minsize, minrec,
                                             R, msave, iteration, btarget, False, environ, rvar, conn_matrix, 0, years, sizes, minCatch, maxCatch, temperature, massChance, massMort, nfished)
 
                 stocklist = [g for g in os.listdir(outdir + species) if g.endswith(

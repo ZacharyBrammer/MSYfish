@@ -23,10 +23,6 @@
         "en": "Years per simulation",
         "es": "Años por simulación"
     },
-    "initial_pop": {
-        "en": "Initial population",
-        "es": "Población inicial"
-    },
     "optional_param": {
         "en": "Optional Parameters",
         "es": "Parámetros opcionales"
