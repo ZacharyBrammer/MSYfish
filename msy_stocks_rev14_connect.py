@@ -6,7 +6,6 @@ def compute_pop_msy(
     outdir: str,  # output directory
     fishingRates: np.ndarray,  # array with fishing rate per stock
     nstocks: int,  # number of stocks
-    initialPop: int,  # number of fish
     species: str,  # name of species
     asympLen: np.ndarray,  # asymptotic length array
     growthCoef: np.ndarray,  # growth coefficient array
@@ -43,6 +42,7 @@ def compute_pop_msy(
         '%d' % iteration + '.nc'  # '_rec_' + '%.4f' % reprodper
 
     # initial conditions
+    initialPop = 400
     resourceAvail = backgroundRes/nstocks  # resource availability
     if environ:
         env = 0.05  # enviromental scaling effect
