@@ -4,7 +4,7 @@ import uuid
 import streamlit as st
 
 from analyze import analyze
-from simulate import simulate
+from simulate_page import simulate
 from translate import Translator
 
 # Page setup
