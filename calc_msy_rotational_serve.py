@@ -149,6 +149,8 @@ def calc_msy(
                     fslap = not compute_pop_msy(outdir, fishingRates, 1, initialPop, species, asympLen, growthCoef, lenWtCoef, lenWtPower,
                                                 maxage, minsize, minrec, R, False, iteration, 1, True, False, .5, conn_matrix, 0, years, False, 0, None, np.array(None), None, None, 1)
                     maxfish = maxfish + .01
+
+                # Set fishing rate array
                 fishingRates = np.zeros([stocks])
                 if not biomassFishing:
                     fishingRates[:] = (maxfish - 0.01) * (fishingRate / 100)
