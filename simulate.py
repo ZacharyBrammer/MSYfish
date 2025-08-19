@@ -74,13 +74,6 @@ def simulate():
         min_value=1,
         disabled=st.session_state.running
     )
-    initialPop = st.number_input(
-        label=t("initial_pop"),
-        step=1,
-        min_value=1,
-        value=400,
-        disabled=st.session_state.running
-    )
 
     # Optional enables
     st.write(t("optional_param"))
@@ -261,7 +254,7 @@ def simulate():
         for i in range(len(speciesIndexes)):
             # 100 is added to the number of years so the simulation is given time to stabilize
             calc_msy(directory, fishdata, connectivity, speciesIndexes[i], stocks, niter, (
-                years + 100), initialPop, fishing, fishingRate, rotation, rotationRate, sizes, minCatchSize, maxCatchSize, temperature, eventChance, eventMort, biomassFishing)
+                years + 100), fishing, fishingRate, rotation, rotationRate, sizes, minCatchSize, maxCatchSize, temperature, eventChance, eventMort, biomassFishing)
 
             # If final run, re-enable inputs and plot first run
             if i == len(speciesIndexes) - 1:
