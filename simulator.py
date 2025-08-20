@@ -123,8 +123,18 @@ class Simulator:
                         maxfish += 0.01
 
                 self.maxfish = maxfish
+                st.session_state.maxfish = maxfish
 
                 fishStatus.update(
-                    label="Max Fishing Rate Found", state="complete")
+                    label="Max Fishing Rate Found",
+                    state="complete"
+                )
 
-            status.update(label="Model Initialized", state="complete")
+            status.update(
+                label="Model Initialized",
+                state="complete",
+                expanded=False
+            )
+
+    def simulate(self):
+        pass

@@ -53,6 +53,15 @@ if "valid_path" not in st.session_state:
 if "firstSimPath" not in st.session_state:
     st.session_state.firstSimPath = ""
 
+if "initd" not in st.session_state:
+    st.session_state.initd = False
+
+if "init" not in st.session_state:
+    st.session_state.init = False
+
+if "maxfish" not in st.session_state:
+    st.session_state.maxfish = 0.0
+
 # Translator
 translator = Translator(st.session_state.language)
 t = translator.translate
