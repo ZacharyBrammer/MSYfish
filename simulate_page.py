@@ -9,6 +9,7 @@ import streamlit as st
 
 from calc_msy_rotational_serve import calc_msy
 from plotting import plot_simulation
+from simulator import Simulator
 from translate import Translator
 
 
@@ -45,4 +46,7 @@ def simulate():
     else:
         st.session_state.valid_path = True
 
-    initButton = st.button("Initialize Simulation")
+    initButton = st.button("Initialize Simulation", disabled=not st.session_state.valid_path)
+
+    if initButton and st.session_state.valid_path:
+        sim = Simulator(outdir="directory", fishdata=fishdata, speciesIndex=speciesIndex)
