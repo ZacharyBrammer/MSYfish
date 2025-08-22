@@ -7,7 +7,6 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
-from calc_msy_rotational_serve import calc_msy
 from plotting import plot_simulation
 from simulator import Simulator
 from translate import Translator
@@ -40,6 +39,7 @@ def simulate():
     )
 
     # do regex to make sure path is valid
+    # TODO: pass to simulate method so that path can be changed easily
     if not re.fullmatch(dir_regex, directory):
         st.session_state.valid_path = False
         st.error(
@@ -57,7 +57,7 @@ def simulate():
     # initialize the model for the selected species
     if st.session_state.init and not st.session_state.initd:
         # TODO: add a check to see if simulator object exists for species already
-        sim = Simulator(outdir="directory", fishdata=fishdata,
+        st.session_state.sim = Simulator(outdir=directory, fishdata=fishdata,
                         speciesIndex=speciesIndex)
         st.session_state.initd = True
 
@@ -213,14 +213,14 @@ def simulate():
         )
 
         if climaticEnable:
-            eventChance = st.number_input(
+            massChance = st.number_input(
                 label="% Chance of Climatic Event",
                 min_value=0.0,
                 max_value=100.0,
                 value=0.0,
                 disabled=st.session_state.running
             )
-            eventMort = st.number_input(
+            massMort = st.number_input(
                 label="% Population Lost In Event",
                 min_value=0.0,
                 max_value=100.0,
@@ -228,8 +228,8 @@ def simulate():
                 disabled=st.session_state.running
             )
         else:
-            eventChance = None
-            eventMort = None
+            massChance = None
+            massMort = None
         
         # warnings
         # TODO: look for any other places user could mess up input, add errors for
@@ -242,4 +242,38 @@ def simulate():
             st.warning(t("rotation_rate_warning"))
 
         # run button
-        runButton = st.button(label=t("run"))
+        runButton = st.button(label=t("run"), disabled=not st.session_state.valid_path)
+        if runButton:
+            st.session_state.running = True
+        
+        if st.session_state.running:
+            for i in range(numiter):
+                st.session_state.sim.simulate(connectivity=connectivity, stocks=stocks, years=years + 100, fishingRate=fishingRate, rotationRate=rotationRate, sizes=sizes, minCatch=minCatchSize, maxCatch=maxCatchSize, temperature=temperature, massChance=massChance, massMort=massMort)
+                
+                # If final run, re-enable inputs and plot first run
+                if i == numiter - 1:
+                    # Get path to most recent simulation to plot
+                    path = f"simulations/{st.session_state.id}/{directory}"
+                    allSims = [
+                        os.path.join(path, species, file)
+                        for species in os.listdir(path)
+                        for file in os.listdir(os.path.join(path, species))
+                    ]
+                    st.session_state.firstSimPath = max(
+                        allSims, key=os.path.getmtime)
+                    st.session_state.plot = plot_simulation(
+                        st.session_state.firstSimPath)
+
+                    # Set running to false and print success message
+                    st.session_state.running = False
+                    st.success(t("sim_complete"))
+                    time.sleep(5)
+                    st.rerun()
+        
+        # Display images and other data from sim
+        if st.session_state.plot != "":
+            simPathStr = "/".join(st.session_state.firstSimPath.split("/")[2:])
+            st.write(f"{t("simulation")}: {simPathStr}")
+            st.write(st.session_state.popDat)
+            for plot in st.session_state.plot:
+                st.plotly_chart(plot)
