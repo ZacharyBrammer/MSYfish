@@ -105,7 +105,9 @@ class Simulator:
 
             self.minrec = minrec
             recruitStatus.update(
-                label="Recruitment Rate Calculated", state="complete")
+                label="Recruitment Rate Calculated",
+                state="complete"
+            )
 
             with st.status("Estimating Maximum Fishing Rate") as fishStatus:
                 # initialize maximum fishing rate

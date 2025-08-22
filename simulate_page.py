@@ -57,8 +57,11 @@ def simulate():
     # initialize the model for the selected species
     if st.session_state.init and not st.session_state.initd:
         # TODO: add a check to see if simulator object exists for species already
-        st.session_state.sim = Simulator(outdir=directory, fishdata=fishdata,
-                        speciesIndex=speciesIndex)
+        st.session_state.sim = Simulator(
+            outdir=directory,
+            fishdata=fishdata,
+            speciesIndex=speciesIndex
+        )
         st.session_state.initd = True
 
     # TODO: display max fishing rate here
@@ -230,7 +233,7 @@ def simulate():
         else:
             massChance = None
             massMort = None
-        
+
         # warnings
         # TODO: look for any other places user could mess up input, add errors for
         # check that stocks > 1 to prevent divide by 0 error
@@ -242,14 +245,16 @@ def simulate():
             st.warning(t("rotation_rate_warning"))
 
         # run button
-        runButton = st.button(label=t("run"), disabled=not st.session_state.valid_path)
+        runButton = st.button(
+            label=t("run"), disabled=not st.session_state.valid_path)
         if runButton:
             st.session_state.running = True
-        
+
         if st.session_state.running:
             for i in range(numiter):
-                st.session_state.sim.simulate(connectivity=connectivity, stocks=stocks, years=years + 100, fishingRate=fishingRate, rotationRate=rotationRate, sizes=sizes, minCatch=minCatchSize, maxCatch=maxCatchSize, temperature=temperature, massChance=massChance, massMort=massMort)
-                
+                st.session_state.sim.simulate(connectivity=connectivity, stocks=stocks, years=years + 100, fishingRate=fishingRate, rotationRate=rotationRate,
+                                              sizes=sizes, minCatch=minCatchSize, maxCatch=maxCatchSize, temperature=temperature, massChance=massChance, massMort=massMort)
+
                 # If final run, re-enable inputs and plot first run
                 if i == numiter - 1:
                     # Get path to most recent simulation to plot
@@ -269,7 +274,7 @@ def simulate():
                     st.success(t("sim_complete"))
                     time.sleep(5)
                     st.rerun()
-        
+
         # Display images and other data from sim
         if st.session_state.plot != "":
             simPathStr = "/".join(st.session_state.firstSimPath.split("/")[2:])
