@@ -251,6 +251,9 @@ def simulate():
             st.session_state.running = True
 
         if st.session_state.running:
+            # updates the directory
+            st.session_state.sim.change_outdir(directory)
+
             for i in range(numiter):
                 st.session_state.sim.simulate(connectivity=connectivity, stocks=stocks, years=years + 100, fishingRate=fishingRate, rotationRate=rotationRate,
                                               sizes=sizes, minCatch=minCatchSize, maxCatch=maxCatchSize, temperature=temperature, massChance=massChance, massMort=massMort)

@@ -137,6 +137,17 @@ class Simulator:
                 state="complete",
                 expanded=False
             )
+    
+    def change_outdir(
+        self,
+        outdir: str # new path for simulation outputs
+    ):
+        outdir = f"simulations/{st.session_state.id}/{outdir}/"
+        self.outdir = outdir
+
+        # set file directories if needed
+        if not os.path.exists(outdir + self.species):
+            os.makedirs(outdir + self.species)
 
     def simulate(
         self,
