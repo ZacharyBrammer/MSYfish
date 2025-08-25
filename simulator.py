@@ -27,7 +27,6 @@ class Simulator:
         species = species[0] + '_' + species[1]
         self.species = species
 
-        # TODO: add incrementor to this for the run simulation button
         self.iteration = 0  # current iteration number
 
         # get species parameters and make relevant calculations

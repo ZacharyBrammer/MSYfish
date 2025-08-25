@@ -39,7 +39,6 @@ def simulate():
     )
 
     # do regex to make sure path is valid
-    # TODO: pass to simulate method so that path can be changed easily
     if not re.fullmatch(dir_regex, directory):
         st.session_state.valid_path = False
         st.error(
