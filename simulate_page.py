@@ -64,6 +64,8 @@ def simulate():
         st.session_state.initd = True
 
     # TODO: display max fishing rate here
+    if st.session_state.initd:
+        st.write(f"Maximum Calculated Fishing Rate: {st.session_state.sim.maxfish:.2f}")
 
     # get inputs to the model for running
     if st.session_state.initd:

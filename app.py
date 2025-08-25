@@ -59,9 +59,6 @@ if "initd" not in st.session_state:
 if "init" not in st.session_state:
     st.session_state.init = False
 
-if "maxfish" not in st.session_state:
-    st.session_state.maxfish = 0.0
-
 # Translator
 translator = Translator(st.session_state.language)
 t = translator.translate

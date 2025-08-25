@@ -124,7 +124,6 @@ class Simulator:
                         maxfish += 0.01
 
                 self.maxfish = maxfish
-                st.session_state.maxfish = maxfish
 
                 fishStatus.update(
                     label="Max Fishing Rate Found",
