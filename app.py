@@ -4,7 +4,7 @@ import uuid
 import streamlit as st
 
 from analyze import analyze
-from simulate import simulate
+from simulate_page import simulate
 from translate import Translator
 
 # Page setup
@@ -52,6 +52,12 @@ if "valid_path" not in st.session_state:
 
 if "firstSimPath" not in st.session_state:
     st.session_state.firstSimPath = ""
+
+if "initd" not in st.session_state:
+    st.session_state.initd = False
+
+if "init" not in st.session_state:
+    st.session_state.init = False
 
 # Translator
 translator = Translator(st.session_state.language)

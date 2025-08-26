@@ -29,9 +29,9 @@ def compute_pop_msy(
     minCatch: float,  # minimum catch weight - user input
     maxCatch: float | None,  # maximum catch weight - user input
     temperature: np.ndarray,  # # temperature of water per year, will be None if disabled
-    massChance: float | None, # yearly chance of a mass mortality event
-    massMort: float | None, # proportion of population to die in mass mortality event
-    nfished: int, # number of stocks fished
+    massChance: float | None,  # yearly chance of a mass mortality event
+    massMort: float | None,  # proportion of population to die in mass mortality event
+    nfished: int,  # number of stocks fished
 ) -> bool:
     if any(fishingRates):
         fishedStocks = nfished
@@ -163,7 +163,8 @@ def compute_pop_msy(
                 ff[RM] = 0
         else:
             ff = fishingRates
-            mnpop = np.mean(popsize[ii-5:ii]) / np.mean(popsize[40:50]) # type: ignore
+            mnpop = np.mean(popsize[ii-5:ii]) / \
+                np.mean(popsize[40:50])  # type: ignore
 
         if mnpop < btarget:
             ff = btarget * ff
@@ -403,7 +404,7 @@ def compute_pop_msy(
 
             for kk in range(0, nstocks):
                 reprodTot[ii, kk] = np.sum(reprod[stock == kk])
-                for mm in range(0, nstocks): # type: ignore
+                for mm in range(0, nstocks):  # type: ignore
                     reproductionMatrix[kk, mm] = conn_matrix[kk,
                                                              mm] * reprodTot[ii, kk]
                 sigrec = np.random.lognormal(0., recruitVar)
