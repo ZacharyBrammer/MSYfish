@@ -113,24 +113,19 @@ class Simulator:
 
         self.maxfish = maxfish
 
-    def simulate(
-        self,
-        connectivity: np.ndarray,  # connectivity matrix, will be None if not included
-        stocks: int,  # number of stocks
-        years: int,  # number of years per simulation
-        fishingRate: float,  # fishing rate as a percentage of biomass
-        rotationRate: int,
-        sizes: bool,  # enable catch size ranges
-        minCatch: float,  # minimum length of fish to catch
-        maxCatch: float | None,  # maximum length of fish ot catch
-        temperature: np.ndarray,  # temperature of water per year, will be None if disabled
-        massChance: float | None,  # yearly chance of a mass mortality event
-        massMort: float | None,  # proportion of population to die in mass mortality event
-    ):
-        # set fishing rate array
-        fishingRates = np.full(stocks, fishingRate)
+    def to_dict(self, i):
+        data = {
+            "species": self.species,
+            "iteration": i + 1,
+            "maxfish": self.maxfish,
+            "minrec": self.minrec,
+            "asympLen": self.asympLen,
+            "growthCoef": self.growthCoef,
+            "lenWtPower": self.lenWtPower,
+            "lenWtCoef": self.lenWtCoef,
+            "maxage": self.maxage,
+            "minsize": self.minsize,
+            "bgResource": self.bgResource
+        }
 
-        # run simulation
-        compute_pop_msy(outdir=self.outdir, fishingRates=fishingRates, nstocks=stocks, species=self.species, asympLen=self.asympLen, growthCoef=self.growthCoef, lenWtCoef=self.lenWtCoef, lenWtPower=self.lenWtPower, maxage=self.maxage, minsize=self.minsize, reprodper=self.minrec, backgroundRes=self.bgResource,
-                        msave=True, iteration=self.iteration, btarget=0, rptest=False, environ=True, recruitVar=0.5, conn_matrix=connectivity, rotation=rotationRate, nyr=years, sizes=sizes, minCatch=minCatch, maxCatch=maxCatch, temperature=temperature, massChance=massChance, massMort=massMort, nfished=stocks)
-        self.iteration += 1
+        return data
