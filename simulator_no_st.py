@@ -13,6 +13,7 @@ class Simulator:
         fishdata: pd.DataFrame,  # dataframe of species data
         speciesIndex: int,  # index of species in fishdata
     ):
+        np.seterr(all="raise")
         outdir = f"max_fish_estimate/"
         self.outdir = outdir
 
@@ -38,8 +39,7 @@ class Simulator:
         self.growthCoef = growthCoef
 
         # power (b) of length-weight relationship
-        lenWtPower = fishdata['bmean'][speciesIndex] + 0. * \
-            np.random.randn() * fishdata['bstd'][speciesIndex] / 20
+        lenWtPower = fishdata['bmean'][speciesIndex] + np.random.randn() * fishdata['bstd'][speciesIndex] / 20
         self.lenWtPower = lenWtPower
 
         # calculate coefficient (a) of length-weight power relationship based on value of lenWtPower
@@ -106,7 +106,6 @@ class Simulator:
             fishingRate = np.zeros([1]) + maxfish
             fslap = not compute_pop_msy(outdir=outdir, fishingRates=fishingRate, nstocks=1, species=species, asympLen=asympLen, growthCoef=growthCoef, lenWtCoef=lenWtCoef, lenWtPower=lenWtPower, maxage=maxage, minsize=minsize, reprodper=minrec, backgroundRes=bgResource,
                                         msave=False, iteration=0, btarget=1, rptest=True, environ=False, recruitVar=0.5, conn_matrix=np.array(None), rotation=0, nyr=0, sizes=False, minCatch=0, maxCatch=None, temperature=np.array(None), massChance=None, massMort=None, nfished=1)
-
             # increment max fishing rate if still viable
             if fslap:
                 maxfish += 0.01

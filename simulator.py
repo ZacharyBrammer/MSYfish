@@ -43,8 +43,7 @@ class Simulator:
         self.growthCoef = growthCoef
 
         # power (b) of length-weight relationship
-        lenWtPower = fishdata['bmean'][speciesIndex] + 0. * \
-            np.random.randn() * fishdata['bstd'][speciesIndex] / 20
+        lenWtPower = fishdata['bmean'][speciesIndex] + np.random.randn() * fishdata['bstd'][speciesIndex] / 20
         self.lenWtPower = lenWtPower
 
         # calculate coefficient (a) of length-weight power relationship based on value of lenWtPower
