@@ -2,6 +2,9 @@ import netCDF4 as nc
 import numpy as np
 
 
+# epsilon for avoiding divide by zero and negative power on zero
+EPS = 1e-12
+
 def compute_pop_msy(
     outdir: str,  # output directory
     fishingRates: np.ndarray,  # array with fishing rate per stock
@@ -28,7 +31,7 @@ def compute_pop_msy(
     sizes: bool,  # flag to enable catch size restriction
     minCatch: float,  # minimum catch weight - user input
     maxCatch: float | None,  # maximum catch weight - user input
-    temperature: np.ndarray,  # # temperature of water per year, will be None if disabled
+    temperature: np.ndarray,  # temperature of water per year, will be None if disabled
     massChance: float | None,  # yearly chance of a mass mortality event
     massMort: float | None,  # proportion of population to die in mass mortality event
     nfished: int,  # number of stocks fished
@@ -90,25 +93,22 @@ def compute_pop_msy(
     asympWt = (lenWtCoef*initialAsympLen**lenWtPower)/1000
     wtMat = compute_wtMat(asympLen[0], growthCoef[0],
                           lenWtCoef, lenWtPower, maxage)
-    initialWt = asympWt * \
-        (1 - np.exp(-(growthCoef[0] + gvar) * initialAge)) ** lenWtPower
+    initialWt = asympWt * (-np.expm1(-(growthCoef[0] + gvar) * initialAge)) ** lenWtPower
 
     if sizes:
         minCatchWt = (lenWtCoef*minCatch**lenWtPower)/1000
         if maxCatch:
             maxCatchWt = (lenWtCoef*maxCatch**lenWtPower)/1000
 
-    binMin = 0.1 * (lenWtCoef * asympLen[0] ** lenWtPower) / 1000 * (
-        1 - np.exp(-(growthCoef[0]) * initialAge)) ** lenWtPower
+    binMin = 0.1 * (lenWtCoef * asympLen[0] ** lenWtPower) / 1000 * (-np.expm1(-(growthCoef[0]) * initialAge)) ** lenWtPower
     binMax = 10 * (lenWtCoef * asympLen[0] ** lenWtPower) / 1000
 
-    fish[0, :] = asympWt * \
-        (1-np.exp(-(growthCoef[0] + gvar) * age)) ** lenWtPower
+    fish[0, :] = asympWt * (-np.expm1(-(growthCoef[0] + gvar) * age)) ** lenWtPower
 
     m00 = 0.95
 
     # scaled so that age 1 mortality is m00
-    m0 = m00*np.mean(initialWt)**(0.25)
+    m0 = m00 * (np.maximum(np.mean(initialWt), EPS) ** 0.25)
 
     newgrowth = np.zeros([tlength])
     reprodOut = np.zeros([tlength])
@@ -163,8 +163,7 @@ def compute_pop_msy(
                 ff[RM] = 0
         else:
             ff = fishingRates
-            mnpop = np.mean(popsize[ii-5:ii]) / \
-                np.mean(popsize[40:50])  # type: ignore
+            mnpop = np.mean(popsize[ii-5:ii]) / np.maximum(np.mean(popsize[40:50]), EPS)
 
         if mnpop < btarget:
             ff = btarget * ff
@@ -208,8 +207,9 @@ def compute_pop_msy(
                         # Production with set temperature
                         if temperature.any() and ii >= 100:
                             temp = temperature[ii - 100]
-                            tempConst = float(
-                                np.exp(-(0.65 / (8.62e-5 * (temp + 273.15)))))
+                            denom = 8.62e-5 * (temp + 273.15)
+                            denom = np.maximum(denom, EPS)
+                            tempConst = float(np.exp(-(0.65 / denom)))
                             production = 2.89e11 * tempConst * \
                                 fish[ii-1, jj] ** 0.75
                         else:  # Default behavior
@@ -227,8 +227,8 @@ def compute_pop_msy(
                             for cc in range(0, ee):
                                 eatid = idcan[0, cc]
                                 cannibal = np.random.random()
-                                cann_rate = 1.0 * fish[ii-1, eatid] ** (-0.25)
-                                cann_prob = 1 - np.exp(-cann_rate * delt)
+                                cann_rate = 1.0 * (np.maximum(fish[ii-1, eatid], EPS) ** (-0.25))
+                                cann_prob = -np.expm1(-cann_rate * delt)
                                 if cannibal <= cann_prob and availableEnergy < consumption:
                                     availableEnergy = availableEnergy + \
                                         fish[ii-1, eatid]
@@ -239,7 +239,7 @@ def compute_pop_msy(
 
                         consumed[jj] = consumption
 
-                       # growth and reproduction
+                        # growth and reproduction
                         if (fish[ii, jj] < wtMat and availableEnergy < metabolism):
                             mortality[ii, 0] += 1
                             mortality[ii, 1] += fish[ii-1, jj]
@@ -249,11 +249,20 @@ def compute_pop_msy(
                             growth = 0
                             reprod[jj] = 0
                             netgrowth[jj] = availableEnergy - metabolism
+
+                            # If this year would cause fish to starve, kill
+                            if fish[ii-1, jj] + netgrowth[jj] < wtMat:
+                                mortality[ii, 0] += 1
+                                mortality[ii, 1] += fish[ii-1, jj]
+                                dead[jj] = 1
+                                consumption = 0
                         else:
                             pconsum = (availableEnergy -
                                        metabolism) / production
-                            growth = pconsum * asympWt[jj] * lenWtPower * (growthCoef[0] + gvar[jj]) * (fish[ii-1, jj] / asympWt[jj]) ** (
-                                1 - 1 / lenWtPower) * (1 - (fish[ii-1, jj] / asympWt[jj]) ** (1 / lenWtPower))
+                            safe_asymp = np.maximum(asympWt[jj], EPS)
+                            ratio = fish[ii-1, jj] / safe_asymp
+                            growth = pconsum * safe_asymp * lenWtPower * (growthCoef[0] + gvar[jj]) * ratio ** (1 - 1 / lenWtPower) * (1 - ratio ** (1 / lenWtPower))
+
                             netgrowth[jj] = growth*delt
                             if maturity[jj] == 1 and sex[jj] == 1:
                                 eggMass = (.008 *
@@ -267,11 +276,9 @@ def compute_pop_msy(
 
                     if mm == 1:
                         # natural mortality (including predation)
-                        mort = m0 * \
-                            fish[ii-1, jj] ** (-0.25) + 1 / \
-                            (1 + np.exp(-0.6 * (age[jj] - maxage)))
+                        mort = m0 * np.maximum(fish[ii-1, jj], EPS) ** (-0.25) + 1 / (1 + np.exp(-0.6 * (age[jj] - maxage)))
 
-                        morprob = 1 - np.exp(-mort * delt)
+                        morprob = -np.expm1(-mort * delt)
 
                         death = np.random.random()
 
@@ -286,11 +293,10 @@ def compute_pop_msy(
                         caught = np.random.random()
 
                         if ff[stock[jj]] > 0:
-                            fishmort = scf * \
-                                ff[stock[jj]] / \
-                                (1 + np.exp(-0.05 *
-                                 (fish[ii-1, jj] - fishWt[ii])))
-                            fishmprob = 1 - np.exp(-fishmort * delt)
+                            denom = 1 + np.exp(-0.05 * (fish[ii-1, jj] - fishWt[ii]))
+                            denom = np.maximum(denom, EPS)
+                            fishmort = scf * ff[stock[jj]] / denom
+                            fishmprob = -np.expm1(-fishmort * delt)
                         else:
                             fishmort = 0
                             fishmprob = 0
@@ -333,7 +339,8 @@ def compute_pop_msy(
 
                 # check if fish reaches maturity
                 if maturity[jj] == 0:
-                    pmat = 1 / (1 + np.exp(-2 * (fish[ii, jj] - wtMat)))
+                    denom = 1 + np.exp(-2 * (fish[ii, jj] - wtMat))
+                    pmat = 1 / np.maximum(denom, EPS)
                     ptest = np.random.randn()
                     if ptest > pmat:
                         maturity[jj] = 1
@@ -418,7 +425,8 @@ def compute_pop_msy(
 
         if numrec > 0:
             if connectivity:
-                probStock = np.cumsum(numrecStock / numrec)
+                safe_numrec = np.maximum(numrec, 1)
+                probStock = np.cumsum(numrecStock / safe_numrec)
                 stockn = np.random.random(size=numrec)
                 newstock = np.zeros([numrec], dtype=int)
 
@@ -438,9 +446,7 @@ def compute_pop_msy(
             newAsympLen = asympLen[0] + asympLen[1] * np.random.randn(numrec)
             newAsympLen[newAsympLen < 0] = asympLen[0]
             newAsympWt = (lenWtCoef * newAsympLen ** lenWtPower) / 1000
-            newInitialWt = newAsympWt * \
-                (1 - np.exp(-(growthCoef[0] + newgvar)
-                 * initialAge)) ** lenWtPower
+            newInitialWt = newAsympWt * (-np.expm1(-(growthCoef[0] + newgvar) * initialAge)) ** lenWtPower
             newrec[ii, :] = newInitialWt
             reproduction[ii, 1] = np.sum(newrec[ii, :])
 
@@ -688,7 +694,7 @@ def compute_wtMat(asympLen, growthCoef, lenWtCoef, lenWtPower, maxage):
     yrage = np.linspace(1, maxage, 120)
     asympWt = (lenWtCoef * asympLen ** lenWtPower) / 1000
 
-    length = asympLen * (1 - np.exp(-growthCoef * yrage))
+    length = asympLen * -np.expm1(-growthCoef * yrage)
 
     weight = (lenWtCoef * length ** lenWtPower) / 1000
 
