@@ -27,13 +27,13 @@ sims = []
 # --- Parallel execution ---
 with ProcessPoolExecutor() as executor:
     all_futures = {}
-    for species in tqdm(speciesList[:1], desc="Species", leave=True):
+    for species in tqdm(speciesList[:5], desc="Species", leave=True):
         speciesIndex: int = speciesList[speciesList == species].index[0] # type: ignore
 
         # Submit 10 simulations for this species
         futures = [
             executor.submit(runSimulation, speciesIndex, i)
-            for i in range(5)
+            for i in range(10)
         ]
         for f in futures:
             all_futures[f] = species  # keep mapping to species

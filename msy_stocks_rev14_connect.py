@@ -1,5 +1,6 @@
 import netCDF4 as nc
 import numpy as np
+from scipy.special import expit
 
 
 # epsilon for avoiding divide by zero and negative power on zero
@@ -198,12 +199,14 @@ def compute_pop_msy(
 
             jj = order[kk]
             if dead[jj] == 0:
+                safe_fish = np.maximum(fish[ii-1, jj], EPS)
                 bioOrder = np.random.permutation(3)
 
                 for mm in bioOrder:
                     if mm == 0:
                         # individual consumption of resource
-                        consumption = 6.0 * fish[ii-1, jj] ** 1.00
+                        consumption = 6.0 * safe_fish ** 1.00
+                        
                         # Production with set temperature
                         if temperature.any() and ii >= 100:
                             temp = temperature[ii - 100]
@@ -211,17 +214,17 @@ def compute_pop_msy(
                             denom = np.maximum(denom, EPS)
                             tempConst = float(np.exp(-(0.65 / denom)))
                             production = 2.89e11 * tempConst * \
-                                fish[ii-1, jj] ** 0.75
+                                safe_fish ** 0.75
                         else:  # Default behavior
-                            production = 3.0 * fish[ii-1, jj] ** 0.75
+                            production = 3.0 * safe_fish ** 0.75
                         metabolism = consumption-production
 
                         if resource[ii, stock[jj]] >= consumption:
                             availableEnergy = consumption
-                        elif fish[ii-1, jj] > 100 * np.mean(initialWt):
+                        elif safe_fish > 100 * np.mean(initialWt):
                             availableEnergy = resource[ii, stock[jj]]
                             cann = np.abs(
-                                (fish[ii-1, :] > 0) * (fish[ii-1, :] <= .01 * fish[ii-1, jj]) * (1 - dead))
+                                (fish[ii-1, :] > 0) * (fish[ii-1, :] <= .01 * safe_fish) * (1 - dead))
                             idcan = np.asarray(cann.nonzero())
                             [dd, ee] = idcan.shape
                             for cc in range(0, ee):
@@ -242,7 +245,7 @@ def compute_pop_msy(
                         # growth and reproduction
                         if (fish[ii, jj] < wtMat and availableEnergy < metabolism):
                             mortality[ii, 0] += 1
-                            mortality[ii, 1] += fish[ii-1, jj]
+                            mortality[ii, 1] += safe_fish
                             dead[jj] = 1
                             consumption = 0
                         elif availableEnergy < metabolism:
@@ -251,32 +254,32 @@ def compute_pop_msy(
                             netgrowth[jj] = availableEnergy - metabolism
 
                             # If this year would cause fish to starve, kill
-                            if fish[ii-1, jj] + netgrowth[jj] < wtMat:
+                            if safe_fish + netgrowth[jj] < wtMat:
                                 mortality[ii, 0] += 1
-                                mortality[ii, 1] += fish[ii-1, jj]
+                                mortality[ii, 1] += safe_fish
                                 dead[jj] = 1
                                 consumption = 0
                         else:
                             pconsum = (availableEnergy -
                                        metabolism) / production
                             safe_asymp = np.maximum(asympWt[jj], EPS)
-                            ratio = fish[ii-1, jj] / safe_asymp
+                            ratio = safe_fish / safe_asymp
                             growth = pconsum * safe_asymp * lenWtPower * (growthCoef[0] + gvar[jj]) * ratio ** (1 - 1 / lenWtPower) * (1 - ratio ** (1 / lenWtPower))
 
                             netgrowth[jj] = growth*delt
                             if maturity[jj] == 1 and sex[jj] == 1:
                                 eggMass = (.008 *
-                                           fish[ii-1, jj] ** .109) / 1000 ** 2
+                                           safe_fish ** .109) / 1000 ** 2
                                 reprod[jj] = int(
                                     (availableEnergy - growth) / eggMass)
                                 if reprod[jj] < 0:
                                     reprod[jj] = 0
 
-                        fish[ii, jj] = fish[ii-1, jj] + netgrowth[jj]
+                        fish[ii, jj] = safe_fish + netgrowth[jj]
 
                     if mm == 1:
                         # natural mortality (including predation)
-                        mort = m0 * np.maximum(fish[ii-1, jj], EPS) ** (-0.25) + 1 / (1 + np.exp(-0.6 * (age[jj] - maxage)))
+                        mort = m0 * safe_fish ** (-0.25) + 1 / (1 + np.exp(-0.6 * (age[jj] - maxage)))
 
                         morprob = -np.expm1(-mort * delt)
 
@@ -284,7 +287,7 @@ def compute_pop_msy(
 
                         if death < morprob:
                             mortality[ii, 0] += 1
-                            mortality[ii, 1] += fish[ii-1, jj]
+                            mortality[ii, 1] += safe_fish
                             dead[jj] = 1
                             consumption = 0
 
@@ -293,9 +296,7 @@ def compute_pop_msy(
                         caught = np.random.random()
 
                         if ff[stock[jj]] > 0:
-                            denom = 1 + np.exp(-0.05 * (fish[ii-1, jj] - fishWt[ii]))
-                            denom = np.maximum(denom, EPS)
-                            fishmort = scf * ff[stock[jj]] / denom
+                            fishmort = scf * ff[stock[jj]] / (1 / expit(0.05 * (safe_fish - fishWt[ii])))
                             fishmprob = -np.expm1(-fishmort * delt)
                         else:
                             fishmort = 0
@@ -324,7 +325,7 @@ def compute_pop_msy(
                                     # Hardcoded catch and release mortality, can make variable in future
                                     if death < 0.01:
                                         mortality[ii, 0] += 1
-                                        mortality[ii, 1] += fish[ii-1, jj]
+                                        mortality[ii, 1] += safe_fish
                                         dead[jj] = 1
                                         consumption = 0
                         else:  # Default behavior
@@ -339,8 +340,7 @@ def compute_pop_msy(
 
                 # check if fish reaches maturity
                 if maturity[jj] == 0:
-                    denom = 1 + np.exp(-2 * (fish[ii, jj] - wtMat))
-                    pmat = 1 / np.maximum(denom, EPS)
+                    pmat = expit(2 * (fish[ii, jj] - wtMat))
                     ptest = np.random.randn()
                     if ptest > pmat:
                         maturity[jj] = 1
