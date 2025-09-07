@@ -94,7 +94,8 @@ def compute_pop_msy(
     asympWt = (lenWtCoef*initialAsympLen**lenWtPower)/1000
     wtMat = compute_wtMat(asympLen[0], growthCoef[0],
                           lenWtCoef, lenWtPower, maxage)
-    initialWt = asympWt * (-np.expm1(-(growthCoef[0] + gvar) * initialAge)) ** lenWtPower
+    base = np.maximum((-np.expm1(-(growthCoef[0] + gvar) * initialAge)), EPS)
+    initialWt = asympWt * base ** lenWtPower
 
     if sizes:
         minCatchWt = (lenWtCoef*minCatch**lenWtPower)/1000
@@ -104,7 +105,8 @@ def compute_pop_msy(
     binMin = 0.1 * (lenWtCoef * asympLen[0] ** lenWtPower) / 1000 * (-np.expm1(-(growthCoef[0]) * initialAge)) ** lenWtPower
     binMax = 10 * (lenWtCoef * asympLen[0] ** lenWtPower) / 1000
 
-    fish[0, :] = asympWt * (-np.expm1(-(growthCoef[0] + gvar) * age)) ** lenWtPower
+    base = np.maximum((-np.expm1(-(growthCoef[0] + gvar) * age)), EPS)
+    fish[0, :] = asympWt *  base ** lenWtPower
 
     m00 = 0.95
 
@@ -446,7 +448,8 @@ def compute_pop_msy(
             newAsympLen = asympLen[0] + asympLen[1] * np.random.randn(numrec)
             newAsympLen[newAsympLen < 0] = asympLen[0]
             newAsympWt = (lenWtCoef * newAsympLen ** lenWtPower) / 1000
-            newInitialWt = newAsympWt * (-np.expm1(-(growthCoef[0] + newgvar) * initialAge)) ** lenWtPower
+            base = np.maximum((-np.expm1(-(growthCoef[0] + newgvar) * initialAge)), EPS)
+            newInitialWt = newAsympWt * base ** lenWtPower
             newrec[ii, :] = newInitialWt
             reproduction[ii, 1] = np.sum(newrec[ii, :])
 
