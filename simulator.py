@@ -161,7 +161,7 @@ class Simulator:
         massMort: float | None,  # proportion of population to die in mass mortality event
     ):
         # set fishing rate array
-        fishingRates = np.full(stocks, fishingRate)
+        fishingRates = np.full(stocks, fishingRate / 100)
 
         # run simulation
         compute_pop_msy(outdir=self.outdir, fishingRates=fishingRates, nstocks=stocks, species=self.species, asympLen=self.asympLen, growthCoef=self.growthCoef, lenWtCoef=self.lenWtCoef, lenWtPower=self.lenWtPower, maxage=self.maxage, minsize=self.minsize, reprodper=self.minrec, backgroundRes=self.bgResource,
