@@ -107,14 +107,12 @@ def simulate():
                     columns=[f"Stock {i+1}" for i in range(stocks)],
                     index=[f"Stock {i+1}" for i in range(stocks)]
                 )
-            # TODO: add editor like for temperature
             conn_file = st.file_uploader(
                 label=t("conn_file"),
                 type=["xls", "xlsx", "csv"],
                 disabled=st.session_state.running
             )
             if conn_file:
-                # TODO: add more verification, make sure values are in proper range (ask Dr Woodson)
                 # Read file contents
                 if conn_file.name.endswith(".csv"):
                     df = pd.read_csv(conn_file, index_col=0)
@@ -207,7 +205,6 @@ def simulate():
             disabled=st.session_state.running
         )
 
-        # TODO: add file upload stuff like in connectivity matrix
         # if temperature impact on production is enabled, let user set in degrees C
         if tempEnable:
             if "years" not in st.session_state:
