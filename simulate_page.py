@@ -210,15 +210,42 @@ def simulate():
         # TODO: add file upload stuff like in connectivity matrix
         # if temperature impact on production is enabled, let user set in degrees C
         if tempEnable:
+            if "years" not in st.session_state:
+                st.session_state.years = years
+            
             # set up temperature data to be number of years with default value of 20C
-            temps = np.hstack(
+            if "temps" not in st.session_state or years != st.session_state.years:
+                st.session_state.temps = np.hstack(
                 [np.arange(1, years + 1).reshape(-1, 1),
                  np.full((years, 1), 20.0)]
             )
+            
+            # temperature file upload
+            temp_file = st.file_uploader(
+                label="Temperature File",
+                type=["xls", "xlsx", "csv"],
+                disabled=st.session_state.running
+            )
+
+            if temp_file:
+                # read file contents
+                if temp_file.name.endswith(".csv"):
+                    df = pd.read_csv(temp_file, index_col=0)
+                else:  # xls or xlsx
+                    df = pd.read_excel(temp_file, index_col=0)
+                
+                # check that tempearature file matches years
+                if df.shape != (years, 1):
+                    # warn user, set connectivity to none
+                    st.warning(t("conn_warning"))
+                    temperature = np.array(None)
+                    temp_file = None
+                else:
+                    st.session_state.temps = df
 
             # data editor to allow users to input their temperature data
-            temps = st.data_editor(
-                temps,
+            st.session_state.temps = st.data_editor(
+                st.session_state.temps,
                 column_config={
                     "0": st.column_config.NumberColumn(
                         "Year",
@@ -232,7 +259,7 @@ def simulate():
                 disabled=st.session_state.running
             )
 
-            temperature = temps[:, 1]
+            temperature = st.session_state.temps.values.ravel()
         else:
             temperature = np.array(None)
 
@@ -295,8 +322,6 @@ def simulate():
             
             # updates the directory
             st.session_state.sim.change_outdir(directory)
-
-            print(connectivity)
 
             for i in range(numiter):
                 st.session_state.sim.simulate(connectivity=connectivity, stocks=stocks, years=years + 100, fishingRate=fishingRate, rotationRate=rotationRate,
