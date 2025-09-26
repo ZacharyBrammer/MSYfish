@@ -92,28 +92,52 @@ def simulate():
         # optional enables
         st.write(t("optional_param"))
 
-        # load connectivity file
-        # TODO: add editor like for temperature
-        conn_file = st.file_uploader(
-            label=t("conn_file"),
-            type=["xls", "xlsx"],
+        # connectivity
+        conn_enable = st.toggle(
+            label="Connectivity",
             disabled=st.session_state.running
         )
-        if conn_file is not None:
-            # TODO: add more verification, make sure values are in proper range (ask Dr Woodson)
-            file_bytes = io.BytesIO(conn_file.getvalue())
-            conn_data = pd.read_excel(file_bytes)
-            connectivity = conn_data.to_numpy()
-            connectivity = connectivity[:, 1:]
+        if conn_enable:
+            if "num_stocks" not in st.session_state:
+                st.session_state.num_stocks = stocks
 
-            # check that connectivity file matches number of stocks
-            if not (connectivity.shape[0] == stocks and connectivity.shape[1] == stocks):
-                # warn user, set connectivity to none
-                st.warning(t("conn_warning"))
-                connectivity = np.array(None)
-                conn_file = None
-        else:
-            connectivity = np.array(None)
+            if "conn_matrix" not in st.session_state or stocks != st.session_state.num_stocks:
+                st.session_state.conn_matrix = pd.DataFrame(
+                    np.zeros((stocks, stocks), dtype=float),
+                    columns=[f"Stock {i+1}" for i in range(stocks)],
+                    index=[f"Stock {i+1}" for i in range(stocks)]
+                )
+            conn_file = st.file_uploader(
+                label=t("conn_file"),
+                type=["xls", "xlsx", "csv"],
+                disabled=st.session_state.running
+            )
+            if conn_file:
+                # Read file contents
+                if conn_file.name.endswith(".csv"):
+                    df = pd.read_csv(conn_file, index_col=0)
+                else:  # xls or xlsx
+                    df = pd.read_excel(conn_file, index_col=0)
+
+                # check that connectivity file matches number of stocks
+                if df.shape != (stocks, stocks):
+                    # warn user, set connectivity to none
+                    st.warning(t("conn_warning"))
+                    connectivity = np.array(None)
+                    conn_file = None
+                else:
+                    # Validate that rows sum to 1
+                    rowSums = df.sum(axis=1).round(6)
+                    if not np.allclose(rowSums, 1.0, atol=1e-6):
+                        st.warning("Rows must sum up to 1")
+                    else:
+                        st.session_state.conn_matrix = df
+            
+            # Editable matrix for connectivity
+            st.session_state.conn_matrix = st.data_editor(
+                st.session_state.conn_matrix,
+                disabled=st.session_state.running
+            )
 
         # fishing stuff
         fishing = st.toggle(
@@ -181,18 +205,44 @@ def simulate():
             disabled=st.session_state.running
         )
 
-        # TODO: add file upload stuff like in connectivity matrix
         # if temperature impact on production is enabled, let user set in degrees C
         if tempEnable:
+            if "years" not in st.session_state:
+                st.session_state.years = years
+            
             # set up temperature data to be number of years with default value of 20C
-            temps = np.hstack(
+            if "temps" not in st.session_state or years != st.session_state.years:
+                st.session_state.temps = np.hstack(
                 [np.arange(1, years + 1).reshape(-1, 1),
                  np.full((years, 1), 20.0)]
             )
+            
+            # temperature file upload
+            temp_file = st.file_uploader(
+                label="Temperature File",
+                type=["xls", "xlsx", "csv"],
+                disabled=st.session_state.running
+            )
+
+            if temp_file:
+                # read file contents
+                if temp_file.name.endswith(".csv"):
+                    df = pd.read_csv(temp_file, index_col=0)
+                else:  # xls or xlsx
+                    df = pd.read_excel(temp_file, index_col=0)
+                
+                # check that tempearature file matches years
+                if df.shape != (years, 1):
+                    # warn user, set connectivity to none
+                    st.warning(t("conn_warning"))
+                    temperature = np.array(None)
+                    temp_file = None
+                else:
+                    st.session_state.temps = df
 
             # data editor to allow users to input their temperature data
-            temps = st.data_editor(
-                temps,
+            st.session_state.temps = st.data_editor(
+                st.session_state.temps,
                 column_config={
                     "0": st.column_config.NumberColumn(
                         "Year",
@@ -206,7 +256,7 @@ def simulate():
                 disabled=st.session_state.running
             )
 
-            temperature = temps[:, 1]
+            temperature = st.session_state.temps.values.ravel()
         else:
             temperature = np.array(None)
 
@@ -252,6 +302,21 @@ def simulate():
             st.session_state.running = True
 
         if st.session_state.running:
+            # connectivity validation
+            if conn_enable:
+                # convert conn_matrix to an ndarray, do final validation
+                connectivity = st.session_state.conn_matrix.to_numpy()
+                # validate that rows sum to 1
+                rowSums = connectivity.sum(axis=1).round(6)
+                if np.allclose(connectivity, 0):
+                    connectivity = np.array(None)
+                elif not np.allclose(rowSums, 1.0, atol=1e-6):
+                    st.warning("Rows must sum up to 1, disabling connectivity")
+                    connectivity = np.array(None)
+            else:
+                connectivity = np.array(None)
+
+            
             # updates the directory
             st.session_state.sim.change_outdir(directory)
 
