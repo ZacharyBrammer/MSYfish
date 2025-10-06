@@ -149,6 +149,9 @@ class Simulator:
         outdir = f"simulations/{st.session_state.id}/{outdir}/"
         self.outdir = outdir
 
+        # Update iteration counter so file names are less confusing
+        self.iteration = 0
+
         # set file directories if needed
         if not os.path.exists(outdir + self.species):
             os.makedirs(outdir + self.species)
