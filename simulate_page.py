@@ -48,22 +48,37 @@ def simulate():
 
     initButton = st.button(
         "Initialize Simulation",
-        disabled=not st.session_state.valid_path or st.session_state.initd
+        disabled=not st.session_state.valid_path
     )
     if initButton:
         st.session_state.init = True
+        st.session_state.initd = False
 
     # initialize the model for the selected species
     if st.session_state.init and not st.session_state.initd:
-        # TODO: add a check to see if simulator object exists for species already
+        # If there's already a simulator for this species
+        if (any(sim.speciesIndex == speciesIndex for sim in Simulator.instances)):
+            old = [
+                sim for sim in Simulator.instances if sim.speciesIndex == speciesIndex
+            ][0]
+
+            iteration = old.iteration
+
+            Simulator.instances.remove(old)
+
+            del old
+
+        else:
+            iteration = 0
+        
         st.session_state.sim = Simulator(
             outdir=directory,
             fishdata=fishdata,
-            speciesIndex=speciesIndex
+            speciesIndex=speciesIndex,
+            iteration=iteration
         )
         st.session_state.initd = True
 
-    # TODO: display max fishing rate here
     if st.session_state.initd:
         st.write(f"Maximum Calculated Fishing Rate: {st.session_state.sim.maxfish:.2f}")
 

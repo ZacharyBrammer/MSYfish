@@ -1,4 +1,5 @@
 import os
+from typing import List
 
 import numpy as np
 import pandas as pd
@@ -9,11 +10,14 @@ from translate import Translator
 
 
 class Simulator:
+    instances: List["Simulator"] = []
+
     def __init__(
         self,
         outdir: str,  # output directory
         fishdata: pd.DataFrame,  # dataframe of species data
         speciesIndex: int,  # index of species in fishdata
+        iteration: int = 0, # used for resestting iteration number on new object
     ):
         self.translator = Translator(st.session_state.language)
         self.t = self.translator.translate
@@ -26,8 +30,9 @@ class Simulator:
         species = species.split()
         species = species[0] + '_' + species[1]
         self.species = species
+        self.speciesIndex = speciesIndex
 
-        self.iteration = 0  # current iteration number
+        self.iteration = iteration  # current iteration number
 
         # get species parameters and make relevant calculations
         # asymptotic length
@@ -134,6 +139,8 @@ class Simulator:
                 state="complete",
                 expanded=False
             )
+
+            Simulator.instances.append(self)
     
     def change_outdir(
         self,
