@@ -34,9 +34,21 @@ def simulate():
     
     # Deal with species changing
     if (selectedSpecies != st.session_state.species):
-        st.session_state.species = selectedSpecies
-        st.session_state.init = False
-        st.session_state.initd = False
+        # TODO: find some way of saving simulator object to a file
+        # Check if simulator already exists for this species
+        if (any(sim.speciesIndex == speciesIndex for sim in Simulator.instances)):
+            old = [
+                sim for sim in Simulator.instances if sim.speciesIndex == speciesIndex
+            ][0]
+            st.session_state.sim = old
+
+            st.session_state.species = selectedSpecies
+            st.session_state.init = True
+            st.session_state.initd = True
+        else:
+            st.session_state.species = selectedSpecies
+            st.session_state.init = False
+            st.session_state.initd = False
         st.rerun()
 
     dir_regex = r"^[A-Za-z0-9_-]+$"
@@ -90,6 +102,7 @@ def simulate():
         st.session_state.initd = True
 
     if st.session_state.initd:
+        # TODO: Make this part of sim object
         st.write(f"Maximum Calculated Fishing Rate: {st.session_state.sim.maxfish:.2f}")
 
     # get inputs to the model for running
