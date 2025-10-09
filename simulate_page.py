@@ -29,6 +29,16 @@ def simulate():
     )
     speciesIndex = speciesList[speciesList == selectedSpecies].index[0]
 
+    if "species" not in st.session_state:
+                st.session_state.species = selectedSpecies
+    
+    # Deal with species changing
+    if (selectedSpecies != st.session_state.species):
+        st.session_state.species = selectedSpecies
+        st.session_state.init = False
+        st.session_state.initd = False
+        st.rerun()
+
     dir_regex = r"^[A-Za-z0-9_-]+$"
 
     # get output directory
@@ -333,7 +343,8 @@ def simulate():
 
             
             # updates the directory
-            st.session_state.sim.change_outdir(directory)
+            if (st.session_state.sim.outdir != f"simulations/{st.session_state.id}/{directory}/"):
+                st.session_state.sim.change_outdir(directory)
 
             for i in range(numiter):
                 st.session_state.sim.simulate(connectivity=connectivity, stocks=stocks, years=years + 100, fishingRate=fishingRate, rotationRate=rotationRate,

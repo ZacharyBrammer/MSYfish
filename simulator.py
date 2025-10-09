@@ -146,6 +146,8 @@ class Simulator:
         self,
         outdir: str # new path for simulation outputs
     ):
+        #TODO: figure out why this is running all the time and messing with iteration count
+        print("CHANGEDIR")
         outdir = f"simulations/{st.session_state.id}/{outdir}/"
         self.outdir = outdir
 
@@ -170,6 +172,7 @@ class Simulator:
         massChance: float | None,  # yearly chance of a mass mortality event
         massMort: float | None,  # proportion of population to die in mass mortality event
     ):
+        print("PRE", self.iteration)
         # set fishing rate array
         fishingRates = np.full(stocks, fishingRate / 100)
 
@@ -177,3 +180,4 @@ class Simulator:
         compute_pop_msy(outdir=self.outdir, fishingRates=fishingRates, nstocks=stocks, species=self.species, asympLen=self.asympLen, growthCoef=self.growthCoef, lenWtCoef=self.lenWtCoef, lenWtPower=self.lenWtPower, maxage=self.maxage, minsize=self.minsize, reprodper=self.minrec, backgroundRes=self.bgResource,
                         msave=True, iteration=self.iteration, btarget=0, rptest=False, environ=True, recruitVar=0.5, conn_matrix=connectivity, rotation=rotationRate, nyr=years, sizes=sizes, minCatch=minCatch, maxCatch=maxCatch, temperature=temperature, massChance=massChance, massMort=massMort, nfished=stocks)
         self.iteration += 1
+        print("POST", self.iteration)
