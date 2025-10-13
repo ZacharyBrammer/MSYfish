@@ -102,7 +102,6 @@ def simulate():
         st.session_state.initd = True
 
     if st.session_state.initd:
-        # TODO: Make this part of sim object
         st.write(f"Maximum Calculated Fishing Rate: {st.session_state.sim.maxfish:.2f}")
 
     # get inputs to the model for running
@@ -384,9 +383,12 @@ def simulate():
                     st.rerun()
 
         # Display images and other data from sim
+        # TODO: sim object
         if st.session_state.plot != "":
             simPathStr = "/".join(st.session_state.firstSimPath.split("/")[2:])
             st.write(f"{t("simulation")}: {simPathStr}")
+            # TODO: sim object
             st.write(st.session_state.popDat)
+            # TODO: sim object
             for plot in st.session_state.plot:
                 st.plotly_chart(plot)
