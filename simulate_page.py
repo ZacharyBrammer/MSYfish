@@ -373,7 +373,7 @@ def simulate():
                     ]
                     st.session_state.firstSimPath = max(
                         allSims, key=os.path.getmtime)
-                    st.session_state.plot = plot_simulation(
+                    st.session_state.sim.plots = plot_simulation(
                         st.session_state.firstSimPath)
 
                     # Set running to false and print success message
@@ -384,11 +384,11 @@ def simulate():
 
         # Display images and other data from sim
         # TODO: sim object
-        if st.session_state.plot != "":
+        if st.session_state.sim.plots != []:
             simPathStr = "/".join(st.session_state.firstSimPath.split("/")[2:])
             st.write(f"{t("simulation")}: {simPathStr}")
             # TODO: sim object
             st.write(st.session_state.popDat)
             # TODO: sim object
-            for plot in st.session_state.plot:
+            for plot in st.session_state.sim.plots:
                 st.plotly_chart(plot)

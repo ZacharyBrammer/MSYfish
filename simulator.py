@@ -1,5 +1,7 @@
 import os
-from typing import List
+from typing import List, Dict
+import plotly.graph_objects as go # type: ignore
+
 
 import numpy as np
 import pandas as pd
@@ -141,6 +143,9 @@ class Simulator:
             )
 
             Simulator.instances.append(self)
+        
+        self.popDat: Dict[str, str] = {}
+        self.plots: List[go.Figure] = []
     
     def change_outdir(
         self,
