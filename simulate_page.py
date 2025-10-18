@@ -36,7 +36,7 @@ def simulate():
     if (selectedSpecies != st.session_state.species):
         # TODO: find some way of saving simulator object to a file
         # Check if simulator already exists for this species
-        if (any(sim.speciesIndex == speciesIndex for sim in Simulator.instances)):
+        if any(sim.speciesIndex == speciesIndex and sim.session == st.session_state.id for sim in Simulator.instances):
             old = [
                 sim for sim in Simulator.instances if sim.speciesIndex == speciesIndex
             ][0]
@@ -79,7 +79,8 @@ def simulate():
     # initialize the model for the selected species
     if st.session_state.init and not st.session_state.initd:
         # If there's already a simulator for this species
-        if (any(sim.speciesIndex == speciesIndex for sim in Simulator.instances)):
+        # TODO: find some way of saving simulator object to a file
+        if any(sim.speciesIndex == speciesIndex and sim.session == st.session_state.id for sim in Simulator.instances):
             old = [
                 sim for sim in Simulator.instances if sim.speciesIndex == speciesIndex
             ][0]
@@ -383,12 +384,9 @@ def simulate():
                     st.rerun()
 
         # Display images and other data from sim
-        # TODO: sim object
         if st.session_state.sim.plots != []:
             simPathStr = "/".join(st.session_state.firstSimPath.split("/")[2:])
             st.write(f"{t("simulation")}: {simPathStr}")
-            # TODO: sim object
-            st.write(st.session_state.popDat)
-            # TODO: sim object
+            st.write(st.session_state.sim.popDat)
             for plot in st.session_state.sim.plots:
                 st.plotly_chart(plot)

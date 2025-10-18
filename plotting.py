@@ -188,7 +188,7 @@ def plot_simulation(
 
         plots.append(catchBar)
 
-    st.session_state.popDat = popDat
+    st.session_state.sim.popDat = popDat
     # Close file
     biodata.close()
 

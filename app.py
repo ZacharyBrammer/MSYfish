@@ -35,15 +35,6 @@ if "language" not in st.session_state:
 if "names" not in st.session_state:
     st.session_state.names = "scientific"
 
-if "plot" not in st.session_state:
-    st.session_state.plot = ""
-
-if "fishingDat" not in st.session_state:
-    st.session_state.fishingDat = ""
-
-if "popDat" not in st.session_state:
-    st.session_state.popDat = ""
-
 if "mode" not in st.session_state:
     st.session_state.mode = "simulate"
 

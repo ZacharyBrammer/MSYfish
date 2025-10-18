@@ -27,6 +27,8 @@ class Simulator:
         outdir = f"simulations/{st.session_state.id}/{outdir}/"
         self.outdir = outdir
 
+        self.session = st.session_state.id
+
         # grab data from fishdata array
         species = fishdata['scientific'][speciesIndex]
         species = species.split()
