@@ -42,7 +42,6 @@ def simulate():
         st.session_state.init = False
         st.session_state.initd = False
 
-
     # Deal with species changing
     if (selectedSpecies != st.session_state.species):
         sims = st.session_state.simulators
@@ -376,10 +375,10 @@ def simulate():
                         for species in os.listdir(path)
                         for file in os.listdir(os.path.join(path, species))
                     ]
-                    st.session_state.firstSimPath = max(
+                    st.session_state.sim.firstSimPath = max(
                         allSims, key=os.path.getmtime)
                     st.session_state.sim.plots = plot_simulation(
-                        st.session_state.firstSimPath)
+                        st.session_state.sim.firstSimPath)
 
                     # Set running to false and print success message
                     st.session_state.running = False
@@ -391,7 +390,7 @@ def simulate():
         # Display images and other data from sim
         if st.session_state.sim.plots != []:
             # TODO: swap with sim
-            simPathStr = "/".join(st.session_state.firstSimPath.split("/")[2:])
+            simPathStr = "/".join(st.session_state.sim.firstSimPath.split("/")[2:])
             st.write(f"{t("simulation")}: {simPathStr}")
             st.write(st.session_state.sim.popDat)
             for plot in st.session_state.sim.plots:
