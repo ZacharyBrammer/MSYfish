@@ -32,23 +32,32 @@ def simulate():
     if "species" not in st.session_state:
                 st.session_state.species = selectedSpecies
     
+    # Check if simulators loaded from a previous visit to page
+    sim = next((s for s in st.session_state.simulators if s.speciesIndex == speciesIndex), None)
+    if sim:
+        st.session_state.sim = sim
+        st.session_state.init = True
+        st.session_state.initd = True
+    else:
+        st.session_state.init = False
+        st.session_state.initd = False
+
+
     # Deal with species changing
     if (selectedSpecies != st.session_state.species):
-        # TODO: find some way of saving simulator object to a file
-        # Check if simulator already exists for this species
-        if any(sim.speciesIndex == speciesIndex and sim.session == st.session_state.id for sim in Simulator.instances):
-            old = [
-                sim for sim in Simulator.instances if sim.speciesIndex == speciesIndex
-            ][0]
-            st.session_state.sim = old
+        sims = st.session_state.simulators
+        sim = next((s for s in sims if s.speciesIndex == speciesIndex), None)
 
-            st.session_state.species = selectedSpecies
+        if sim:
+            st.session_state.sim = sim
             st.session_state.init = True
             st.session_state.initd = True
         else:
-            st.session_state.species = selectedSpecies
             st.session_state.init = False
             st.session_state.initd = False
+
+        st.session_state.species = selectedSpecies
+        save_sims()
         st.rerun()
 
     dir_regex = r"^[A-Za-z0-9_-]+$"
@@ -78,28 +87,23 @@ def simulate():
 
     # initialize the model for the selected species
     if st.session_state.init and not st.session_state.initd:
-        # If there's already a simulator for this species
-        # TODO: find some way of saving simulator object to a file
-        if any(sim.speciesIndex == speciesIndex and sim.session == st.session_state.id for sim in Simulator.instances):
-            old = [
-                sim for sim in Simulator.instances if sim.speciesIndex == speciesIndex
-            ][0]
+        sim = next((s for s in st.session_state.simulators if s.speciesIndex == speciesIndex), None)
 
-            iteration = old.iteration
-
-            Simulator.instances.remove(old)
-
-            del old
-
+        # Existing sim, reinitalize
+        if sim:
+            iteration = sim.iteration
+            st.session_state.simulators.remove(sim)
         else:
             iteration = 0
         
-        st.session_state.sim = Simulator(
+        newSim = Simulator(
             outdir=directory,
             fishdata=fishdata,
             speciesIndex=speciesIndex,
             iteration=iteration
         )
+        st.session_state.simulators.append(newSim)
+        st.session_state.sim = newSim
         st.session_state.initd = True
 
     if st.session_state.initd:
@@ -381,12 +385,25 @@ def simulate():
                     st.session_state.running = False
                     st.success(t("sim_complete"))
                     time.sleep(5)
+                    save_sims()
                     st.rerun()
 
         # Display images and other data from sim
         if st.session_state.sim.plots != []:
+            # TODO: swap with sim
             simPathStr = "/".join(st.session_state.firstSimPath.split("/")[2:])
             st.write(f"{t("simulation")}: {simPathStr}")
             st.write(st.session_state.sim.popDat)
             for plot in st.session_state.sim.plots:
                 st.plotly_chart(plot)
+
+def save_sims():
+    sid = st.session_state.get("id")
+    sims = st.session_state.get("simulators", [])
+    if sid and sims:
+        try:
+            Simulator.save(sid, sims)
+        except Exception:
+            import traceback
+            print("[MSYFish] Save failed:")
+            traceback.print_exc()

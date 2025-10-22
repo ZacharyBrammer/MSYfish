@@ -5,6 +5,7 @@ import streamlit as st
 
 from analyze import analyze
 from simulate_page import simulate
+from simulator import Simulator
 from translate import Translator
 
 # Page setup
@@ -49,6 +50,9 @@ if "initd" not in st.session_state:
 
 if "init" not in st.session_state:
     st.session_state.init = False
+    
+if "simulators" not in st.session_state:
+    st.session_state.simulators = Simulator.load(st.session_state.id)
 
 # Translator
 translator = Translator(st.session_state.language)

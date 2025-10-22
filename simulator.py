@@ -1,10 +1,10 @@
 import os
-from typing import List, Dict
-import plotly.graph_objects as go # type: ignore
-
+import pickle
+from typing import Dict, List
 
 import numpy as np
 import pandas as pd
+import plotly.graph_objects as go  # type: ignore
 import streamlit as st
 
 from msy_stocks_rev14_connect import compute_pop_msy
@@ -12,8 +12,6 @@ from translate import Translator
 
 
 class Simulator:
-    instances: List["Simulator"] = []
-
     def __init__(
         self,
         outdir: str,  # output directory
@@ -26,8 +24,6 @@ class Simulator:
 
         outdir = f"simulations/{st.session_state.id}/{outdir}/"
         self.outdir = outdir
-
-        self.session = st.session_state.id
 
         # grab data from fishdata array
         species = fishdata['scientific'][speciesIndex]
@@ -143,12 +139,10 @@ class Simulator:
                 state="complete",
                 expanded=False
             )
-
-            Simulator.instances.append(self)
         
         self.popDat: Dict[str, str] = {}
         self.plots: List[go.Figure] = []
-    
+
     def change_outdir(
         self,
         outdir: str # new path for simulation outputs
@@ -184,3 +178,40 @@ class Simulator:
         compute_pop_msy(outdir=self.outdir, fishingRates=fishingRates, nstocks=stocks, species=self.species, asympLen=self.asympLen, growthCoef=self.growthCoef, lenWtCoef=self.lenWtCoef, lenWtPower=self.lenWtPower, maxage=self.maxage, minsize=self.minsize, reprodper=self.minrec, backgroundRes=self.bgResource,
                         msave=True, iteration=self.iteration, btarget=0, rptest=False, environ=True, recruitVar=0.5, conn_matrix=connectivity, rotation=rotationRate, nyr=years, sizes=sizes, minCatch=minCatch, maxCatch=maxCatch, temperature=temperature, massChance=massChance, massMort=massMort, nfished=stocks)
         self.iteration += 1
+
+    @classmethod
+    def load(
+        cls,
+        sessionId: str
+    ) -> list["Simulator"]:
+        # Check if file exists for this user, if not return empty list
+        path = f"simulations/{sessionId}/sims.pkl"
+        if not os.path.exists(path):
+            return []
+        
+        # Rehydrate objects from file
+        with open(path, "rb") as f:
+            sims = pickle.load(f)
+        
+        # Restore translator objects
+        for sim in sims:
+            sim.translator = Translator(st.session_state.language)
+        
+        return sims
+
+    @classmethod
+    def save(
+        cls,
+        sessionId: str,
+        sims: list["Simulator"]
+    ):
+        path = f"simulations/{sessionId}/"
+        os.makedirs(path, exist_ok=True)
+        savePath = os.path.join(path, "sims.pkl")
+
+        # Remove translator for pickling
+        for sim in sims:
+            sim.translator = None # type: ignore
+        
+        with open(savePath, "wb") as f:
+            pickle.dump(sims, f)
