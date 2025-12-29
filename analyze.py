@@ -19,7 +19,7 @@ def analyze():
 
     # Select which simulation to plot
     base = f"simulations/{st.session_state.id}/"
-    folders = [""] + sorted(os.listdir(base))
+    folders = [""] + sorted(next(os.walk(base))[1])
     folder = st.selectbox(label=t("folder"), options=folders)
 
     # Select folder
