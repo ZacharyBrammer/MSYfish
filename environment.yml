@@ -3,8 +3,10 @@ channels:
   - conda-forge
 dependencies:
   - streamlit
-  - netcdf4
+  - netcdf4=1.7.2
+  - hdf5=1.14.3
   - pandas
   - plotly
   - openpyxl
   - pandas-stubs
+  - scipy

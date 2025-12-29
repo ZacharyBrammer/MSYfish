@@ -4,7 +4,8 @@ import uuid
 import streamlit as st
 
 from analyze import analyze
-from simulate import simulate
+from simulate_page import simulate
+from simulator import Simulator
 from translate import Translator
 
 # Page setup
@@ -35,15 +36,6 @@ if "language" not in st.session_state:
 if "names" not in st.session_state:
     st.session_state.names = "scientific"
 
-if "plot" not in st.session_state:
-    st.session_state.plot = ""
-
-if "fishingDat" not in st.session_state:
-    st.session_state.fishingDat = ""
-
-if "popDat" not in st.session_state:
-    st.session_state.popDat = ""
-
 if "mode" not in st.session_state:
     st.session_state.mode = "simulate"
 
@@ -52,6 +44,15 @@ if "valid_path" not in st.session_state:
 
 if "firstSimPath" not in st.session_state:
     st.session_state.firstSimPath = ""
+
+if "initd" not in st.session_state:
+    st.session_state.initd = False
+
+if "init" not in st.session_state:
+    st.session_state.init = False
+    
+if "simulators" not in st.session_state:
+    st.session_state.simulators = Simulator.load(st.session_state.id)
 
 # Translator
 translator = Translator(st.session_state.language)
