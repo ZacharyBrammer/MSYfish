@@ -1,0 +1,106 @@
+{
+    "labels": {
+        "run": {
+            "en": "Run Simulations",
+            "es": "Ejecutar Simulacion"
+        },
+        "species": {
+            "en": "Species",
+            "es": "Especies"
+        },
+        "output_dir": {
+            "en": "Model Output Directory",
+            "es": "Directorio de salida del modelo"
+        },
+        "init_sim": {
+            "en": "Initialize Simulation",
+            "es": "Inicializar simulación"
+        },
+        "max_cal_rate": {
+            "en": "Maximum Calculated Fishing Rate: {rate}",
+            "es": "Tasa máxima de pesca calculada: {rate}"
+        }
+    },
+    "sim_settings": {
+        "conn": {
+            "en": "Connectivity",
+            "es": "Conectividad"
+        },
+        "fishing": {
+            "en": "Fishing",
+            "es": "Pesca"
+        },
+        "sizes": {
+            "en": "Restrict catch size",
+            "es": "Restringir tamaño de captura"
+        },
+        "min_catch_size": {
+            "en": "Minimum size to catch (centimeters)",
+            "es": "Tamaño mínimo de captura (centímetros)"
+        },
+        "max_catch_size": {
+            "en": "Maximum size to catch (centimeters)",
+            "es": "Tamaño máximo de captura (centímetros)"
+        },
+        "rotation": {
+            "en": "Rotation",
+            "es": "Rotación"
+        },
+        "rotation_rate": {
+            "en": "Rotation rate (years)",
+            "es": "Frecuencia de rotación (años)"
+        },
+        "temp_enable": {
+            "en": "Set Temperature",
+            "es": "Establecer temperatura"
+        },
+        "years": {
+            "en": "Years",
+            "es": "Años"
+        },
+        "temperature": {
+            "en": "Water temperature (degrees C)",
+            "es": "Temperatura del agua (grados C)"
+        },
+        "climatic_enable": {
+            "en": "Climatic Event Enable",
+            "es": "Habilitar evento climático"
+        },
+        "climatic_chance": {
+            "en": "% Chance of Climatic Event",
+            "es": "% de probabilidad de evento climático"
+        },
+        "climatic_killed": {
+            "en": "% Population Lost In Event",
+            "es": "% de población perdida en el evento"
+        },
+        "compare_all": {
+            "en": "Compare all simulations",
+            "es": "Comparar todas las simulaciones"
+        }
+    },
+    "variables": {
+
+    },
+    "errors": {
+
+    },
+    "options": {
+        "simulate": {
+            "en": "simulate",
+            "es": "simular"
+        },
+        "analyze": {
+            "en": "analyze",
+            "es": "analizar"
+        },
+        "scientific": {
+            "en": "scientific",
+            "es": "científico"
+        },
+        "common": {
+            "en": "common",
+            "es": "común"
+        }
+    }
+}
