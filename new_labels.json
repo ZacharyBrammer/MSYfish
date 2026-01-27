@@ -1,9 +1,5 @@
 {
     "labels": {
-        "run": {
-            "en": "Run Simulations",
-            "es": "Ejecutar Simulacion"
-        },
         "species": {
             "en": "Species",
             "es": "Especies"
@@ -19,16 +15,44 @@
         "max_cal_rate": {
             "en": "Maximum Calculated Fishing Rate: {rate}",
             "es": "Tasa máxima de pesca calculada: {rate}"
+        },
+        "optional_param": {
+            "en": "Optional Parameters",
+            "es": "Parámetros opcionales"
         }
     },
     "sim_settings": {
+        "stocks": {
+            "en": "Number of stocks",
+            "es": "Número de poblaciones"
+        },
+        "iterations": {
+            "en": "Iterations to run",
+            "es": "Número de iteraciones"
+        },
+        "years": {
+            "en": "Years per simulation",
+            "es": "Años por simulación"
+        },
         "conn": {
             "en": "Connectivity",
             "es": "Conectividad"
         },
+        "stock_num": {
+            "en": "Stock {n}",
+            "es": "Población {n}"
+        },
+        "conn_file": {
+            "en": "Connectivity Matrix",
+            "es": "Matriz de conectividad"
+        },
         "fishing": {
             "en": "Fishing",
             "es": "Pesca"
+        },
+        "fishing_rate": {
+            "en": "Percentage of population to fish",
+            "es": "Porcentaje de la población a pescar"
         },
         "sizes": {
             "en": "Restrict catch size",
@@ -54,10 +78,6 @@
             "en": "Set Temperature",
             "es": "Establecer temperatura"
         },
-        "years": {
-            "en": "Years",
-            "es": "Años"
-        },
         "temperature": {
             "en": "Water temperature (degrees C)",
             "es": "Temperatura del agua (grados C)"
@@ -80,7 +100,16 @@
         }
     },
     "variables": {},
-    "errors": {},
+    "errors": {
+        "conn_warning": {
+            "en": "Connectivity file does not match number of stocks, connectivity set to none. Update number of stocks or choose new connectivity file.",
+            "es": "El archivo de conectividad no coincide con el número de poblaciones. Conectividad desactivada. Actualice el número de poblaciones o seleccione un nuevo archivo de conectividad."
+        },
+        "row_num_warning": {
+            "en": "Rows must sum up to 1",
+            "es": "Las filas deben sumar 1"
+        }
+    },
     "sidebar": {
         "language": {
             "en": "Language",
