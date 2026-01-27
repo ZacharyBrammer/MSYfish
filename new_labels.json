@@ -79,13 +79,21 @@
             "es": "Comparar todas las simulaciones"
         }
     },
-    "variables": {
-
-    },
-    "errors": {
-
-    },
-    "options": {
+    "variables": {},
+    "errors": {},
+    "sidebar": {
+        "language": {
+            "en": "Language",
+            "es": "Idioma"
+        },
+        "species_names": {
+            "en": "Species Names",
+            "es": "Nombres de especies"
+        },
+        "sim_mode": {
+            "en": "Mode",
+            "es": "Modo"
+        },
         "simulate": {
             "en": "simulate",
             "es": "simular"
@@ -101,6 +109,10 @@
         "common": {
             "en": "common",
             "es": "común"
+        },
+        "session_link": {
+            "en": "Bookmark Link to View Simulations Later:  \n[Link to Session]({link})",
+            "es": "Guardar enlace para ver simulaciones más tarde:  \n[Enlace a la sesión]({link})"
         }
     }
 }
