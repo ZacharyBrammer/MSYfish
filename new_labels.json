@@ -19,6 +19,14 @@
         "optional_param": {
             "en": "Optional Parameters",
             "es": "Parámetros opcionales"
+        },
+        "sim_complete": {
+            "en": "Simulations complete",
+            "es": "Simulaciones completadas"
+        },
+        "simulation": {
+            "en": "Simulation",
+            "es": "Simulación"
         }
     },
     "sim_settings": {
@@ -78,6 +86,14 @@
             "en": "Set Temperature",
             "es": "Establecer temperatura"
         },
+        "temp_file": {
+            "en": "Temperature File",
+            "es": "Archivo de temperatura"
+        },
+        "year": {
+            "en": "Year",
+            "es": "Año"
+        },
         "temperature": {
             "en": "Water temperature (degrees C)",
             "es": "Temperatura del agua (grados C)"
@@ -94,6 +110,12 @@
             "en": "% Population Lost In Event",
             "es": "% de población perdida en el evento"
         },
+        "run": {
+            "en": "Run Simulations",
+            "es": "Ejecutar Simulacion"
+        }
+    },
+    "analyze_settings": {
         "compare_all": {
             "en": "Compare all simulations",
             "es": "Comparar todas las simulaciones"
@@ -106,8 +128,20 @@
             "es": "El archivo de conectividad no coincide con el número de poblaciones. Conectividad desactivada. Actualice el número de poblaciones o seleccione un nuevo archivo de conectividad."
         },
         "row_num_warning": {
-            "en": "Rows must sum up to 1",
-            "es": "Las filas deben sumar 1"
+            "en": "Rows must sum up to 1. Connectivity Disabled",
+            "es": "Las filas deben sumar 1. Conectividad desactivada."
+        },
+        "temp_warning": {
+            "en": "File does not fit dimensions. Please only include the year and temperature, as shown in the editor.",
+            "es": "El archivo no coincide con las dimensiones. Por favor, incluya únicamente el año y la temperatura, como se muestra en el editor."
+        },
+        "rotation_warning": {
+            "en": "Cannot run with connectivity with only one stock, rotation set to false. Update number of stocks or disable rotation.",
+            "es": "No se puede ejecutar con conectividad con solo una población. Rotación desactivada. Actualice el número de poblaciones o desactive la rotación."
+        },
+        "rotation_rate_warning": {
+            "en": "Rotation rate is the same as simulation length. Permanent closure enabled.",
+            "es": "La frecuencia de rotación es igual a la duración de la simulación. Cierre permanente activado."
         }
     },
     "sidebar": {

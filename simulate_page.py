@@ -255,10 +255,9 @@ def simulate():
                  np.full((years, 1), 20.0)]
             )
             
-            # TODO: translations left off here
             # temperature file upload
             temp_file = st.file_uploader(
-                label="Temperature File",
+                label=t("sim_settings", "temp_file"),
                 type=["xls", "xlsx", "csv"],
                 disabled=st.session_state.running
             )
@@ -273,7 +272,7 @@ def simulate():
                 # check that tempearature file matches years
                 if df.shape != (years, 1):
                     # warn user, set connectivity to none
-                    st.warning(t("conn_warning"))
+                    st.warning(t("errors", "temp_warning"))
                     temperature = np.array(None)
                     temp_file = None
                 else:
@@ -284,37 +283,37 @@ def simulate():
                 st.session_state.temps,
                 column_config={
                     "0": st.column_config.NumberColumn(
-                        "Year",
+                        t("sim_settings", "year"),
                         disabled=True
                     ),
                     "1": st.column_config.NumberColumn(
-                        "Temperature (C)",
+                        t("sim_settings", "temperature"),
                         format="%.2f"
                     )
                 },
                 disabled=st.session_state.running
             )
 
-            temperature = st.session_state.temps.values.ravel()
+            temperature = st.session_state.temps.ravel()
         else:
             temperature = np.array(None)
 
         # climatic events
         climaticEnable = st.toggle(
-            label="Climatic Event Enable",
+            label=t("sim_settings", "climatic_enable"),
             disabled=st.session_state.running
         )
 
         if climaticEnable:
             massChance = st.number_input(
-                label="% Chance of Climatic Event",
+                label=t("sim_settings", "climatic_chance"),
                 min_value=0.0,
                 max_value=100.0,
                 value=0.0,
                 disabled=st.session_state.running
             )
             massMort = st.number_input(
-                label="% Population Lost In Event",
+                label=t("sim_settings", "climatic_killed"),
                 min_value=0.0,
                 max_value=100.0,
                 value=0.0,
@@ -328,15 +327,15 @@ def simulate():
         # TODO: look for any other places user could mess up input, add errors for
         # check that stocks > 1 to prevent divide by 0 error
         if rotation and stocks == 1:
-            st.warning(t("rotation_warning"))
+            st.warning(t("errors", "rotation_warning"))
             rotation = False
         # if rotation rate is the same as number of years, add warning about permanent closure
         if rotationRate == (years + 100):
-            st.warning(t("rotation_rate_warning"))
+            st.warning(t("errors", "rotation_rate_warning"))
 
         # run button
         runButton = st.button(
-            label=t("run"), disabled=not st.session_state.valid_path)
+            label=t("sim_settings", "run"), disabled=not st.session_state.valid_path)
         if runButton:
             st.session_state.running = True
 
@@ -350,7 +349,7 @@ def simulate():
                 if np.allclose(connectivity, 0):
                     connectivity = np.array(None)
                 elif not np.allclose(rowSums, 1.0, atol=1e-6):
-                    st.warning("Rows must sum up to 1, disabling connectivity")
+                    st.warning(t("errors", "row_num_warning"))
                     connectivity = np.array(None)
             else:
                 connectivity = np.array(None)
@@ -380,16 +379,15 @@ def simulate():
 
                     # Set running to false and print success message
                     st.session_state.running = False
-                    st.success(t("sim_complete"))
+                    st.success(t("labels", "sim_complete"))
                     time.sleep(5)
                     save_sims()
                     st.rerun()
 
         # Display images and other data from sim
         if st.session_state.sim.plots != []:
-            # TODO: swap with sim
             simPathStr = "/".join(st.session_state.sim.firstSimPath.split("/")[2:])
-            st.write(f"{t("simulation")}: {simPathStr}")
+            st.write(f"{t("labels", "simulation")}: {simPathStr}")
             st.write(st.session_state.sim.popDat)
             for plot in st.session_state.sim.plots:
                 st.plotly_chart(plot)
