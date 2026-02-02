@@ -181,6 +181,7 @@ class Simulator:
                         msave=True, iteration=self.iteration, btarget=0, rptest=False, environ=True, recruitVar=0.5, conn_matrix=connectivity, rotation=rotationRate, nyr=years, sizes=sizes, minCatch=minCatch, maxCatch=maxCatch, temperature=temperature, massChance=massChance, massMort=massMort, nfished=stocks)
         self.iteration += 1
 
+    #TODO: Fix this, change when saving/loading is done
     @classmethod
     def load(
         cls,
