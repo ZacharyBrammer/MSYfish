@@ -121,7 +121,60 @@
             "es": "Comparar todas las simulaciones"
         }
     },
-    "variables": {},
+    "variables": {
+        "biomass_avg": {
+            "en": "Stock Biomass Average",
+            "es": "Promedio de biomasa por población"
+        },
+        "biomass_sd": {
+            "en": "Stock Biomass Standard Deviation",
+            "es": "Desviación estándar de biomasa por población"
+        },
+        "biomass_time": {
+            "en": "Stock Biomass vs Time",
+            "es": "Biomasa por población vs tiempo"
+        },
+        "popsize_time": {
+            "en": "Population Size vs Time",
+            "es": "Tamaño poblacional vs tiempo"
+        },
+        "catch_time": {
+            "en": "Catch Per Stock vs Time",
+            "es": "Captura por población vs tiempo"
+        },
+        "catch_stock": {
+            "en": "Catch Per Stock",
+            "es": "Captura por población"
+        },
+        "years_x": {
+            "en": "Time (years)",
+            "es": "Tiempo (años)"
+        },
+        "biomass_y": {
+            "en": "Biomass (kg)",
+            "es": "Biomasa (kg)"
+        },
+        "popsize_y": {
+            "en": "Population Size",
+            "es": "Tamaño Poblacional"
+        },
+        "catch_avg_kg": {
+            "en": "Average Catch (kg)",
+            "es": "Captura promedio (kg)"
+        },
+        "catch_avg_ct": {
+            "en": "Average Catch (#)",
+            "es": "Captura promedio (#)"
+        },
+        "catch_kg_y": {
+            "en": "Catch (kg)",
+            "es": "Captura (kg)"
+        },
+        "stock": {
+            "en": "Stock",
+            "es": "Población"
+        }
+    },
     "errors": {
         "conn_warning": {
             "en": "Connectivity file does not match number of stocks, connectivity set to none. Update number of stocks or choose new connectivity file.",
@@ -142,6 +195,10 @@
         "rotation_rate_warning": {
             "en": "Rotation rate is the same as simulation length. Permanent closure enabled.",
             "es": "La frecuencia de rotación es igual a la duración de la simulación. Cierre permanente activado."
+        },
+        "crash_warning": {
+            "en": "Warning: population crashed during simulation",
+            "es": "Advertencia: la población colapsó durante la simulación"
         }
     },
     "sidebar": {

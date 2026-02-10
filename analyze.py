@@ -15,7 +15,6 @@ from translate import Translator
 def analyze():
     translator = Translator(st.session_state.language)
     t = translator.translate
-    v = translator.var
 
     # Select which simulation to plot
     base = f"simulations/{st.session_state.id}/"

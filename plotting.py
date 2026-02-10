@@ -34,26 +34,26 @@ def plot_simulation(
     # Get per-stock biomass data
     stockBiomass = biodata.variables["stock_biomass"][:].data[100:][:last]
     popDat = {
-        t("biomass_avg"): f"{np.mean(stockBiomass):.2f}",
-        t("biomass_sd"): f"{np.std(stockBiomass):.2f}"
+        t("variables", "biomass_avg"): f"{np.mean(stockBiomass):.2f}",
+        t("variables", "biomass_sd"): f"{np.std(stockBiomass):.2f}"
     }
 
     # Setup layout for interactive figure
     stockBLayout = go.Layout(
         title={
-            "text": t("biomass_time"),
+            "text": t("variables", "biomass_time"),
             "x": 0.5,  # Center title on plot
             "xanchor": "center",
         },
         # Set labels along with range
-        xaxis=dict(title=t("years_x"), range=[0, None]),
-        yaxis=dict(title=t("biomass_y"), range=[0, None]),
+        xaxis=dict(title=t("variables", "years_x"), range=[0, None]),
+        yaxis=dict(title=t("variables", "biomass_y"), range=[0, None]),
         template="plotly"  # Default dark theme
     )
 
     # If ends early, modify title using html to add warning
     if endsEarly:
-        stockBLayout.title["text"] = f"{t("biomass_time")} <br><sup>{t("crash_warning")}</sup>" # type: ignore
+        stockBLayout.title["text"] = f"{t("variables", "biomass_time")} <br><sup>{t("errors", "crash_warning")}</sup>" # type: ignore
 
     stockBFig = go.Figure(layout=stockBLayout)
 
@@ -63,7 +63,7 @@ def plot_simulation(
             x=years,
             y=stockBiomass[:, i],
             mode="lines",
-            name=f"{t("stock")} {i+1}"
+            name=f"{t("sim_settings", "stock_num", n=i+1)}"
         )
         stockBFig.add_trace(trace)
 
@@ -76,19 +76,19 @@ def plot_simulation(
     # Setup layout for interactive figure
     popsizeFigLayout = go.Layout(
         title={
-            "text": t("popsize_time"),
+            "text": t("variables", "popsize_time"),
             "x": 0.5,  # Center title on plot
             "xanchor": "center",
         },
         # Set labels along with range
-        xaxis=dict(title=t("years_x"), range=[0, None]),
-        yaxis=dict(title=t("popsize_y"), range=[0, None]),
+        xaxis=dict(title=t("variables", "years_x"), range=[0, None]),
+        yaxis=dict(title=t("variables", "popsize_y"), range=[0, None]),
         template="plotly"  # Default dark theme
     )
 
     # If ends early, modify title using html to add warning
     if endsEarly:
-        popsizeFigLayout.title["text"] = f"{t("popsize_time")} <br><sup>{t("crash_warning")}</sup>" # type: ignore
+        popsizeFigLayout.title["text"] = f"{t("variables", "popsize_time")} <br><sup>{t("errors", "crash_warning")}</sup>" # type: ignore
 
     # Create figure
     popsizeFig = go.Figure(layout=popsizeFigLayout)
@@ -113,28 +113,28 @@ def plot_simulation(
 
     if fishing:
         # Get average count and weight of catch
-        popDat[t("catch_avg_kg")] = f"{np.mean(catch):.2f}"
+        popDat[t("variables", "catch_avg_kg")] = f"{np.mean(catch):.2f}"
         catchCt = biodata.variables["catch"][:].data[100:][:last]
         catchCt = catchCt[:, :, 0]
-        popDat[t("catch_avg_ct")] = f"{np.mean(catchCt):.2f}"
+        popDat[t("variables", "catch_avg_ct")] = f"{np.mean(catchCt):.2f}"
 
         # Plot catch over time
         # Setup layout for interactive figure
         catchFigLayout = go.Layout(
             title={
-                "text": t("catch_time"),
+                "text": t("variables", "catch_time"),
                 "x": 0.5,  # Center title on plot
                 "xanchor": "center",
             },
             # Set labels along with range
-            xaxis=dict(title=t("years_x"), range=[0, None]),
-            yaxis=dict(title=t("catch_kg_y"), range=[0, None]),
+            xaxis=dict(title=t("variables", "years_x"), range=[0, None]),
+            yaxis=dict(title=t("variables", "catch_kg_y"), range=[0, None]),
             template="plotly"  # Default dark theme
         )
 
         # If ends early, modify title using html to add warning
         if endsEarly:
-            catchFigLayout.title["text"] = f"{t("catch_time")} <br><sup>{t("crash_warning")}</sup>" # type: ignore
+            catchFigLayout.title["text"] = f"{t("variables", "catch_time")} <br><sup>{t("errors", "crash_warning")}</sup>" # type: ignore
 
         catchFig = go.Figure(layout=catchFigLayout)
 
@@ -144,7 +144,7 @@ def plot_simulation(
                 x=years,
                 y=catch[:, i],
                 mode="lines",
-                name=f"{t("stock")} {i+1}"
+                name=f"{t("sim_settings", "stock_num", n=i+1)}"
             )
             catchFig.add_trace(trace)
 
@@ -154,13 +154,13 @@ def plot_simulation(
         # Setup layout for interactive figure
         catchBarLayout = go.Layout(
             title={
-                "text": t("catch_stock"),
+                "text": t("variables", "catch_stock"),
                 "x": 0.5,  # Center title on plot
                 "xanchor": "center",
             },
             # Set labels along with range
-            xaxis=dict(title=t("stock_num"), range=[0, None]),
-            yaxis=dict(title=t("catch_kg_y"), range=[0, None]),
+            xaxis=dict(title=t("variable", "stock"), range=[0, None]),
+            yaxis=dict(title=t("variables", "catch_kg_y"), range=[0, None]),
             template="plotly"  # Default dark theme
         )
 
@@ -173,11 +173,11 @@ def plot_simulation(
             stds.append(np.std(catch[:, i]))
             trace = go.Bar(
                 y=catch[:, i],
-                name=f"{t("stock")} {i+1}"
+                name=f"{t("sim_settings", "stock_num", n=i+1)}"
             )
             # catchBar.add_trace(trace)
         trace = go.Bar(
-            x=[f"{t("stock")} {i+1}" for i in range(catch.shape[1])],
+            x=[f"{t("sim_settings", "stock_num", n=i+1)}" for i in range(catch.shape[1])],
             y=avgs,
             error_y=dict(
                 type="data",
