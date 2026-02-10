@@ -183,6 +183,19 @@ class Simulator:
         self.iteration += 1
 
     #TODO: Fix this, change when saving/loading is done
+    def __getstate__(self):
+        state = self.__dict__.copy()
+        state.pop("translator", None)
+        state.pop("t", None)
+        return state
+
+    def __setstate__(self, state):
+        self.__dict__.update(state)
+        from translate import Translator
+        import streamlit as st
+        self.translator = Translator(st.session_state.language)
+        self.t = self.translator.translate
+
     @classmethod
     def load(
         cls,
@@ -197,10 +210,6 @@ class Simulator:
         with open(path, "rb") as f:
             sims = pickle.load(f)
         
-        # Restore translator objects
-        for sim in sims:
-            sim.translator = Translator(st.session_state.language)
-        
         return sims
 
     @classmethod
@@ -212,10 +221,6 @@ class Simulator:
         path = f"simulations/{sessionId}/"
         os.makedirs(path, exist_ok=True)
         savePath = os.path.join(path, "sims.pkl")
-
-        # Remove translator for pickling
-        for sim in sims:
-            sim.translator = None # type: ignore
         
         with open(savePath, "wb") as f:
             pickle.dump(sims, f)
