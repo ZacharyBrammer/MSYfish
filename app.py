@@ -57,13 +57,12 @@ if "simulators" not in st.session_state:
 # Translator
 translator = Translator(st.session_state.language)
 t = translator.translate
-opt = translator.option
 
 with st.sidebar:
     # Language select
     languages = ["en", "es"]
     language = st.selectbox(
-        label=t("language"),
+        label=t("sidebar", "language"),
         options=languages,
         index=languages.index(st.session_state.language),
         disabled=st.session_state.running
@@ -75,15 +74,14 @@ with st.sidebar:
 
     translator.set_lang(st.session_state.language)
     t = translator.translate
-    opt = translator.option
 
     # Species name select
     name_options = ["scientific", "common"]
     names = st.selectbox(
-        label=t("spesies_names"),
+        label=t("sidebar", "species_names"),
         options=name_options,
         index=name_options.index(st.session_state.names),
-        format_func=lambda x: opt(x),
+        format_func=lambda x: t("sidebar", x),
         disabled=st.session_state.running
     )
     # If name type changed, rerun page
@@ -94,10 +92,10 @@ with st.sidebar:
     # Mode select
     mode_options = ["simulate", "analyze"]
     mode = st.selectbox(
-        label=t("sim_mode"),
+        label=t("sidebar", "sim_mode"),
         options=mode_options,
         index=mode_options.index(st.session_state.mode),
-        format_func=lambda x: opt(x),
+        format_func=lambda x: t("sidebar", x),
         disabled=st.session_state.running
     )
     # If mode changed, rerun page
@@ -107,7 +105,7 @@ with st.sidebar:
 
     # Link to session
     st.write(
-        t("session_link", link=f"{st.context.url}?id={st.session_state.id}")
+        t("sidebar", "session_link", link=f"{st.context.url}?id={st.session_state.id}")
     )
 
 match st.session_state.mode:

@@ -15,26 +15,25 @@ from translate import Translator
 def analyze():
     translator = Translator(st.session_state.language)
     t = translator.translate
-    v = translator.var
 
     # Select which simulation to plot
     base = f"simulations/{st.session_state.id}/"
     folders = [""] + sorted(next(os.walk(base))[1])
-    folder = st.selectbox(label=t("folder"), options=folders)
+    folder = st.selectbox(label=t("analyze_settings", "folder"), options=folders)
 
     # Select folder
     if folder != "":
         # Get all species in the folder. If there's multiple species, allow choice
         speciess = [""] + os.listdir(f"{base}/{folder}")
-        species = st.selectbox(label=t("species"), options=speciess)
+        species = st.selectbox(label=t("analyze_settings", "species"), options=speciess)
 
         if species != "":
-            compareAll = st.toggle(label="Compare all simulations")
+            compareAll = st.toggle(label=t("analyze_settings", "compare_all"))
             # Get all simulations in the folder and let user select
             simulations = [""] + os.listdir(f"{base}/{folder}/{species}")
             if not compareAll:
                 simulation = st.selectbox(
-                    label=t("simulation"),
+                    label=t("analyze_settings", "simulation"),
                     options=simulations
                 )
             else:
@@ -76,7 +75,7 @@ def analyze():
         # Download button for the simulation file
         with open(path, "rb") as file:
             st.download_button(
-                label=t("download"),
+                label=t("analyze_settings", "download"),
                 data=file,
                 file_name=f"{simulation}" if simulation != "" else "average.nc",
                 icon=":material/download:",
@@ -85,10 +84,10 @@ def analyze():
         # Setup for reading individual variables in file
         variable_desc = {}
         for variable in biodata.variables:
-            variable_desc[v(variable, "short")] = v(variable, "long")
+            variable_desc[t("variables", variable, "short")] = t("variables", variable, "long")
 
-        st.write(t("create_custom"))
-        st.write(t("dataset_vars"))
+        st.write(t("analyze_settings", "create_custom"))
+        st.write(t("analyze_settings", "dataset_vars"))
         st.json(variable_desc, expanded=0)
 
         # Remove variables that aren't time-related/would be difficult for users to make sense of
@@ -103,9 +102,9 @@ def analyze():
         selectable_vars.pop("fish")
 
         variables = st.multiselect(
-            label=t("var_select"),
+            label=t("analyze_settings", "var_select"),
             options=selectable_vars,
-            format_func=lambda x: v(x, "short")
+            format_func=lambda x: t("variables", x, "short")
         )
 
         # Collect data user selected, start with time variable
@@ -119,7 +118,7 @@ def analyze():
             match len(biodata.variables[variable].shape):
                 case 1:
                     # Get variable name and units for column title
-                    title = f"{v(variable, "short")} ({v(variable, "units")})"
+                    title = f"{t("variables", variable, "short")} ({t("variables", variable, "units")})"
 
                     # Add data to the dataframe
                     selected_data[title] = data
@@ -128,11 +127,11 @@ def analyze():
                     match variable:
                         case "stock_size" | "stock_biomass" | "stock_recruit" | "resource":
                             var_name = variable.split("_")[-1]
-                            units = v(variable, "units")
+                            units = t("variables", variable, "units")
                             data = pd.DataFrame(
                                 data,
                                 columns=[
-                                    f"{t("stock")} {i + 1} {t(var_name)} ({(units)})" for i in range(data.shape[1])
+                                    f"{t("plot_labels", "stock")} {i + 1} {t("plot_labels", var_name)} ({(units)})" for i in range(data.shape[1])
                                 ]
                             )
                             selected_data = pd.concat(
@@ -143,8 +142,8 @@ def analyze():
                             data = pd.DataFrame(
                                 data,
                                 columns=[
-                                    f"{t(variable)} {t("biomass")} (kg)",
-                                    f"{t(variable)} {t("number")} (#)"
+                                    f"{t("plot_labels", variable)} {t("plot_labels", "biomass")} (kg)",
+                                    f"{t("plot_labels", variable)} {t("plot_labels", "number")} (#)"
                                 ]
                             )
                             selected_data = pd.concat(
@@ -154,14 +153,14 @@ def analyze():
                 case 3:
                     match variable:
                         case "pop_bins" | "biomass_bins" | "reprod_bins" | "catch_bins" | "mort_bins":
-                            var_name = v(variable, "short")
-                            units = v(variable, "units")
+                            var_name = t("variables", variable, "short")
+                            units = t("variables", variable, "units")
                             time, bins, stocks = data.shape
                             data = data.reshape(time, bins * stocks)
                             data = pd.DataFrame(
                                 data,
                                 columns=[
-                                    f"{t("bin")} {b + 1} {t("stock")} {s + 1} {var_name} ({(units)})"
+                                    f"{t("plot_labels", "bin")} {b + 1} {t("plot_labels", "stock")} {s + 1} {var_name} ({(units)})"
                                     for b in range(bins)
                                     for s in range(stocks)
                                 ]
@@ -172,14 +171,14 @@ def analyze():
                             )
                         case "age_bins":
                             # TODO: Figure out units / if this is right
-                            var_name = v(variable, "short")
-                            units = v(variable, "units")
+                            var_name = t("variables", variable, "short")
+                            units = t("variables", variable, "units")
                             time, ages, stocks = data.shape
                             data = data.reshape(time, ages * stocks)
                             data = pd.DataFrame(
                                 data,
                                 columns=[
-                                    f"{v("age", "short")} {a + 1} {t("stock")} {s + 1} {var_name} ({(units)})"
+                                    f"{t("variables", "age", "short")} {a + 1} {t("plot_labels", "stock")} {s + 1} {var_name} ({(units)})"
                                     for a in range(ages)
                                     for s in range(stocks)
                                 ]
@@ -189,16 +188,16 @@ def analyze():
                                 axis=1
                             )
                         case "catch":
-                            var_name = v(variable, "short")
-                            units = v(variable, "units")
+                            var_name = t("variables", variable, "short")
+                            units = t("variables", variable, "units")
                             time, stocks, vars = data.shape
                             columns = []
                             for i in range(stocks):
                                 columns.append(
-                                    f"{t("stock")} {i + 1} {var_name} (#)"
+                                    f"{t("plot_labels", "stock")} {i + 1} {var_name} (#)"
                                 )
                                 columns.append(
-                                    f"{t("stock")} {i + 1} {var_name} (kg)"
+                                    f"{t("plot_labels", "stock")} {i + 1} {var_name} (kg)"
                                 )
                             data = data.reshape(time, stocks * vars)
                             data = pd.DataFrame(
@@ -217,24 +216,24 @@ def analyze():
         if selected_data.shape[1] > 0:
             figLayout = go.Layout(
                 title={
-                    "text": t("custom_plot"),
+                    "text": t("plot_labels", "custom_plot"),
                     "x": 0.5,  # Center title on plot
                     "xanchor": "center",
                 },
                 # Set labels along with range
                 xaxis=dict(
-                    title=t("years_x"),
+                    title=t("plot_labels", "years_x"),
                     range=[0, None]
                 ),
                 yaxis=dict(
-                    title=t("cust_y"),
+                    title=t("plot_labels", "cust_y"),
                     range=[0, None]
                 ),
                 template="plotly"  # Default dark theme
             )
             # If ends early, modify title using html to add warning
             if endsEarly:
-                figLayout.title["text"] = f"{t("custom_plot")} <br><sup>{t("crash_warning")}</sup>" # type: ignore
+                figLayout.title["text"] = f"{t("plot_labels", "custom_plot")} <br><sup>{t("errors", "crash_warning")}</sup>" # type: ignore
 
             fig = go.Figure(layout=figLayout)
 

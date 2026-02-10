@@ -23,7 +23,7 @@ def simulate():
 
     # have user select species, get index for running model
     selectedSpecies = st.selectbox(
-        label=t("species"),
+        label=t("labels", "species"),
         options=speciesList,
         disabled=st.session_state.running
     )
@@ -63,7 +63,7 @@ def simulate():
 
     # get output directory
     directory = st.text_input(
-        label=t("output_dir"),
+        label=t("labels", "output_dir"),
         value="path",
         disabled=st.session_state.running
     )
@@ -76,10 +76,7 @@ def simulate():
     else:
         st.session_state.valid_path = True
 
-    initButton = st.button(
-        "Initialize Simulation",
-        disabled=not st.session_state.valid_path
-    )
+    initButton = st.button(t("labels", "init_sim"), disabled=not st.session_state.valid_path)
     if initButton:
         st.session_state.init = True
         st.session_state.initd = False
@@ -106,36 +103,36 @@ def simulate():
         st.session_state.initd = True
 
     if st.session_state.initd:
-        st.write(f"Maximum Calculated Fishing Rate: {st.session_state.sim.maxfish:.2f}")
+        st.write(t("labels", "max_cal_rate", rate=f"{st.session_state.sim.maxfish:.2f}"))
 
     # get inputs to the model for running
     if st.session_state.initd:
         # integer inputs to the model
         stocks = st.number_input(
-            label=t("stocks"),
+            label=t("sim_settings", "stocks"),
             step=1,
             min_value=1,
             disabled=st.session_state.running
         )
         numiter = st.number_input(
-            label=t("iterations"),
+            label=t("sim_settings", "iterations"),
             step=1,
             min_value=1,
             disabled=st.session_state.running
         )
         years = st.number_input(
-            label=t("years"),
+            label=t("sim_settings", "years"),
             step=1,
             min_value=1,
             disabled=st.session_state.running
         )
 
         # optional enables
-        st.write(t("optional_param"))
+        st.write(t("labels", "optional_param"))
 
         # connectivity
         conn_enable = st.toggle(
-            label="Connectivity",
+            label=t("sim_settings", "conn"),
             disabled=st.session_state.running
         )
         if conn_enable:
@@ -145,11 +142,11 @@ def simulate():
             if "conn_matrix" not in st.session_state or stocks != st.session_state.num_stocks:
                 st.session_state.conn_matrix = pd.DataFrame(
                     np.zeros((stocks, stocks), dtype=float),
-                    columns=[f"Stock {i+1}" for i in range(stocks)],
-                    index=[f"Stock {i+1}" for i in range(stocks)]
+                    columns=[t("sim_settings", "stock_num", n=i+1) for i in range(stocks)],
+                    index=[t("sim_settings", "stock_num", n=i+1) for i in range(stocks)]
                 )
             conn_file = st.file_uploader(
-                label=t("conn_file"),
+                label=t("sim_settings", "conn_file"),
                 type=["xls", "xlsx", "csv"],
                 disabled=st.session_state.running
             )
@@ -163,14 +160,14 @@ def simulate():
                 # check that connectivity file matches number of stocks
                 if df.shape != (stocks, stocks):
                     # warn user, set connectivity to none
-                    st.warning(t("conn_warning"))
+                    st.warning(t("errors", "conn_warning"))
                     connectivity = np.array(None)
                     conn_file = None
                 else:
                     # Validate that rows sum to 1
                     rowSums = df.sum(axis=1).round(6)
                     if not np.allclose(rowSums, 1.0, atol=1e-6):
-                        st.warning("Rows must sum up to 1")
+                        st.warning(t("errors", "row_num_warning"))
                     else:
                         st.session_state.conn_matrix = df
             
@@ -182,14 +179,14 @@ def simulate():
 
         # fishing stuff
         fishing = st.toggle(
-            label=t("fishing"),
+            label=t("sim_settings", "fishing"),
             disabled=st.session_state.running
         )
 
         # if fishing is enabled, show relevant settings
         if fishing:
             fishingRate = st.number_input(
-                label=t("fishing_rate"),
+                label=t("sim_settings", "fishing_rate"),
                 min_value=0.0,
                 max_value=100.0,
                 value=10.0,
@@ -197,19 +194,19 @@ def simulate():
             )
 
             sizes = st.toggle(
-                label=t("sizes"),
+                label=t("sim_settings", "sizes"),
                 disabled=st.session_state.running
             )
             # if size select is enabled, let user set a minimum and maximum catch size
             if sizes:
                 minCatchSize = st.number_input(
-                    label=t("min_catch_size"),
+                    label=t("sim_settings", "min_catch_size"),
                     min_value=0.0,
                     value=0.0,
                     disabled=st.session_state.running
                 )
                 maxCatchSize = st.number_input(
-                    label=t("max_catch_size"),
+                    label=t("sim_settings", "max_catch_size"),
                     min_value=minCatchSize,
                     value=None,
                     disabled=st.session_state.running
@@ -219,13 +216,13 @@ def simulate():
                 maxCatchSize = 0
 
             rotation = st.toggle(
-                label=t("rotation"),
+                label=t("sim_settings", "rotation"),
                 disabled=st.session_state.running
             )
             # if rotation is enabled, let user set rotation rate
             if rotation:
                 rotationRate = st.number_input(
-                    label=t("rotation_rate"),
+                    label=t("sim_settings", "rotation_rate"),
                     min_value=1,
                     max_value=years + 100,
                     disabled=st.session_state.running
@@ -242,7 +239,7 @@ def simulate():
 
         # temperature stuff
         tempEnable = st.toggle(
-            label=t("temp_enable"),
+            label=t("sim_settings", "temp_enable"),
             disabled=st.session_state.running
         )
 
@@ -260,7 +257,7 @@ def simulate():
             
             # temperature file upload
             temp_file = st.file_uploader(
-                label="Temperature File",
+                label=t("sim_settings", "temp_file"),
                 type=["xls", "xlsx", "csv"],
                 disabled=st.session_state.running
             )
@@ -275,7 +272,7 @@ def simulate():
                 # check that tempearature file matches years
                 if df.shape != (years, 1):
                     # warn user, set connectivity to none
-                    st.warning(t("conn_warning"))
+                    st.warning(t("errors", "temp_warning"))
                     temperature = np.array(None)
                     temp_file = None
                 else:
@@ -286,37 +283,37 @@ def simulate():
                 st.session_state.temps,
                 column_config={
                     "0": st.column_config.NumberColumn(
-                        "Year",
+                        t("sim_settings", "year"),
                         disabled=True
                     ),
                     "1": st.column_config.NumberColumn(
-                        "Temperature (C)",
+                        t("sim_settings", "temperature"),
                         format="%.2f"
                     )
                 },
                 disabled=st.session_state.running
             )
 
-            temperature = st.session_state.temps.values.ravel()
+            temperature = st.session_state.temps.ravel()
         else:
             temperature = np.array(None)
 
         # climatic events
         climaticEnable = st.toggle(
-            label="Climatic Event Enable",
+            label=t("sim_settings", "climatic_enable"),
             disabled=st.session_state.running
         )
 
         if climaticEnable:
             massChance = st.number_input(
-                label="% Chance of Climatic Event",
+                label=t("sim_settings", "climatic_chance"),
                 min_value=0.0,
                 max_value=100.0,
                 value=0.0,
                 disabled=st.session_state.running
             )
             massMort = st.number_input(
-                label="% Population Lost In Event",
+                label=t("sim_settings", "climatic_killed"),
                 min_value=0.0,
                 max_value=100.0,
                 value=0.0,
@@ -330,15 +327,15 @@ def simulate():
         # TODO: look for any other places user could mess up input, add errors for
         # check that stocks > 1 to prevent divide by 0 error
         if rotation and stocks == 1:
-            st.warning(t("rotation_warning"))
+            st.warning(t("errors", "rotation_warning"))
             rotation = False
         # if rotation rate is the same as number of years, add warning about permanent closure
         if rotationRate == (years + 100):
-            st.warning(t("rotation_rate_warning"))
+            st.warning(t("errors", "rotation_rate_warning"))
 
         # run button
         runButton = st.button(
-            label=t("run"), disabled=not st.session_state.valid_path)
+            label=t("sim_settings", "run"), disabled=not st.session_state.valid_path)
         if runButton:
             st.session_state.running = True
 
@@ -352,7 +349,7 @@ def simulate():
                 if np.allclose(connectivity, 0):
                     connectivity = np.array(None)
                 elif not np.allclose(rowSums, 1.0, atol=1e-6):
-                    st.warning("Rows must sum up to 1, disabling connectivity")
+                    st.warning(t("errors", "row_num_warning"))
                     connectivity = np.array(None)
             else:
                 connectivity = np.array(None)
@@ -382,16 +379,15 @@ def simulate():
 
                     # Set running to false and print success message
                     st.session_state.running = False
-                    st.success(t("sim_complete"))
+                    st.success(t("labels", "sim_complete"))
                     time.sleep(5)
                     save_sims()
                     st.rerun()
 
         # Display images and other data from sim
         if st.session_state.sim.plots != []:
-            # TODO: swap with sim
             simPathStr = "/".join(st.session_state.sim.firstSimPath.split("/")[2:])
-            st.write(f"{t("simulation")}: {simPathStr}")
+            st.write(f"{t("labels", "simulation")}: {simPathStr}")
             st.write(st.session_state.sim.popDat)
             for plot in st.session_state.sim.plots:
                 st.plotly_chart(plot)
