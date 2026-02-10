@@ -11,6 +11,7 @@ from msy_stocks_rev14_connect import compute_pop_msy
 from translate import Translator
 
 
+#TODO: make it so simulator saves settings on each iteration so you can go back and see it later
 class Simulator:
     def __init__(
         self,
