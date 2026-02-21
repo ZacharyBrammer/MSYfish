@@ -4,7 +4,8 @@ WORKDIR /app
 
 COPY environment.yml .
 
-RUN conda env create -f environment.yml
+RUN conda env create -f environment.yml && \
+    conda clean -afy
 
 SHELL ["/bin/bash", "-c"]
 
