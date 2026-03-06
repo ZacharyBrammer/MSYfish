@@ -207,7 +207,7 @@ def compute_pop_msy(
                 for mm in bioOrder:
                     if mm == 0:
                         # individual consumption of resource
-                        consumption = 6.0 * safe_fish ** -0.25
+                        consumption = 6.0 * safe_fish ** 0.75
                         
                         # Production with set temperature
                         if temperature.any() and ii >= 100:
