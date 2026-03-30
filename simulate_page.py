@@ -327,6 +327,22 @@ def simulate():
         else:
             massChance = None
             massMort = None
+        
+        productionEnable = st.toggle(
+            label=t("sim_settings", "production_enable"),
+            disabled=st.session_state.running
+        )
+
+        if productionEnable:
+            prodScale = st.number_input(
+                label=t("sim_settings", "production_scaling"),
+                min_value=-30.0,
+                max_value=30.0,
+                value=0.0,
+                disabled=st.session_state.running
+            )
+        else:
+            prodScale = 0
 
         # warnings
         # TODO: look for any other places user could mess up input, add errors for
@@ -366,7 +382,7 @@ def simulate():
 
             for i in range(numiter):
                 st.session_state.sim.simulate(connectivity=connectivity, stocks=stocks, years=years + 100, fishingRate=fishingRate, rotationRate=rotationRate,
-                                              sizes=sizes, minCatch=minCatchSize, maxCatch=maxCatchSize, temperature=temperature, massChance=massChance, massMort=massMort)
+                                              sizes=sizes, minCatch=minCatchSize, maxCatch=maxCatchSize, temperature=temperature, massChance=massChance, massMort=massMort, prodScale=prodScale)
 
                 # If final run, re-enable inputs and plot first run
                 if i == numiter - 1:
