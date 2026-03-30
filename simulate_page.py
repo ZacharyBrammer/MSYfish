@@ -18,8 +18,11 @@ def simulate():
     t = translator.translate
 
     # get species data from spreadsheet, can turn into user uploaded file later
-    fishdata = pd.read_excel("fish_growth_data2.xlsx")
-    speciesList = fishdata[st.session_state.names]
+    fishdata = pd.read_excel("fish_growth_data2_COJ.xlsx")
+    try:
+        speciesList = fishdata[st.session_state.names]
+    except KeyError:
+        speciesList = fishdata[f"{st.session_state.names}_{st.session_state.language}"]
 
     # have user select species, get index for running model
     selectedSpecies = st.selectbox(
@@ -294,7 +297,7 @@ def simulate():
                 disabled=st.session_state.running
             )
 
-            temperature = st.session_state.temps.ravel()
+            temperature = st.session_state.temps.ravel() # type: ignore
         else:
             temperature = np.array(None)
 
