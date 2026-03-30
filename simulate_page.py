@@ -270,11 +270,13 @@ def simulate():
                 if temp_file.name.endswith(".csv"):
                     df = pd.read_csv(temp_file, index_col=0)
                 else:  # xls or xlsx
-                    df = pd.read_excel(temp_file, index_col=0)
+                    df = pd.read_excel(temp_file, header=None, index_col=0)
+                
+                df.index.name = None
                 
                 # check that tempearature file matches years
                 if df.shape != (years, 1):
-                    # warn user, set connectivity to none
+                    # warn user, set temp to none
                     st.warning(t("errors", "temp_warning"))
                     temperature = np.array(None)
                     temp_file = None
@@ -297,7 +299,7 @@ def simulate():
                 disabled=st.session_state.running
             )
 
-            temperature = st.session_state.temps.ravel() # type: ignore
+            temperature = np.asarray(st.session_state.temps).ravel()
         else:
             temperature = np.array(None)
 
