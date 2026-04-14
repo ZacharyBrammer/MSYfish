@@ -18,8 +18,11 @@ def simulate():
     t = translator.translate
 
     # get species data from spreadsheet, can turn into user uploaded file later
-    fishdata = pd.read_excel("fish_growth_data2.xlsx")
-    speciesList = fishdata[st.session_state.names]
+    fishdata = pd.read_excel("fish_growth_data2_COJ.xlsx")
+    try:
+        speciesList = fishdata[st.session_state.names]
+    except KeyError:
+        speciesList = fishdata[f"{st.session_state.names}_{st.session_state.language}"]
 
     # have user select species, get index for running model
     selectedSpecies = st.selectbox(
@@ -267,11 +270,13 @@ def simulate():
                 if temp_file.name.endswith(".csv"):
                     df = pd.read_csv(temp_file, index_col=0)
                 else:  # xls or xlsx
-                    df = pd.read_excel(temp_file, index_col=0)
+                    df = pd.read_excel(temp_file, header=None, index_col=0)
+                
+                df.index.name = None
                 
                 # check that tempearature file matches years
                 if df.shape != (years, 1):
-                    # warn user, set connectivity to none
+                    # warn user, set temp to none
                     st.warning(t("errors", "temp_warning"))
                     temperature = np.array(None)
                     temp_file = None
@@ -294,7 +299,7 @@ def simulate():
                 disabled=st.session_state.running
             )
 
-            temperature = st.session_state.temps.ravel()
+            temperature = np.asarray(st.session_state.temps).ravel()
         else:
             temperature = np.array(None)
 
@@ -322,6 +327,22 @@ def simulate():
         else:
             massChance = None
             massMort = None
+        
+        productionEnable = st.toggle(
+            label=t("sim_settings", "production_enable"),
+            disabled=st.session_state.running
+        )
+
+        if productionEnable:
+            prodScale = st.number_input(
+                label=t("sim_settings", "production_scaling"),
+                min_value=-30.0,
+                max_value=30.0,
+                value=0.0,
+                disabled=st.session_state.running
+            )
+        else:
+            prodScale = 0
 
         # warnings
         # TODO: look for any other places user could mess up input, add errors for
@@ -361,7 +382,7 @@ def simulate():
 
             for i in range(numiter):
                 st.session_state.sim.simulate(connectivity=connectivity, stocks=stocks, years=years + 100, fishingRate=fishingRate, rotationRate=rotationRate,
-                                              sizes=sizes, minCatch=minCatchSize, maxCatch=maxCatchSize, temperature=temperature, massChance=massChance, massMort=massMort)
+                                              sizes=sizes, minCatch=minCatchSize, maxCatch=maxCatchSize, temperature=temperature, massChance=massChance, massMort=massMort, prodScale=prodScale)
 
                 # If final run, re-enable inputs and plot first run
                 if i == numiter - 1:

@@ -36,6 +36,7 @@ def compute_pop_msy(
     massChance: float | None,  # yearly chance of a mass mortality event
     massMort: float | None,  # proportion of population to die in mass mortality event
     nfished: int,  # number of stocks fished
+    prodScale: float = 0.0, # percentage to offset production by
 ) -> bool:
     if any(fishingRates):
         fishedStocks = nfished
@@ -215,10 +216,10 @@ def compute_pop_msy(
                             denom = 8.62e-5 * (temp + 273.15)
                             denom = np.maximum(denom, EPS)
                             tempConst = float(np.exp(-(0.65 / denom)))
-                            production = 2.89e11 * tempConst * \
-                                safe_fish ** 0.75
+                            production = (2.89e11 * tempConst * \
+                                safe_fish ** 0.75) * (1 + prodScale / 100)
                         else:  # Default behavior
-                            production = 3.0 * safe_fish ** 0.75
+                            production = (3.0 * safe_fish ** 0.75) * (1 + prodScale / 100)
                         metabolism = consumption-production
 
                         if resource[ii, stock[jj]] >= consumption:

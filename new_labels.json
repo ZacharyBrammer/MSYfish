@@ -110,6 +110,14 @@
             "en": "% Population Lost In Event",
             "es": "% de población perdida en el evento"
         },
+        "production_enable": {
+            "en": "Production Scaling",
+            "es": "Escalado de la producción"
+        },
+        "production_scaling": {
+            "en": "Percentage of production to offset by",
+            "es": "Porcentaje de producción a compensar"
+        },
         "run": {
             "en": "Run Simulations",
             "es": "Ejecutar Simulacion"
