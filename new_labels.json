@@ -112,11 +112,11 @@
         },
         "production_enable": {
             "en": "Production Scaling",
-            "es": ""
+            "es": "Escalado de la producción"
         },
         "production_scaling": {
             "en": "Percentage of production to offset by",
-            "es": ""
+            "es": "Porcentaje de producción a compensar"
         },
         "run": {
             "en": "Run Simulations",

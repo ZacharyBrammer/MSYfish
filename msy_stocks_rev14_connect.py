@@ -156,7 +156,6 @@ def compute_pop_msy(
             ff = np.zeros([nstocks])
             mnpop = 1
         # rotational closure
-        # TODO: check here
         elif ii >= 100 and rotation > 0:
             ff = fishingRates[:] * nstocks / (nstocks - 1)
             if ii > 0 and np.remainder(ii, rotation) == 0:
