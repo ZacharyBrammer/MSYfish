@@ -83,7 +83,8 @@ class Simulator:
         self.minsize = minsize
 
         # set background resource value to scale as winf to constrain run time
-        bgResource = np.floor(800 * winf ** 1.2)
+        #bgResource = np.floor(800 * winf ** 1.2)
+        bgResource = 2000
         self.bgResource = bgResource
 
         # set file directories if needed
