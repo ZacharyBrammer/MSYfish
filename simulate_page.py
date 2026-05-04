@@ -79,6 +79,22 @@ def simulate():
     else:
         st.session_state.valid_path = True
 
+    bgResourceEnable = st.toggle(
+        label=t("sim_settings", "bg_resource_enable"),
+        disabled=st.session_state.running
+    )
+
+    if bgResourceEnable:
+        bgResource = st.number_input(
+            label=t("sim_settings", "bg_resource"),
+            step=1,
+            min_value=1,
+            value=2000,
+            disabled=st.session_state.running
+        )
+    else:
+        bgResource = 2000
+
     initButton = st.button(t("labels", "init_sim"), disabled=not st.session_state.valid_path)
     if initButton:
         st.session_state.init = True
@@ -99,7 +115,8 @@ def simulate():
             outdir=directory,
             fishdata=fishdata,
             speciesIndex=speciesIndex,
-            iteration=iteration
+            iteration=iteration,
+            bgResource=bgResource
         )
         st.session_state.simulators.append(newSim)
         st.session_state.sim = newSim
@@ -382,7 +399,7 @@ def simulate():
 
             for i in range(numiter):
                 st.session_state.sim.simulate(connectivity=connectivity, stocks=stocks, years=years + 100, fishingRate=fishingRate, rotationRate=rotationRate,
-                                              sizes=sizes, minCatch=minCatchSize, maxCatch=maxCatchSize, temperature=temperature, massChance=massChance, massMort=massMort, prodScale=prodScale)
+                                              sizes=sizes, minCatch=minCatchSize, maxCatch=maxCatchSize, temperature=temperature, massChance=massChance, massMort=massMort, prodScale=prodScale, bgResource=bgResource)
 
                 # If final run, re-enable inputs and plot first run
                 if i == numiter - 1:

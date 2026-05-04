@@ -19,6 +19,7 @@ class Simulator:
         fishdata: pd.DataFrame,  # dataframe of species data
         speciesIndex: int,  # index of species in fishdata
         iteration: int = 0, # used for resestting iteration number on new object
+        bgResource: int = 2000,
     ):
         self.translator = Translator(st.session_state.language)
         self.t = self.translator.translate
@@ -84,7 +85,6 @@ class Simulator:
 
         # set background resource value to scale as winf to constrain run time
         #bgResource = np.floor(800 * winf ** 1.2)
-        bgResource = 2000
         self.bgResource = bgResource
 
         # set file directories if needed
@@ -174,13 +174,17 @@ class Simulator:
         temperature: np.ndarray,  # temperature of water per year, will be None if disabled
         massChance: float | None,  # yearly chance of a mass mortality event
         massMort: float | None,  # proportion of population to die in mass mortality event
-        prodScale: float
+        prodScale: float,
+        bgResource: int | None = None,
     ):
         # set fishing rate array
         fishingRates = np.full(stocks, fishingRate / 100)
 
+        if bgResource is None:
+            bgResource = self.bgResource
+
         # run simulation
-        compute_pop_msy(outdir=self.outdir, fishingRates=fishingRates, nstocks=stocks, species=self.species, asympLen=self.asympLen, growthCoef=self.growthCoef, lenWtCoef=self.lenWtCoef, lenWtPower=self.lenWtPower, maxage=self.maxage, minsize=self.minsize, reprodper=self.minrec, backgroundRes=self.bgResource,
+        compute_pop_msy(outdir=self.outdir, fishingRates=fishingRates, nstocks=stocks, species=self.species, asympLen=self.asympLen, growthCoef=self.growthCoef, lenWtCoef=self.lenWtCoef, lenWtPower=self.lenWtPower, maxage=self.maxage, minsize=self.minsize, reprodper=self.minrec, backgroundRes=bgResource,
                         msave=True, iteration=self.iteration, btarget=0, rptest=False, environ=True, recruitVar=0.5, conn_matrix=connectivity, rotation=rotationRate, nyr=years, sizes=sizes, minCatch=minCatch, maxCatch=maxCatch, temperature=temperature, massChance=massChance, massMort=massMort, nfished=stocks, prodScale=prodScale)
         self.iteration += 1
 

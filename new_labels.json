@@ -118,6 +118,14 @@
             "en": "Percentage of production to offset by",
             "es": "Porcentaje de producción a compensar"
         },
+        "bg_resource_enable": {
+            "en": "Background Resource",
+            "es": "Recurso de fondo"
+        },
+        "bg_resource": {
+            "en": "Background Resource Value",
+            "es": "Valor del recurso de fondo"
+        },
         "run": {
             "en": "Run Simulations",
             "es": "Ejecutar Simulacion"
