@@ -167,6 +167,10 @@
         "year": {
             "en": "Year",
             "es": "Año"
+        },
+        "download_all": {
+            "en": "Download all simulations (.zip)",
+            "es": "Descargar todas las simulaciones (.zip)"
         }
     },
     "variables": {

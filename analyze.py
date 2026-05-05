@@ -1,4 +1,6 @@
+import io
 import os
+import zipfile
 from typing import Any, Dict, List
 
 import netCDF4 as nc
@@ -11,6 +13,15 @@ from plotting import plot_simulation
 from translate import Translator
 
 
+@st.cache_data
+def _build_all_sims_zip(base: str, nc_files: tuple) -> bytes:
+    buf = io.BytesIO()
+    with zipfile.ZipFile(buf, "w", zipfile.ZIP_DEFLATED) as zf:
+        for full_path in nc_files:
+            zf.write(full_path, arcname=os.path.relpath(full_path, base))
+    return buf.getvalue()
+
+
 # Method to allow plotting/viewing of previous simulations
 def analyze():
     translator = Translator(st.session_state.language)
@@ -19,6 +30,21 @@ def analyze():
     # Select which simulation to plot
     base = f"simulations/{st.session_state.id}/"
     folders = [""] + sorted(next(os.walk(base))[1])
+
+    nc_files = tuple(sorted(
+        os.path.join(root, f)
+        for root, _, files in os.walk(base)
+        for f in files
+        if f.endswith(".nc")
+    ))
+    if nc_files:
+        st.download_button(
+            label=t("analyze_settings", "download_all"),
+            data=_build_all_sims_zip(base, nc_files),
+            file_name="all_simulations.zip",
+            icon=":material/folder_zip:",
+        )
+
     folder = st.selectbox(label=t("analyze_settings", "folder"), options=folders)
 
     # Select folder
