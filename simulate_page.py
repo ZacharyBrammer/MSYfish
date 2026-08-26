@@ -123,7 +123,7 @@ def simulate():
         st.session_state.initd = True
 
     if st.session_state.initd:
-        st.write(t("labels", "max_cal_rate", rate=f"{st.session_state.sim.maxfish:.2f}"))
+        st.write(t("labels", "max_cal_rate", rate=f"{(st.session_state.sim.maxfish * 100)}%"))
 
     # get inputs to the model for running
     if st.session_state.initd:
