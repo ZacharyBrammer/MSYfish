@@ -46,8 +46,8 @@ def plot_simulation(
             "xanchor": "center",
         },
         # Set labels along with range
-        xaxis=dict(title=t("plot_labels", "years_x"), range=[0, None]),
-        yaxis=dict(title=t("plot_labels", "biomass_y"), range=[0, None]),
+        xaxis=dict(title=t("plot_labels", "years_x"), rangemode="tozero"),
+        yaxis=dict(title=t("plot_labels", "biomass_y"), rangemode="tozero"),
         template="plotly"  # Default dark theme
     )
 
@@ -81,8 +81,8 @@ def plot_simulation(
             "xanchor": "center",
         },
         # Set labels along with range
-        xaxis=dict(title=t("plot_labels", "years_x"), range=[0, None]),
-        yaxis=dict(title=t("plot_labels", "popsize_y"), range=[0, None]),
+        xaxis=dict(title=t("plot_labels", "years_x"), rangemode="tozero"),
+        yaxis=dict(title=t("plot_labels", "popsize_y"), rangemode="tozero"),
         template="plotly"  # Default dark theme
     )
 
@@ -127,8 +127,8 @@ def plot_simulation(
                 "xanchor": "center",
             },
             # Set labels along with range
-            xaxis=dict(title=t("plot_labels", "years_x"), range=[0, None]),
-            yaxis=dict(title=t("plot_labels", "catch_kg_y"), range=[0, None]),
+            xaxis=dict(title=t("plot_labels", "years_x"), rangemode="tozero"),
+            yaxis=dict(title=t("plot_labels", "catch_kg_y"), rangemode="tozero"),
             template="plotly"  # Default dark theme
         )
 
@@ -159,8 +159,8 @@ def plot_simulation(
                 "xanchor": "center",
             },
             # Set labels along with range
-            xaxis=dict(title=t("variable", "stock"), range=[0, None]),
-            yaxis=dict(title=t("plot_labels", "catch_kg_y"), range=[0, None]),
+            xaxis=dict(title=t("variable", "stock"), rangemode="tozero"),
+            yaxis=dict(title=t("plot_labels", "catch_kg_y"), rangemode="tozero"),
             template="plotly"  # Default dark theme
         )
 

@@ -249,11 +249,11 @@ def analyze():
                 # Set labels along with range
                 xaxis=dict(
                     title=t("plot_labels", "years_x"),
-                    range=[0, None]
+                    rangemode="tozero"
                 ),
                 yaxis=dict(
                     title=t("plot_labels", "cust_y"),
-                    range=[0, None]
+                    rangemode="tozero"
                 ),
                 template="plotly"  # Default dark theme
             )
