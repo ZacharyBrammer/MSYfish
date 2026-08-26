@@ -338,8 +338,8 @@
                 "es": "biomasa"
             },
             "units": {
-                "en": "kg",
-                "es": "kg"
+                "en": "MT",
+                "es": "MT"
             }
         },
         "biomass_bins": {
@@ -352,8 +352,8 @@
                 "es": "biomasa por categorías de tamaño"
             },
             "units": {
-                "en": "kg",
-                "es": "kg"
+                "en": "MT",
+                "es": "MT"
             }
         },
         "newgrowth": {
@@ -366,8 +366,8 @@
                 "es": "nueva biomasa"
             },
             "units": {
-                "en": "kg",
-                "es": "kg"
+                "en": "MT",
+                "es": "MT"
             }
         },
         "reprod_out": {
@@ -394,8 +394,8 @@
                 "es": "consumo"
             },
             "units": {
-                "en": "kg",
-                "es": "kg"
+                "en": "MT",
+                "es": "MT"
             }
         },
         "reproduction": {
@@ -408,8 +408,8 @@
                 "es": "biomasa y número"
             },
             "units": {
-                "en": "kg and #",
-                "es": "kg y número"
+                "en": "MT and #",
+                "es": "MT y número"
             }
         },
         "reprod_bins": {
@@ -436,8 +436,8 @@
                 "es": "captura (biomasa y número)"
             },
             "units": {
-                "en": "kg and #",
-                "es": "kg y número"
+                "en": "MT and #",
+                "es": "MT y número"
             }
         },
         "catch_bins": {
@@ -520,8 +520,8 @@
                 "es": "mortalidad (biomasa y número)"
             },
             "units": {
-                "en": "kg and #",
-                "es": "kg y número"
+                "en": "MT and #",
+                "es": "MT y número"
             }
         },
         "mort_bins": {
