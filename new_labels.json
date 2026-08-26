@@ -338,8 +338,8 @@
                 "es": "biomasa"
             },
             "units": {
-                "en": "kg",
-                "es": "kg"
+                "en": "MT",
+                "es": "MT"
             }
         },
         "biomass_bins": {
@@ -352,8 +352,8 @@
                 "es": "biomasa por categorías de tamaño"
             },
             "units": {
-                "en": "kg",
-                "es": "kg"
+                "en": "MT",
+                "es": "MT"
             }
         },
         "newgrowth": {
@@ -366,8 +366,8 @@
                 "es": "nueva biomasa"
             },
             "units": {
-                "en": "kg",
-                "es": "kg"
+                "en": "MT",
+                "es": "MT"
             }
         },
         "reprod_out": {
@@ -394,8 +394,8 @@
                 "es": "consumo"
             },
             "units": {
-                "en": "kg",
-                "es": "kg"
+                "en": "MT",
+                "es": "MT"
             }
         },
         "reproduction": {
@@ -408,8 +408,8 @@
                 "es": "biomasa y número"
             },
             "units": {
-                "en": "kg and #",
-                "es": "kg y número"
+                "en": "MT and #",
+                "es": "MT y número"
             }
         },
         "reprod_bins": {
@@ -436,8 +436,8 @@
                 "es": "captura (biomasa y número)"
             },
             "units": {
-                "en": "kg and #",
-                "es": "kg y número"
+                "en": "MT and #",
+                "es": "MT y número"
             }
         },
         "catch_bins": {
@@ -520,8 +520,8 @@
                 "es": "mortalidad (biomasa y número)"
             },
             "units": {
-                "en": "kg and #",
-                "es": "kg y número"
+                "en": "MT and #",
+                "es": "MT y número"
             }
         },
         "mort_bins": {
@@ -583,24 +583,24 @@
             "es": "Tiempo (años)"
         },
         "biomass_y": {
-            "en": "Biomass (kg)",
-            "es": "Biomasa (kg)"
+            "en": "Biomass (MT)",
+            "es": "Biomasa (MT)"
         },
         "popsize_y": {
             "en": "Population Size",
             "es": "Tamaño Poblacional"
         },
         "catch_avg_kg": {
-            "en": "Average Catch (kg)",
-            "es": "Captura promedio (kg)"
+            "en": "Average Catch (MT)",
+            "es": "Captura promedio (MT)"
         },
         "catch_avg_ct": {
             "en": "Average Catch (#)",
             "es": "Captura promedio (#)"
         },
         "catch_kg_y": {
-            "en": "Catch (kg)",
-            "es": "Captura (kg)"
+            "en": "Catch (MT)",
+            "es": "Captura (MT)"
         },
         "stock": {
             "en": "stock",

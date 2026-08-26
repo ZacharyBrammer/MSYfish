@@ -168,7 +168,7 @@ def analyze():
                             data = pd.DataFrame(
                                 data,
                                 columns=[
-                                    f"{t("plot_labels", variable)} {t("plot_labels", "biomass")} (kg)",
+                                    f"{t("plot_labels", variable)} {t("plot_labels", "biomass")} (MT)",
                                     f"{t("plot_labels", variable)} {t("plot_labels", "number")} (#)"
                                 ]
                             )
@@ -223,7 +223,7 @@ def analyze():
                                     f"{t("plot_labels", "stock")} {i + 1} {var_name} (#)"
                                 )
                                 columns.append(
-                                    f"{t("plot_labels", "stock")} {i + 1} {var_name} (kg)"
+                                    f"{t("plot_labels", "stock")} {i + 1} {var_name} (MT)"
                                 )
                             data = data.reshape(time, stocks * vars)
                             data = pd.DataFrame(
