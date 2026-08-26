@@ -583,24 +583,24 @@
             "es": "Tiempo (años)"
         },
         "biomass_y": {
-            "en": "Biomass (kg)",
-            "es": "Biomasa (kg)"
+            "en": "Biomass (MT)",
+            "es": "Biomasa (MT)"
         },
         "popsize_y": {
             "en": "Population Size",
             "es": "Tamaño Poblacional"
         },
         "catch_avg_kg": {
-            "en": "Average Catch (kg)",
-            "es": "Captura promedio (kg)"
+            "en": "Average Catch (MT)",
+            "es": "Captura promedio (MT)"
         },
         "catch_avg_ct": {
             "en": "Average Catch (#)",
             "es": "Captura promedio (#)"
         },
         "catch_kg_y": {
-            "en": "Catch (kg)",
-            "es": "Captura (kg)"
+            "en": "Catch (MT)",
+            "es": "Captura (MT)"
         },
         "stock": {
             "en": "stock",
