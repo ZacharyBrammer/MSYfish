@@ -93,7 +93,7 @@ def simulate():
             disabled=st.session_state.running
         )
     else:
-        bgResource = 2000
+        bgResource = None
 
     initButton = st.button(t("labels", "init_sim"), disabled=not st.session_state.valid_path)
     if initButton:
@@ -123,7 +123,7 @@ def simulate():
         st.session_state.initd = True
 
     if st.session_state.initd:
-        st.write(t("labels", "max_cal_rate", rate=f"{st.session_state.sim.maxfish:.2f}"))
+        st.write(t("labels", "max_cal_rate", rate=f"{(st.session_state.sim.maxfish * 100)}%"))
 
     # get inputs to the model for running
     if st.session_state.initd:
