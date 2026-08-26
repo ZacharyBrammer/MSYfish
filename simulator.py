@@ -19,7 +19,7 @@ class Simulator:
         fishdata: pd.DataFrame,  # dataframe of species data
         speciesIndex: int,  # index of species in fishdata
         iteration: int = 0, # used for resestting iteration number on new object
-        bgResource: int = 2000,
+        bgResource: int | None = None,
     ):
         self.translator = Translator(st.session_state.language)
         self.t = self.translator.translate
@@ -84,7 +84,9 @@ class Simulator:
         self.minsize = minsize
 
         # set background resource value to scale as winf to constrain run time
-        #bgResource = np.floor(800 * winf ** 1.2)
+        if bgResource is None:
+            bgResource = np.floor(800 * winf ** 1.2)
+
         self.bgResource = bgResource
 
         # set file directories if needed

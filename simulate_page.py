@@ -93,7 +93,7 @@ def simulate():
             disabled=st.session_state.running
         )
     else:
-        bgResource = 2000
+        bgResource = None
 
     initButton = st.button(t("labels", "init_sim"), disabled=not st.session_state.valid_path)
     if initButton:
