@@ -85,7 +85,7 @@ class Simulator:
 
         # set background resource value to scale as winf to constrain run time
         if bgResource is None:
-            bgResource = np.floor(800 * winf ** 1.2)
+            bgResource = np.floor(1e5 * winf ** 1.2)
 
         self.bgResource = bgResource
 
