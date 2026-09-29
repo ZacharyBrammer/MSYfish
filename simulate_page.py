@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 
+from analyze import average_sims
 from plotting import plot_simulation
 from simulator import Simulator
 from translate import Translator
@@ -397,21 +398,24 @@ def simulate():
             if (st.session_state.sim.outdir != f"simulations/{st.session_state.id}/{directory}/"):
                 st.session_state.sim.change_outdir(directory)
 
+            speciesPath = f"{st.session_state.sim.outdir}{st.session_state.sim.species}"
+            runSims = []
             for i in range(numiter):
                 st.session_state.sim.simulate(connectivity=connectivity, stocks=stocks, years=years + 100, fishingRate=fishingRate, rotationRate=rotationRate,
                                               sizes=sizes, minCatch=minCatchSize, maxCatch=maxCatchSize, temperature=temperature, massChance=massChance, massMort=massMort, prodScale=prodScale, bgResource=bgResource)
 
-                # If final run, re-enable inputs and plot first run
+                # Record the file this run just wrote (most recently modified in the species folder)
+                allSims = [os.path.join(speciesPath, file) for file in os.listdir(speciesPath)]
+                runSims.append(max(allSims, key=os.path.getmtime))
+
+                # If final run, re-enable inputs and plot results
                 if i == numiter - 1:
-                    # Get path to most recent simulation to plot
-                    path = f"simulations/{st.session_state.id}/{directory}"
-                    allSims = [
-                        os.path.join(path, species, file)
-                        for species in os.listdir(path)
-                        for file in os.listdir(os.path.join(path, species))
-                    ]
-                    st.session_state.sim.firstSimPath = max(
-                        allSims, key=os.path.getmtime)
+                    # Plot the average of this batch if multiple simulations ran, otherwise the single run
+                    if len(runSims) > 1:
+                        st.session_state.sim.firstSimPath = os.path.join(speciesPath, "average.nc")
+                        average_sims(runSims, st.session_state.sim.firstSimPath)
+                    else:
+                        st.session_state.sim.firstSimPath = runSims[0]
                     st.session_state.sim.plots = plot_simulation(
                         st.session_state.sim.firstSimPath)
 

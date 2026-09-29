@@ -76,10 +76,12 @@ def analyze():
     if simulation != "" or compareAll:
         # Get biodata from either single sim or all sims
         if compareAll:
-            # Get the average data for all sims
-            average_sims(f"{base}/{folder}/{species}", simulations)
+            # Get the average data for all sims, skipping the placeholder and any previous average file
             path = f"{base}/{folder}/{species}/average.nc"
-            pass
+            average_sims(
+                [f"{base}/{folder}/{species}/{s}" for s in simulations if s not in ("", "average.nc")],
+                path
+            )
         else:
             # Default behavior
             path = f"{base}/{folder}/{species}/{simulation}"
@@ -281,22 +283,13 @@ def analyze():
             st.plotly_chart(plot)
 
 
-def average_sims(path: str, simulations: List[str]):
-    # Remove the empty string placeholder and previous average file (if applicable)
-    sims = simulations.copy()
-    sims.remove("")
-    if "average.nc" in sims:
-        sims.remove("average.nc")
-
-    # Restore path to sim names
-    for i in range(len(sims)):
-        sims[i] = f"{path}/{sims[i]}"
-
+def average_sims(sims: List[str], outPath: str):
+    # sims: full paths to the simulation files to average, outPath: where to write the average
     refSim = sims[0]
 
     # Open reference file and set up average file
     with nc.Dataset(refSim) as ref:
-        with nc.Dataset(f"{path}/average.nc", "w") as out:
+        with nc.Dataset(outPath, "w") as out:
             # Copy dimensions
             for name, dim in ref.dimensions.items():
                 out.createDimension(name, len(dim))
@@ -340,7 +333,7 @@ def average_sims(path: str, simulations: List[str]):
     stacks.pop("age")
 
     # Write averages to file
-    with nc.Dataset(f"{path}/average.nc", "a") as out, nc.Dataset(refSim) as ref:
+    with nc.Dataset(outPath, "a") as out:
         for name, stack in stacks.items():
             out.variables[name][:] = np.nanmean(
                 np.stack(stack, axis=0),
