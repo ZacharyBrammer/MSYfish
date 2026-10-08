@@ -170,8 +170,8 @@ def analyze():
                             data = pd.DataFrame(
                                 data,
                                 columns=[
-                                    f"{t("plot_labels", variable)} {t("plot_labels", "biomass")} (MT)",
-                                    f"{t("plot_labels", variable)} {t("plot_labels", "number")} (#)"
+                                    f"{t("plot_labels", variable)} {t("plot_labels", "number")} (#)",
+                                    f"{t("plot_labels", variable)} {t("plot_labels", "biomass")} (MT)"
                                 ]
                             )
                             selected_data = pd.concat(

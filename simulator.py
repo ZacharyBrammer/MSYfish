@@ -99,8 +99,8 @@ class Simulator:
         fishingRate = np.zeros([1])
 
         # initilize model by calculating recruitment rate and max fishing rate
-        with st.status("Initializing Model", expanded=True) as status:
-            with st.status("Estimating Recruitment Rate") as recruitStatus:
+        with st.status(self.t("init_status", "initializing"), expanded=True) as status:
+            with st.status(self.t("init_status", "estimating_recruitment")) as recruitStatus:
                 while rslap:
                     if recruitmentIndex < rstep:
                         reprodper = reprodstep[recruitmentIndex]
@@ -114,11 +114,11 @@ class Simulator:
 
             self.minrec = minrec
             recruitStatus.update(
-                label="Recruitment Rate Calculated",
+                label=self.t("init_status", "recruitment_done"),
                 state="complete"
             )
 
-            with st.status("Estimating Maximum Fishing Rate") as fishStatus:
+            with st.status(self.t("init_status", "estimating_max_fish")) as fishStatus:
                 # initialize maximum fishing rate
                 maxfish = 0.0
 
@@ -136,12 +136,12 @@ class Simulator:
                 self.maxfish = maxfish
 
                 fishStatus.update(
-                    label="Max Fishing Rate Found",
+                    label=self.t("init_status", "max_fish_done"),
                     state="complete"
                 )
 
             status.update(
-                label="Model Initialized",
+                label=self.t("init_status", "initialized"),
                 state="complete",
                 expanded=False
             )

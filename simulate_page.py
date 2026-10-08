@@ -75,8 +75,7 @@ def simulate():
     # do regex to make sure path is valid
     if not re.fullmatch(dir_regex, directory):
         st.session_state.valid_path = False
-        st.error(
-            "Invalid folder name. Only letters, numbers, underscores, and hyphens are allowed.")
+        st.error(t("errors", "invalid_folder"))
     else:
         st.session_state.valid_path = True
 
@@ -288,7 +287,7 @@ def simulate():
                 if temp_file.name.endswith(".csv"):
                     df = pd.read_csv(temp_file, index_col=0)
                 else:  # xls or xlsx
-                    df = pd.read_excel(temp_file, header=None, index_col=0)
+                    df = pd.read_excel(temp_file, index_col=0)
                 
                 df.index.name = None
                 

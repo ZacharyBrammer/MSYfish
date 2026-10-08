@@ -1,276 +1,176 @@
 {
-    "run": {
-        "en": "Run Simulations",
-        "es": "Ejecutar Simulacion"
-    },
-    "species": {
-        "en": "Species",
-        "es": "Especies"
-    },
-    "output_dir": {
-        "en": "Model Output Directory",
-        "es": "Directorio de salida del modelo"
-    },
-    "stocks": {
-        "en": "Number of stocks",
-        "es": "Número de poblaciones"
-    },
-    "iterations": {
-        "en": "Iterations to run",
-        "es": "Número de iteraciones"
-    },
-    "years": {
-        "en": "Years per simulation",
-        "es": "Años por simulación"
-    },
-    "optional_param": {
-        "en": "Optional Parameters",
-        "es": "Parámetros opcionales"
-    },
-    "conn_file": {
-        "en": "Connectivity Matrix",
-        "es": "Matriz de conectividad"
-    },
-    "conn_warning": {
-        "en": "Connectivity file does not match number of stocks, connectivity set to none. Update number of stocks or choose new connectivity file.",
-        "es": "El archivo de conectividad no coincide con el número de poblaciones. Conectividad desactivada. Actualice el número de poblaciones o seleccione un nuevo archivo de conectividad."
-    },
-    "fishing": {
-        "en": "Fishing",
-        "es": "Pesca"
-    },
-    "rotation": {
-        "en": "Rotation",
-        "es": "Rotación"
-    },
-    "rotation_warning": {
-        "en": "Cannot run with connectivity with only one stock, rotation set to false. Update number of stocks or disable rotation.",
-        "es": "No se puede ejecutar con conectividad con solo una población. Rotación desactivada. Actualice el número de poblaciones o desactive la rotación."
-    },
-    "sim_complete": {
-        "en": "Simulations complete",
-        "es": "Simulaciones completadas"
-    },
-    "fishing_rate": {
-        "en": "Percentage of max fishing rate",
-        "es": "Porcentaje de la tasa máxima de pesca"
-    },
-    "rotation_rate": {
-        "en": "Rotation rate (years)",
-        "es": "Frecuencia de rotación (años)"
-    },
-    "rotation_rate_warning": {
-        "en": "Rotation rate is the same as simulation length. Permanent closure enabled.",
-        "es": "La frecuencia de rotación es igual a la duración de la simulación. Cierre permanente activado."
-    },
-    "sizes": {
-        "en": "Restrict catch size",
-        "es": "Restringir tamaño de captura"
-    },
-    "min_catch_size": {
-        "en": "Minimum size to catch (centimeters)",
-        "es": "Tamaño mínimo de captura (centímetros)"
-    },
-    "max_catch_size": {
-        "en": "Maximum size to catch (centimeters)",
-        "es": "Tamaño máximo de captura (centímetros)"
-    },
-    "size_warning": {
-        "en": "Fishing is disabled but catch size selected",
-        "es": "La pesca está desactivada, pero se seleccionó un tamaño de captura"
-    },
-    "temp_enable": {
-        "en": "Set Temperature",
-        "es": "Establecer temperatura"
-    },
-    "temperature": {
-        "en": "Water temperature (degrees C)",
-        "es": "Temperatura del agua (grados C)"
-    },
-    "language": {
-        "en": "Language",
-        "es": "Idioma"
-    },
-    "species_names": {
-        "en": "Species Names",
-        "es": "Nombres de especies"
-    },
-    "sim_mode": {
-        "en": "Mode",
-        "es": "Modo"
-    },
-    "simulate": {
-        "en": "simulate",
-        "es": "simular"
-    },
-    "analyze": {
-        "en": "analyze",
-        "es": "analizar"
-    },
-    "session_link": {
-        "en": "Bookmark Link to View Simulations Later:  \n[Link to Session]({link})",
-        "es": "Guardar enlace para ver simulaciones más tarde:  \n[Enlace a la sesión]({link})"
-    },
-    "folder": {
-        "en": "Folder",
-        "es": "Carpeta"
-    },
-    "download": {
-        "en": "Download NetCDF file",
-        "es": "Descargar archivo NetCDF"
-    },
-    "var_select": {
-        "en": "Select Variables (Custom Plotting)",
-        "es": "Seleccionar variables (gráficos personalizados)"
-    },
-    "simulation": {
-        "en": "Simulation",
-        "es": "Simulación"
-    },
-    "create_custom": {
-        "en": "Create custom table/plot:",
-        "es": "Crear tabla/gráfico personalizado:"
-    },
-    "dataset_vars": {
-        "en": "Dataset Variables",
-        "es": "Variables del conjunto de datos"
-    },
-    "custom_plot": {
-        "en": "Custom Plot",
-        "es": "Gráfico personalizado"
-    },
-    "years_x": {
-        "en": "Time (years)",
-        "es": "Tiempo (años)"
-    },
-    "cust_y": {
-        "en": "Selected Vars",
-        "es": "Variables seleccionadas"
-    },
-    "crash_warning": {
-        "en": "Warning: population crashed during simulation",
-        "es": "Advertencia: la población colapsó durante la simulación"
-    },
-    "stock": {
-        "en": "stock",
-        "es": "población"
-    },
-    "biomass": {
-        "en": "biomass",
-        "es": "biomasa"
-    },
-    "number": {
-        "en": "number",
-        "es": "número"
-    },
-    "bin": {
-        "en": "bin",
-        "es": "intervalo"
-    },
-    "reproduction": {
-        "en": "reproduction",
-        "es": "reproducción"
-    },
-    "mortality": {
-        "en": "mortality",
-        "es": "mortalidad"
-    },
-    "size": {
-        "en": "size",
-        "es": "tamaño"
-    },
-    "recruit": {
-        "en": "recruit",
-        "es": "reclutas"
-    },
-    "resource": {
-        "en": "resource",
-        "es": "recurso"
-    },
-    "biomass_avg": {
-        "en": "Stock Biomass Average",
-        "es": "Promedio de biomasa por población"
-    },
-    "biomass_sd": {
-        "en": "Stock Biomass Standard Deviation",
-        "es": "Desviación estándar de biomasa por población"
-    },
-    "biomass_time": {
-        "en": "Stock Biomass vs Time",
-        "es": "Biomasa por población vs tiempo"
-    },
-    "popsize_time": {
-        "en": "Population Size vs Time",
-        "es": "Tamaño poblacional vs tiempo"
-    },
-    "catch_time": {
-        "en": "Catch Per Stock vs Time",
-        "es": "Captura por población vs tiempo"
-    },
-    "catch_stock": {
-        "en": "Catch Per Stock",
-        "es": "Captura por población"
-    },
-    "max_fish": {
-        "en": "Maximum calculated fishing rate",
-        "es": "Tasa máxima de pesca calculada"
-    },
-    "fish_used": {
-        "en": "Fishing rate used",
-        "es": "Tasa de pesca utilizada"
-    },
-    "biomass_y": {
-        "en": "Biomass (kg)",
-        "es": "Biomasa (kg)"
-    },
-    "popsize_y": {
-        "en": "Population Size",
-        "es": "Tamaño Poblacional"
-    },
-    "catch_kg_y": {
-        "en": "Catch (kg)",
-        "es": "Captura (kg)"
-    },
-    "stock_num": {
-        "en": "Stock (#)",
-        "es": "Población (#)"
-    },
-    "iter_bar": {
-        "en": "All Iterations",
-        "es": "Todas las iteraciones"
-    },
-    "curr_bar": {
-        "en": "Current Iteration",
-        "es": "Iteración actual"
-    },
-    "path_warning": {
-        "en": "Invalid folder name. Only letters, numbers, underscores, and hyphens are allowed.",
-        "es": "Nombre de carpeta no válido. Solo se permiten letras, números, guiones bajos y guiones."
-    },
-    "catch_avg_kg": {
-        "en": "Average Catch (kg)",
-        "es": "Captura promedio (kg)"
-    },
-    "catch_avg_ct": {
-        "en": "Average Catch (#)",
-        "es": "Captura promedio (#)"
-    },
-    "options": {
-        "simulate": {
-            "en": "simulate",
-            "es": "simular"
+    "labels": {
+        "species": {
+            "en": "Species",
+            "es": "Especies"
         },
-        "analyze": {
-            "en": "analyze",
-            "es": "analizar"
+        "output_dir": {
+            "en": "Model Output Directory",
+            "es": "Directorio de salida del modelo"
         },
-        "scientific": {
-            "en": "scientific",
-            "es": "científico"
+        "init_sim": {
+            "en": "Initialize Simulation",
+            "es": "Inicializar simulación"
         },
-        "common": {
-            "en": "common",
-            "es": "común"
+        "max_cal_rate": {
+            "en": "Maximum Calculated Fishing Rate: {rate}",
+            "es": "Tasa máxima de pesca calculada: {rate}"
+        },
+        "optional_param": {
+            "en": "Optional Parameters",
+            "es": "Parámetros opcionales"
+        },
+        "sim_complete": {
+            "en": "Simulations complete",
+            "es": "Simulaciones completadas"
+        },
+        "simulation": {
+            "en": "Simulation",
+            "es": "Simulación"
+        }
+    },
+    "sim_settings": {
+        "stocks": {
+            "en": "Number of stocks",
+            "es": "Número de poblaciones"
+        },
+        "iterations": {
+            "en": "Iterations to run",
+            "es": "Número de iteraciones"
+        },
+        "years": {
+            "en": "Years per simulation",
+            "es": "Años por simulación"
+        },
+        "conn": {
+            "en": "Connectivity",
+            "es": "Conectividad"
+        },
+        "stock_num": {
+            "en": "Stock {n}",
+            "es": "Población {n}"
+        },
+        "conn_file": {
+            "en": "Connectivity Matrix",
+            "es": "Matriz de conectividad"
+        },
+        "fishing": {
+            "en": "Fishing",
+            "es": "Pesca"
+        },
+        "fishing_rate": {
+            "en": "Percentage of population to fish",
+            "es": "Porcentaje de la población a pescar"
+        },
+        "sizes": {
+            "en": "Restrict catch size",
+            "es": "Restringir tamaño de captura"
+        },
+        "min_catch_size": {
+            "en": "Minimum size to catch (centimeters)",
+            "es": "Tamaño mínimo de captura (centímetros)"
+        },
+        "max_catch_size": {
+            "en": "Maximum size to catch (centimeters)",
+            "es": "Tamaño máximo de captura (centímetros)"
+        },
+        "rotation": {
+            "en": "Rotation",
+            "es": "Rotación"
+        },
+        "rotation_rate": {
+            "en": "Rotation rate (years)",
+            "es": "Frecuencia de rotación (años)"
+        },
+        "temp_enable": {
+            "en": "Set Temperature",
+            "es": "Establecer temperatura"
+        },
+        "temp_file": {
+            "en": "Temperature File",
+            "es": "Archivo de temperatura"
+        },
+        "year": {
+            "en": "Year",
+            "es": "Año"
+        },
+        "temperature": {
+            "en": "Water temperature (degrees C)",
+            "es": "Temperatura del agua (grados C)"
+        },
+        "climatic_enable": {
+            "en": "Climatic Event Enable",
+            "es": "Habilitar evento climático"
+        },
+        "climatic_chance": {
+            "en": "% Chance of Climatic Event",
+            "es": "% de probabilidad de evento climático"
+        },
+        "climatic_killed": {
+            "en": "% Population Lost In Event",
+            "es": "% de población perdida en el evento"
+        },
+        "production_enable": {
+            "en": "Production Scaling",
+            "es": "Escalado de la producción"
+        },
+        "production_scaling": {
+            "en": "Percentage of production to offset by",
+            "es": "Porcentaje de producción a compensar"
+        },
+        "bg_resource_enable": {
+            "en": "Background Resource",
+            "es": "Recurso de fondo"
+        },
+        "bg_resource": {
+            "en": "Background Resource Value",
+            "es": "Valor del recurso de fondo"
+        },
+        "run": {
+            "en": "Run Simulations",
+            "es": "Ejecutar Simulacion"
+        }
+    },
+    "analyze_settings": {
+        "folder": {
+            "en": "Folder",
+            "es": "Carpeta"
+        },
+        "species": {
+            "en": "Species",
+            "es": "Especies"
+        },
+        "simulation": {
+            "en": "Simulation",
+            "es": "Simulación"
+        },
+        "compare_all": {
+            "en": "Compare all simulations",
+            "es": "Comparar todas las simulaciones"
+        },
+        "download": {
+            "en": "Download NetCDF file",
+            "es": "Descargar archivo NetCDF"
+        },
+        "create_custom": {
+            "en": "Create custom table/plot:",
+            "es": "Crear tabla/gráfico personalizado:"
+        },
+        "dataset_vars": {
+            "en": "Dataset Variables",
+            "es": "Variables del conjunto de datos"
+        },
+        "var_select": {
+            "en": "Select Variables (Custom Plotting)",
+            "es": "Seleccionar variables (gráficos personalizados)"
+        },
+        "year": {
+            "en": "Year",
+            "es": "Año"
+        },
+        "download_all": {
+            "en": "Download all simulations (.zip)",
+            "es": "Descargar todas las simulaciones (.zip)"
         }
     },
     "variables": {
@@ -410,8 +310,8 @@
                 "es": "biomasa del stock"
             },
             "units": {
-                "en": "# of individuals",
-                "es": "número de individuos"
+                "en": "MT",
+                "es": "MT"
             }
         },
         "stock_recruit": {
@@ -438,8 +338,8 @@
                 "es": "biomasa"
             },
             "units": {
-                "en": "kg",
-                "es": "kg"
+                "en": "MT",
+                "es": "MT"
             }
         },
         "biomass_bins": {
@@ -452,8 +352,8 @@
                 "es": "biomasa por categorías de tamaño"
             },
             "units": {
-                "en": "kg",
-                "es": "kg"
+                "en": "MT",
+                "es": "MT"
             }
         },
         "newgrowth": {
@@ -466,8 +366,8 @@
                 "es": "nueva biomasa"
             },
             "units": {
-                "en": "kg",
-                "es": "kg"
+                "en": "MT",
+                "es": "MT"
             }
         },
         "reprod_out": {
@@ -494,8 +394,8 @@
                 "es": "consumo"
             },
             "units": {
-                "en": "kg",
-                "es": "kg"
+                "en": "MT",
+                "es": "MT"
             }
         },
         "reproduction": {
@@ -508,8 +408,8 @@
                 "es": "biomasa y número"
             },
             "units": {
-                "en": "kg and #",
-                "es": "kg y número"
+                "en": "MT and #",
+                "es": "MT y número"
             }
         },
         "reprod_bins": {
@@ -536,8 +436,8 @@
                 "es": "captura (biomasa y número)"
             },
             "units": {
-                "en": "kg and #",
-                "es": "kg y número"
+                "en": "MT and #",
+                "es": "MT y número"
             }
         },
         "catch_bins": {
@@ -571,15 +471,15 @@
         "age_bins": {
             "short": {
                 "en": "age_bins",
-                "es": "edad_por_tamano"
+                "es": "clases_de_edad"
             },
             "long": {
-                "en": "biomass in size bins",
-                "es": "biomasa por categorías de tamaño"
+                "en": "number of fish in age classes",
+                "es": "número de peces por clase de edad"
             },
             "units": {
-                "en": "yr",
-                "es": "años"
+                "en": "#",
+                "es": "#"
             }
         },
         "wfish": {
@@ -620,8 +520,8 @@
                 "es": "mortalidad (biomasa y número)"
             },
             "units": {
-                "en": "kg and #",
-                "es": "kg y número"
+                "en": "MT and #",
+                "es": "MT y número"
             }
         },
         "mort_bins": {
@@ -651,6 +551,200 @@
                 "en": "kg",
                 "es": "kg"
             }
+        }
+    },
+    "plot_labels": {
+        "biomass_avg": {
+            "en": "Stock Biomass Average",
+            "es": "Promedio de biomasa por población"
+        },
+        "biomass_sd": {
+            "en": "Stock Biomass Standard Deviation",
+            "es": "Desviación estándar de biomasa por población"
+        },
+        "biomass_time": {
+            "en": "Stock Biomass vs Time",
+            "es": "Biomasa por población vs tiempo"
+        },
+        "popsize_time": {
+            "en": "Population Size vs Time",
+            "es": "Tamaño poblacional vs tiempo"
+        },
+        "catch_time": {
+            "en": "Catch Per Stock vs Time",
+            "es": "Captura por población vs tiempo"
+        },
+        "catch_stock": {
+            "en": "Catch Per Stock",
+            "es": "Captura por población"
+        },
+        "years_x": {
+            "en": "Time (years)",
+            "es": "Tiempo (años)"
+        },
+        "biomass_y": {
+            "en": "Biomass (MT)",
+            "es": "Biomasa (MT)"
+        },
+        "popsize_y": {
+            "en": "Population Size",
+            "es": "Tamaño Poblacional"
+        },
+        "catch_avg_kg": {
+            "en": "Average Catch (MT)",
+            "es": "Captura promedio (MT)"
+        },
+        "catch_avg_ct": {
+            "en": "Average Catch (#)",
+            "es": "Captura promedio (#)"
+        },
+        "catch_kg_y": {
+            "en": "Catch (MT)",
+            "es": "Captura (MT)"
+        },
+        "stock": {
+            "en": "stock",
+            "es": "población"
+        },
+        "size": {
+            "en": "size",
+            "es": "tamaño"
+        },
+        "biomass": {
+            "en": "biomass",
+            "es": "biomasa"
+        },
+        "recruit": {
+            "en": "recruit",
+            "es": "reclutas"
+        },
+        "resource": {
+            "en": "resource",
+            "es": "recurso"
+        },
+        "reproduction": {
+            "en": "reproduction",
+            "es": "reproducción"
+        },
+        "mortality": {
+            "en": "mortality",
+            "es": "mortalidad"
+        },
+        "number": {
+            "en": "number",
+            "es": "número"
+        },
+        "bin": {
+            "en": "bin",
+            "es": "intervalo"
+        },
+        "custom_plot": {
+            "en": "Custom Plot",
+            "es": "Gráfico personalizado"
+        },
+        "cust_y": {
+            "en": "Selected Vars",
+            "es": "Variables seleccionadas"
+        }
+    },
+    "errors": {
+        "conn_warning": {
+            "en": "Connectivity file does not match number of stocks, connectivity set to none. Update number of stocks or choose new connectivity file.",
+            "es": "El archivo de conectividad no coincide con el número de poblaciones. Conectividad desactivada. Actualice el número de poblaciones o seleccione un nuevo archivo de conectividad."
+        },
+        "row_num_warning": {
+            "en": "Rows must sum up to 1. Connectivity Disabled",
+            "es": "Las filas deben sumar 1. Conectividad desactivada."
+        },
+        "temp_warning": {
+            "en": "File does not fit dimensions. Please only include the year and temperature, as shown in the editor.",
+            "es": "El archivo no coincide con las dimensiones. Por favor, incluya únicamente el año y la temperatura, como se muestra en el editor."
+        },
+        "rotation_warning": {
+            "en": "Rotation requires at least two stocks, rotation set to false. Update number of stocks or disable rotation.",
+            "es": "La rotación requiere al menos dos poblaciones. Rotación desactivada. Actualice el número de poblaciones o desactive la rotación."
+        },
+        "rotation_rate_warning": {
+            "en": "Rotation rate is the same as simulation length. Permanent closure enabled.",
+            "es": "La frecuencia de rotación es igual a la duración de la simulación. Cierre permanente activado."
+        },
+        "crash_warning": {
+            "en": "Warning: population crashed during simulation",
+            "es": "Advertencia: la población colapsó durante la simulación"
+        },
+        "invalid_folder": {
+            "en": "Invalid folder name. Only letters, numbers, underscores, and hyphens are allowed.",
+            "es": "Nombre de carpeta no válido. Solo se permiten letras, números, guiones bajos y guiones."
+        }
+    },
+    "sidebar": {
+        "language": {
+            "en": "Language",
+            "es": "Idioma"
+        },
+        "species_names": {
+            "en": "Species Names",
+            "es": "Nombres de especies"
+        },
+        "sim_mode": {
+            "en": "Mode",
+            "es": "Modo"
+        },
+        "simulate": {
+            "en": "simulate",
+            "es": "simular"
+        },
+        "analyze": {
+            "en": "analyze",
+            "es": "analizar"
+        },
+        "scientific": {
+            "en": "scientific",
+            "es": "científico"
+        },
+        "common": {
+            "en": "common",
+            "es": "común"
+        },
+        "session_link": {
+            "en": "Bookmark Link to View Simulations Later:  \n[Link to Session]({link})",
+            "es": "Guardar enlace para ver simulaciones más tarde:  \n[Enlace a la sesión]({link})"
+        },
+        "manual_link": {
+            "en": "[📖 User Manual]({link})",
+            "es": "[📖 Manual de usuario]({link})"
+        }
+    },
+    "init_status": {
+        "initializing": {
+            "en": "Initializing Model",
+            "es": "Inicializando modelo"
+        },
+        "initialized": {
+            "en": "Model Initialized",
+            "es": "Modelo inicializado"
+        },
+        "estimating_recruitment": {
+            "en": "Estimating Recruitment Rate",
+            "es": "Estimando tasa de reclutamiento"
+        },
+        "recruitment_done": {
+            "en": "Recruitment Rate Calculated",
+            "es": "Tasa de reclutamiento calculada"
+        },
+        "estimating_max_fish": {
+            "en": "Estimating Maximum Fishing Rate",
+            "es": "Estimando tasa máxima de pesca"
+        },
+        "max_fish_done": {
+            "en": "Max Fishing Rate Found",
+            "es": "Tasa máxima de pesca encontrada"
+        }
+    },
+    "manual": {
+        "full_readme": {
+            "en": "Developer documentation is in the [full README on GitHub]({link}).",
+            "es": "La documentación para desarrolladores está en el [README completo en GitHub]({link})."
         }
     }
 }

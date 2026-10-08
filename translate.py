@@ -2,7 +2,7 @@ import json
 
 
 class Translator:
-    def __init__(self, lang="en", path="new_labels.json"):
+    def __init__(self, lang="en", path="labels.json"):
         with open(path, "r", encoding="utf-8") as f:
             self.labels = json.load(f)
         self.lang = lang
