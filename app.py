@@ -4,6 +4,7 @@ import uuid
 import streamlit as st
 
 from analyze import analyze
+from manual_page import manual
 from simulate_page import simulate
 from simulator import Simulator
 from translate import Translator
@@ -13,6 +14,11 @@ st.set_page_config(
     page_title="MSYFish",
     page_icon="🎣"
 )
+
+# User manual opens in its own tab, so show it and skip the session setup
+if st.query_params.get("page") == "manual":
+    manual()
+    st.stop()
 
 st.title("MSYFish Model")
 
@@ -106,6 +112,11 @@ with st.sidebar:
     # Link to session
     st.write(
         t("sidebar", "session_link", link=f"{st.context.url}?id={st.session_state.id}")
+    )
+
+    # Link to user manual
+    st.write(
+        t("sidebar", "manual_link", link=f"{st.context.url}?page=manual&lang={st.session_state.language}")
     )
 
 match st.session_state.mode:
