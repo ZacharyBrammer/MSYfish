@@ -80,11 +80,11 @@ Running a simulation has two steps: **initialize**, then **run**.
 When you click **Initialize Simulation**, the model calibrates itself for the chosen species in two steps:
 
 1. **Estimating Recruitment Rate.** The model searches for the lowest larval survival rate that keeps an unfished population going.
-2. **Estimating Maximum Fishing Rate.** Starting from 0%, the model raises the fishing rate in steps of 1% until the population can no longer sustain itself.
+2. **Estimating Maximum Fishing Rate.** Starting from 0%, the model raises the fishing rate in steps of 1% until the population crashes.
 
-When initialization is done, the page shows the **Maximum Calculated Fishing Rate**. This is a useful reference for choosing a fishing rate in the next step.
+When initialization is done, the page shows the **Maximum Calculated Fishing Rate**. This is a useful reference for choosing a fishing rate during simulations.
 
-Initialization is saved with your session. If you return to a species you have already initialized, you can go straight to Step 2. Clicking **Initialize Simulation** again recalibrates the model. You need to do this if you change the background resource.
+Initialization is saved with your session. If you return to a species you have already initialized, you can go straight to Step 2. Clicking **Initialize Simulation** recalibrates the model. You need to do this if you change the background resource.
 
 > **Note:** The calibration is stochastic, so initializing the same species twice can give slightly different maximum fishing rates. If a fishing rate of 0% is displayed, you should re-initalize the species.
 
@@ -124,14 +124,14 @@ You can type values into the on-screen table or upload a file (see [Connectivity
 |---|---|
 | **Percentage of population to fish** | The fishing rate (0–100%) applied to every stock each year. Compare it with the Maximum Calculated Fishing Rate. Rates above that value are likely to make the population collapse. |
 | **Restrict catch size** *(toggle)* | Only fish within a length range are caught. |
-| ↳ **Minimum size to catch (cm)** | The smallest length that can be caught. |
+| ↳ **Minimum size to catch (cm)** | The smallest length that can be caught. Leave blank for no lower limit. |
 | ↳ **Maximum size to catch (cm)** | The largest length that can be caught. Leave blank for no upper limit. |
 | **Rotation** *(toggle)* | Rotational closure, like a rotating marine protected area. One stock at a time is closed to fishing, and the closure moves to the next stock every *rotation rate* years. Fishing in the open stocks is scaled up by *N/(N−1)*, so total fishing effort stays the same. **Requires 2 or more stocks.** |
 | ↳ **Rotation rate (years)** | The number of years between rotations. Setting this to the full simulation length (years + 100) makes the closure permanent, so stock 1 becomes a permanent reserve. |
 
 #### Set Temperature
 
-Lets you set the water temperature (°C) for each simulated year. Temperature changes fish production (growth) through a metabolic temperature dependence (Boltzmann–Arrhenius, activation energy 0.65 eV). Warmer water means more production.
+Lets you set the water temperature (°C) for each simulated year. Temperature changes fish production (growth) through a metabolic temperature dependence. Warmer water means more production.
 
 Enter values in the table (one row per year, defaulting to 20 °C), or upload a file (see [Temperature file](#temperature-file)). Temperature forcing only applies after the spin-up.
 
@@ -144,11 +144,11 @@ Simulates random mass-mortality events such as heat waves or hypoxia.
 | **% Chance of Climatic Event** | The probability (0–100%) that an event happens in any given year. |
 | **% Population Lost In Event** | The share of the whole population (0–100%) killed at random when an event happens. |
 
-Events can only happen after the spin-up.
+Events can only happen after spin-up.
 
 #### Production Scaling
 
-**Percentage of production to offset by** (−30% to +30%) multiplies every fish's production (growth) by this percentage. For example, −10% means every fish grows 10% less efficiently. This is useful for exploring general changes in productivity.
+**Percentage of production to offset by** (−30% to +30%) scales every fish's production by this percentage, which changes how much food fish need to cover their metabolism. For example, −10% means fish need more food to break even, so they grow less and starve more when food is limited. This is useful for exploring general changes in productivity.
 
 #### Background resource
 
